@@ -1,4 +1,4 @@
-require_dependency "crm/application_controller"
+require_dependency "universal_crm/application_controller"
 
 module UniversalCrm
   class HomeController < ApplicationController

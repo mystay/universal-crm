@@ -1,6 +1,6 @@
 require 'test_helper'
 
-module Crm
+module UniversalCrm
   class HomeControllerTest < ActionController::TestCase
     setup do
       @routes = Engine.routes

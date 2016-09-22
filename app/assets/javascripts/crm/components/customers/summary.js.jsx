@@ -65,7 +65,7 @@ var CustomerSummary = React.createClass({
             <dt>Phone (Mobile):</dt>
             <dd>{this.props.customer.phone_mobile}</dd>
           </dl>
-          <Tags subject_type="Crm::Customer" subject_id={this.props.customer.id} tags={this.props.customer.tags} />
+          <Tags subject_type="UniversalCrm::Customer" subject_id={this.props.customer.id} tags={this.props.customer.tags} />
         </div>
       )
     }

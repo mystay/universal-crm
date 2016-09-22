@@ -14,6 +14,7 @@ module UniversalCrm
         include Universal::Concerns::Polymorphic #the customer 
         include Universal::Concerns::Commentable
         include Universal::Concerns::Numbered
+        include Universal::Concerns::Scoped
         
         store_in collection: 'crm_tickets'
 

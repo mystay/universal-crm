@@ -1,4 +1,4 @@
-Crm::Engine.routes.draw do
+UniversalCrm::Engine.routes.draw do
   root to: 'home#index'
   
   get '/logout', to: 'user_sessions#logout', as: :logout

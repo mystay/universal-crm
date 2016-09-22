@@ -1,11 +1,11 @@
-require_dependency "crm/application_controller"
+require_dependency "universal_crm/application_controller"
 
 module UniversalCrm
   class CustomersController < ApplicationController
     
     def index
       params[:page] = 1 if params[:page].blank?
-      @customers = UniversalCrm::Customer.all
+      @customers = UniversalCrm::Customer.scoped_to(universal_scope)
       if !params[:q].blank?
         @customers = @customers.full_text_search(params[:q], match: :all)
       end
@@ -23,7 +23,7 @@ module UniversalCrm
     end
     
     def autocomplete
-      @customers = Crm::Customer.all
+      @customers = UniversalCrm::Customer.all
       if !params[:term].blank?
         @customers = @customers.full_text_search(params[:term], match: :all)
       end
@@ -33,7 +33,7 @@ module UniversalCrm
     end
     
     def show
-      @customer = Crm::Customer.find(params[:id])
+      @customer = UniversalCrm::Customer.find(params[:id])
       if @customer.nil?
         render json: {customer: nil}
       else
@@ -49,7 +49,7 @@ module UniversalCrm
     end
     
     def update
-      @customer = Crm::Customer.find(params[:id])
+      @customer = UniversalCrm::Customer.find(params[:id])
       @customer.update(params.require(:customer).permit(:name, :email, :phone_home, :phone_work, :phone_mobile))
       puts @customer.errors.to_json
       render json: {}

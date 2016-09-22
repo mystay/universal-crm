@@ -1,6 +1,6 @@
 module UniversalCrm
   module Models
-    module Customer
+    module Company
       extend ActiveSupport::Concern
 
       included do
@@ -13,16 +13,14 @@ module UniversalCrm
         include Universal::Concerns::Taggable
         include Universal::Concerns::Scoped
         
-        store_in collection: 'crm_customers'
+        store_in collection: 'crm_companies'
 
         field :n, as: :name
         field :e, as: :email
-        field :ph, as: :phone_home
-        field :pw, as: :phone_work
-        field :pm, as: :phone_mobile
+        field :p, as: :phone
         
         has_many :tickets, as: :subject, class_name: 'UniversalCrm::Ticket'
-        belongs_to :company, class_name: 'UniversalCrm::Company'
+        has_many :customers, class_name: 'UniversalCrm::Customer'
         
         search_in :n, :e
         

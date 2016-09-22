@@ -21,7 +21,7 @@ var ExpandedTicket = React.createClass({
               />
           </div>
           <Comments 
-            subject_type='Crm::Ticket'
+            subject_type='UniversalCrm::Ticket'
             subject_id={this.props.ticket.id}
             countComments={this.props.countComments}
             newCommentPosition='bottom'
