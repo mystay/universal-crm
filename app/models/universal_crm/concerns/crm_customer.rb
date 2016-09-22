@@ -1,6 +1,6 @@
 module UniversalCrm
   module Concerns
-    module Customer
+    module CrmCustomer
       extend ActiveSupport::Concern
       
       included do
