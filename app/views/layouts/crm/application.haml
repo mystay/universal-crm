@@ -1,0 +1,17 @@
+!!!
+%html
+  %head
+    %title CRM
+    %meta{name: "viewport", content: "width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0"}
+    %meta{name: "mobile-web-app-capable", content:"yes"}
+    %meta{name: "apple-mobile-web-app-capable", content:"yes"}
+    = stylesheet_link_tag 'crm/application'    
+    = yield :head_javascript
+    = csrf_meta_tags
+    = javascript_include_tag "https://use.fontawesome.com/1718d2531c.js"
+    
+  %body.theme-template-dark.theme-pink.alert-open.alert-with-mat-grow-top-right
+    = yield
+              
+    = javascript_include_tag "crm/application"
+    = yield :javascript

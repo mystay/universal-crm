@@ -1,0 +1,9 @@
+//= require jquery
+//= require jquery_ujs
+//= require react
+//= require react_ujs
+//= require_tree ./components
+//= require_tree ./components/comments
+//= require_tree ./components/customers
+//= require_tree ./components/tickets
+//= require_tree .
