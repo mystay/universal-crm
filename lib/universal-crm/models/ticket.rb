@@ -16,7 +16,7 @@ module UniversalCrm
         include Universal::Concerns::Numbered
         include Universal::Concerns::Scoped
         
-        store_in collection: 'crm_tickets'
+        store_in session: UniversalCrm::Configuration.mongoid_session_name, collection: 'crm_tickets'
 
         field :t, as: :title
         field :c, as: :content

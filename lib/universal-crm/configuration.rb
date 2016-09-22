@@ -1,11 +1,11 @@
 module UniversalCrm
   class Configuration
 
-    cattr_accessor :scope_class, :universal_scope
+    cattr_accessor :scope_class, :mongoid_session_name
 
     def self.reset
       self.scope_class   = nil
-      self.universal_scope = nil
+      self.mongoid_session_name   = :default
     end
 
   end

@@ -13,7 +13,7 @@ module UniversalCrm
         include Universal::Concerns::Taggable
         include Universal::Concerns::Scoped
         
-        store_in collection: 'crm_companies'
+        store_in session: UniversalCrm::Configuration.mongoid_session_name, collection: 'crm_companies'
 
         field :n, as: :name
         field :e, as: :email
