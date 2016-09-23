@@ -6,7 +6,7 @@ var TicketList = React.createClass({
     var t = []
     for (var i=0;i<this.props.tickets.length;i++){
       t.push(
-        <li key={i} className={this.itemCss(this.props.tickets[i].id)} id={`ticket_${this.props.tickets[i].id}`}>
+        <li key={i} className="list-group-item">
           <TicketListItem ticket={this.props.tickets[i]}
             ticketId={this.props.ticketId}
             setTicketId={this.props.setTicketId}
@@ -62,12 +62,5 @@ var TicketList = React.createClass({
   pageResults: function(page){
     this.props.loadTickets(this.props.customerId, null, page)
     this.setState({currentPage: page});
-  },
-  itemCss: function(ticketId){
-    c = "list-group-item"
-    if (this.props.ticketId==ticketId){
-      c += " active"
-    }
-    return c;
   }
 })

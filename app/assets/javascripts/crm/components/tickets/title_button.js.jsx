@@ -8,7 +8,7 @@ var TicketTitleButton = React.createClass({
         <div
           onClick={this.selectTicket}
           style={{cursor: 'pointer', fontWeight: 'bold'}}>
-          <div className='pull-right small'>Ticket: #{this.props.ticket.number}</div>
+          <div className='pull-right small hidden-xs'>Ticket: #{this.props.ticket.number}</div>
           {this.props.priorityIcon()}
           {this.props.closedLabel()}
           {this.props.ticket.title}
