@@ -17,7 +17,6 @@ var ExpandedTicket = React.createClass({
               changeTicketFlagNormal={this.props.changeTicketFlagNormal}
               changeTicketStatusActive={this.props.changeTicketStatusActive}
               changeTicketStatusClosed={this.props.changeTicketStatusClosed}
-              closeTicket={this.props.closeTicket}
               />
           </div>
           <Comments 

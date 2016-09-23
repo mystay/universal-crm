@@ -31,15 +31,15 @@ var NewTicket = React.createClass({
               onChange={this.handleContentChange}
               style={{height: '100px'}}>{this.state.content}</textarea>
           </div>
-        submitButton = <div className="form-group text-right">
-            <button className='btn btn-success btn-sm' onClick={this.handleSubmit}>
+        submitButton = <div className="form-group m-0">
+            <button className='btn btn-primary btn-sm' onClick={this.handleSubmit}>
               <i className='fa fa-plus' /> Add this ticket
             </button>
           </div>
       }
       return(
-        <div className="card">
-          <div className="card-content">
+        <div className="panel">
+          <div className="panel-body">
             {titleField}
             {contentField}
             {submitButton}

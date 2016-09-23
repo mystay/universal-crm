@@ -24,21 +24,24 @@ var TicketList = React.createClass({
     }
     ticketCountTitle = null
     if (this.ticketCount()){
-      ticketCountTitle = <h4>{this.ticketCountTitle()}</h4>
+      ticketCountTitle = this.ticketCountTitle()
     }
     return(
-      <div>
-        {ticketCountTitle}
-        <div className="card">
+      <div className="panel panel-default">
+        <div className="panel-heading">
+          <h3 className="panel-title">{ticketCountTitle}</h3>
+        </div>
+        <div className="panel-body">
           <ul className="list-group">
             {t}
           </ul>
+          <Pagination
+            pagination={this.props.pagination}
+            currentPage={this.props.currentPage}
+            pageResults={this.pageResults}
+            displayDescription={true}
+            />
         </div>
-        <Pagination
-          pagination={this.props.pagination}
-          currentPage={this.props.currentPage}
-          pageResults={this.pageResults}
-          displayDescription={true} />
       </div>
     )
   },

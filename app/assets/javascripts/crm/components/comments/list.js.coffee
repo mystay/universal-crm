@@ -53,12 +53,11 @@
               
   renderCommentList: ->
     R = React.DOM
-    R.div null,
+    R.div className: 'chat-widget',
       if @state.comments
-        R.div className: 'card',
-          R.ul className: 'list-group',
-            for comment in @state.comments
-              React.createElement Comment, key: comment.id, comment: comment
+        R.div null,
+          for comment in @state.comments
+            React.createElement Comment, key: comment.id, comment: comment
     
   loadComments: (e) ->
     $.ajax

@@ -19,31 +19,33 @@ var CustomerEdit = React.createClass({
   render: function(){
     return(
       <div>
-        <form onSubmit={this.handleSubmit}>
+        <form onSubmit={this.handleSubmit} className="form-horizontal" role="form">
           <div className="form-group">
-            <label>Name</label>
-            <input type="text" className="form-control" defaultValue={this.props.customer.name} ref='name' />
+            <label className="col-sm-2 control-label">Name</label>
+            <div className="col-sm-10"><input type="text" className="form-control" defaultValue={this.props.customer.name} ref='name' /></div>
           </div>
           <div className="form-group">
-            <label>Email</label>
-            <input type="text" className="form-control" defaultValue={this.props.customer.email} ref='email' />
+            <label className="col-sm-2 control-label">Email</label>
+            <div className="col-sm-10"><input type="text" className="form-control" defaultValue={this.props.customer.email} ref='email' /></div>
           </div>
           <div className="form-group">
-            <label>Phone (Home)</label>
-            <input type="text" className="form-control" defaultValue={this.props.customer.phone_home} ref='phone_home' />
+            <label className="col-sm-2 control-label">Phone (Home)</label>
+            <div className="col-sm-10"><input type="text" className="form-control" defaultValue={this.props.customer.phone_home} ref='phone_home' /></div>
           </div>
           <div className="form-group">
-            <label>Phone (Work)</label>
-            <input type="text" className="form-control" defaultValue={this.props.customer.phone_work} ref='phone_work' />
+            <label className="col-sm-2 control-label">Phone (Work)</label>
+            <div className="col-sm-10"><input type="text" className="form-control" defaultValue={this.props.customer.phone_work} ref='phone_work' /></div>
           </div>
           <div className="form-group">
-            <label>Phone (Mobile)</label>
-            <input type="text" className="form-control" defaultValue={this.props.customer.phone_mobile} ref='phone_mobile' />
+            <label className="col-sm-2 control-label">Phone (Mobile)</label>
+            <div className="col-sm-10"><input type="text" className="form-control" defaultValue={this.props.customer.phone_mobile} ref='phone_mobile' /></div>
           </div>
           <div className="form-group">
-            <button className="btn btn-success">
-              <i className="fa fa-check" /> Update
-            </button>
+              <div className="col-sm-offset-2 col-sm-10">
+                <button className="btn btn-success">
+                  <i className="fa fa-check" /> Update
+                </button>
+            </div>
           </div>
         </form>
       </div>

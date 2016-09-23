@@ -1,12 +1,9 @@
 var TicketFunctions = React.createClass({
   render: function(){
     return(
-      <div>
-        <div className="pull-right">{this.hideButton()}</div>
-        <div className="btn-group">
-          {this.priorityButton()}
-          {this.closeButton()}
-        </div>
+      <div className="btn-group">
+        {this.priorityButton()}
+        {this.closeButton()}
       </div>
     )
   },
@@ -41,12 +38,5 @@ var TicketFunctions = React.createClass({
           </button>
       )
     }
-  },
-  hideButton: function(){
-    return(
-      <button className='btn btn-default btn-xs' onClick={this.props.closeTicket}>
-        <i className="fa fa-times" /> Hide
-      </button>
-      )
   }
 });

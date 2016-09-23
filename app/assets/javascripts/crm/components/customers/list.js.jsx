@@ -13,11 +13,16 @@ var CustomerList = React.createClass({
         badgeCount = <span></span>
       }
       rows.push(
-        <li className="list-group-item" key={customer.id} style={{cursor: 'pointer'}}>
-          {badgeCount}
-          <h4 className="list-group-item-heading" id={customer.id} onClick={this.loadCustomer}>{customer.name}</h4>
-          <p className="list-group-item-text">{customer.email}</p>
-        </li>
+        <div className="col-sm-3" key={customer.id}>
+          <div className="panel" style={{maxHeight: '70px'}}>
+            <div className="panel-body">
+              <div className="pull-right">{badgeCount}</div>
+              <div className="pull-left"><i className="fa fa-user fa-fw fa-2x text-muted" /></div>
+              <h4 id={customer.id} onClick={this.loadCustomer} style={{cursor: 'pointer'}}>{customer.name}</h4>
+              <p className="text-info" style={{overflow: 'hidden', width:'80%', fontSize: '0.7em'}}>{customer.email}</p>
+            </div>
+          </div>
+        </div>
       );
     }
     return rows;
@@ -29,21 +34,25 @@ var CustomerList = React.createClass({
   render: function(){
     if (this.props.customers.length==0){
       return(
-        <div className="alert alert-warning">No customers to list</div>
+        null
       )
     }else{
       return(
-        <div>
-          <div className="card">
-            <ul className="list-group">
-              {this.customerList()}
-            </ul>
+        <div className="panel panel-warning">
+          <div className="panel-heading">
+            <h3 className="panel-title">Customers</h3>
+            <div className="actions pull-right">
+              <i className="fa fa-times" onClick={this.props.hideCustomerList}/>
+            </div>
           </div>
-          <Pagination
-            pagination={this.props.pagination}
-            currentPage={this.props.currentPage}
-            pageResults={this.pageResults}
-            displayDescription={false} />
+          <div className="panel-body">
+            <div className="row">{this.customerList()}</div>
+            <Pagination
+              pagination={this.props.pagination}
+              currentPage={this.props.currentPage}
+              pageResults={this.pageResults}
+              displayDescription={false} />
+          </div>
         </div>
       )
     }

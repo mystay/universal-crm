@@ -4,7 +4,7 @@ var Pagination = React.createClass({
     if ((this.props.displayDescription == undefined || this.props.displayDescription) && this.props.pagination){
       description = <li className="small">Showing {this.firstNumber()} to {this.lastNumber()} of {this.props.pagination.total_count} results</li>
     }
-    if (this.props.pagination){
+    if (this.props.pagination && this.paginationRequired()){
       return(
         <div>
           <nav aria-label='Pager'>
@@ -22,10 +22,13 @@ var Pagination = React.createClass({
       )
     }else{
       return(
-        <div></div>
+        null
       )
     }
-  },            
+  },
+  paginationRequired: function(){
+    return (this.props.pagination.total_count>this.props.pagination.per_page);
+  },
   firstNumber: function(){
     if (this.props.pagination.current_page==1){
       n = 1;

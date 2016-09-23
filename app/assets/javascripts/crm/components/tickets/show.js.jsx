@@ -16,16 +16,19 @@ var Ticket = React.createClass({
   render: function(){
     if (this.props.ticket){
       return (
-        <div className="card bordered">
-          <div className="card-content">
-            <TicketCustomerName 
-              setCustomerId={this.setCustomerId}
-              name={this.props.ticket.subject_name}
-              />
+        <div className="panel panel-info">
+          <div className="panel-heading">
+            <h3 className="panel-title">
+              Customer: {this.props.ticket.subject_name}
+            </h3>
+            <div className="actions pull-right">
+              <i className="fa fa-times" onClick={this.props.closeTicket} />
+            </div>
+          </div>
+          <div className="panel-body">
             <ExpandedTicket
               ticketId={this.props.ticket.id}
               ticket={this.props.ticket}
-              closeTicket={this.props.closeTicket}
               status={this.props.ticket.status}
               priorityTicket={this.priorityTicket}
               changeTicketFlagPriority={this.props.changeTicketFlagPriority}
