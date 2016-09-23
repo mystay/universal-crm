@@ -164,7 +164,7 @@ var CRM = React.createClass({
     }
     this.setState({customerId: id});
     this.loadCustomer(id);
-    this.loadTickets(id);
+    this.loadTickets(id, 'all');
   },
   loadCustomer: function(id){
     this.setState({ticketId: null});

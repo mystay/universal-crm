@@ -7,11 +7,11 @@ module UniversalCrm
       params[:page] = 1 if params[:page].blank?
       @tickets = UniversalCrm::Ticket.scoped_to(universal_scope)
       @tickets = @tickets.where(subject_id: params[:customer_id]) if !params[:customer_id].blank?
-      if !params[:status].blank? and params[:status] != 'priority'
+      if !params[:status].blank? and params[:status] != 'priority' and params[:status] != 'all'
         @tickets = @tickets.for_status(params[:status])
       elsif params[:status] == 'priority'
         @tickets = @tickets.active.priority
-      else
+      elsif params[:status] != 'all'
         @tickets = @tickets.active  
       end
       @tickets = @tickets.page(params[:page])

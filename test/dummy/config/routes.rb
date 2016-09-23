@@ -1,4 +1,3 @@
 Rails.application.routes.draw do
-
-  mount Crm::Engine => "/crm"
+  mount UniversalCrm::Engine => "/crm"
 end
