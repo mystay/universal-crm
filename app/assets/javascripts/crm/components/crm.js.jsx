@@ -22,7 +22,7 @@ var CRM = React.createClass({
     if (this.props.customerId){
       this.setState({customerId: this.props.customerId});
       this.loadCustomer(this.props.customerId);
-      this.loadTickets(this.props.customerId);
+      this.loadTickets(this.props.customerId, 'all');
       $("#customer_list").hide();
       $("#customer_search").hide();
     }else{
