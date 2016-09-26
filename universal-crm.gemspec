@@ -22,5 +22,6 @@ Gem::Specification.new do |s|
   s.add_dependency 'haml', '~> 4.0.5'
   s.add_dependency 'universal'
   s.add_dependency 'react-rails'
+  s.add_dependency 'bootstrap-sass'
   
 end
