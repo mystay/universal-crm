@@ -1,3 +1,27 @@
 = Crm
 
 This project rocks and uses MIT-LICENSE.
+
+== Installation
+=== Gemfile
+    gem 'universal-crm', github: 'bthree/universal-crm'
+    
+=== config/routes.rb
+
+    mount UniversalCrm::Engine => '/crm'
+    
+=== universal_user - inherit from current_user model
+    # application_controller.rb
+    
+    helper_method :universal_user
+    def universal_user
+      current_user
+    end
+    
+=== universal_scope - inherit from model you want to scope against
+    # application_controller.rb
+    
+    helper_method :universal_scope
+    def universal_scope
+      #scoped model
+    end
