@@ -35,13 +35,13 @@ module UniversalCrm
     end
     
     def update_status
-      @ticket = universal_scope.tickets.unscoped.find(params[:id])
+      @ticket = UniversalCrm::Ticket.find(params[:id])
       @ticket.update(status: params[:status])
       render json: {ticket: ticket(@ticket)}
     end
     
     def flag
-      @ticket = universal_scope.tickets.find(params[:id])
+      @ticket = UniversalCrm::Ticket.find(params[:id])
       if params[:add] == 'true'
         @ticket.flag!(params[:flag], universal_user)
       else

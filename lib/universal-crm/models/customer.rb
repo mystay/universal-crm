@@ -12,6 +12,7 @@ module UniversalCrm
         include Universal::Concerns::Numbered
         include Universal::Concerns::Taggable
         include Universal::Concerns::Scoped
+        include Universal::Concerns::Polymorphic
         
         store_in session: UniversalCrm::Configuration.mongoid_session_name, collection: 'crm_customers'
 
@@ -22,7 +23,7 @@ module UniversalCrm
         field :pm, as: :phone_mobile
         
         has_many :tickets, as: :subject, class_name: 'UniversalCrm::Ticket'
-        belongs_to :company, class_name: 'UniversalCrm::Company'
+        belongs_to :crm_company, class_name: 'UniversalCrm::Company'
         
         search_in :n, :e
         

@@ -26,13 +26,15 @@ This project rocks and uses MIT-LICENSE.
       #scoped model
     end
 
-=== Setup a model to be a CRM 'Customer'
+=== Setup a model to be a CRM 'Company' or 'Customer'
     class Place
-      include UniversalCrm::Concerns::CrmCustomer  
+      include UniversalCrm::Concerns::CrmCompany  
     end
     class User
       include UniversalCrm::Concerns::CrmCustomer  
     end
+    
+    #model must include both a 'name' and 'email' method
     
 === Setup a model to have tickets created for it
     class Placement
@@ -40,5 +42,8 @@ This project rocks and uses MIT-LICENSE.
       
     end
     
-==== Create a customer for this model
-    model.new_customer!(scoped_model)
+==== Find/Create a customer for this model
+    model.crm_customer(scoped_model)
+    
+==== Find/Create a company for this model
+    model.crm_company(scoped_model)
