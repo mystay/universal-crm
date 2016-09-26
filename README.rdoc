@@ -25,3 +25,20 @@ This project rocks and uses MIT-LICENSE.
     def universal_scope
       #scoped model
     end
+
+=== Setup a model to be a CRM 'Customer'
+    class Place
+      include UniversalCrm::Concerns::CrmCustomer  
+    end
+    class User
+      include UniversalCrm::Concerns::CrmCustomer  
+    end
+    
+=== Setup a model to have tickets created for it
+    class Placement
+      include UniversalCrm::Concerns::Ticketed
+      
+    end
+    
+==== Create a customer for this model
+    model.new_customer!(scoped_model)

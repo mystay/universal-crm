@@ -4,7 +4,6 @@ module UniversalCrm
       extend ActiveSupport::Concern
       
       included do
-        
         has_many :crm_customers, class_name: 'UniversalCrm::Customer'
 
         def crm_customer_name
