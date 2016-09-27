@@ -3,9 +3,15 @@ UniversalCrm::Engine.routes.draw do
   
   get '/logout', to: 'user_sessions#logout', as: :logout
   get '/customer/:customer_id', to: 'home#index'
+  get '/company/:company_id', to: 'home#index'
   get '/ticket/:ticket_id', to: 'home#index'
   
   resources :customers do
+    collection do
+      get :autocomplete
+    end
+  end
+  resources :companies do
     collection do
       get :autocomplete
     end
