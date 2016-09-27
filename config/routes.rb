@@ -6,6 +6,8 @@ UniversalCrm::Engine.routes.draw do
   get '/company/:company_id', to: 'home#index'
   get '/ticket/:ticket_id', to: 'home#index'
   
+  resource :config, controller: :config
+  
   resources :customers do
     collection do
       get :autocomplete

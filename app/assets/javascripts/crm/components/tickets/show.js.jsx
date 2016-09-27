@@ -31,6 +31,7 @@ var Ticket = React.createClass({
               ticket={this.props.ticket}
               status={this.props.ticket.status}
               priorityTicket={this.priorityTicket}
+              changeTicketFlag={this.props.changeTicketFlag}
               changeTicketFlagPriority={this.props.changeTicketFlagPriority}
               changeTicketFlagNormal={this.props.changeTicketFlagNormal}
               changeTicketStatusActive={this.props.changeTicketStatusActive}

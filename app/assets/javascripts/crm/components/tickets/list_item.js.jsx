@@ -15,6 +15,7 @@ var TicketListItem = React.createClass({
             priorityIcon={this.priorityIcon}
             closedLabel={this.closedLabel}
             selectTicketId={this.selectTicketId}
+            config={this.props.config}
             />
         </h4>
         {this.listItemDetails()}

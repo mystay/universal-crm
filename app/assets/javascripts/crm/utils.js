@@ -15,3 +15,13 @@ nl2br = function(str) {
 function scrollTo(e){
   $("html, body").animate({scrollTop: $(e).offset().top}, 'fast');
 }
+function findObjectByKeyValue(object, key, value){
+  var result = null;
+  $.each(object, function(index, item){
+    if(item[key].toString() == value.toString()){
+       result = item;
+       return false;
+    }
+  });
+  return result;
+}

@@ -9,10 +9,11 @@ module UniversalCrm
         
         store_in session: UniversalCrm::Configuration.mongoid_session_name, collection: 'crm_configs'
 
-        field :tf, as: :ticket_flags, type: Array, default: %w(priority general)
+        field :tf, as: :ticket_flags, type: Array, default: [{label: 'priority', color: 'e25d5d'}, {label: 'general', color: '27b6af'}]
         
         def to_json
           {
+            scope_id: self.scope_id.to_s,
             ticketFlags: self.ticket_flags
           }
         end

@@ -6,12 +6,7 @@ module UniversalCrm
     helper_method :universal_config
     
     def universal_config
-      if @universal_config.nil?
-        @configs = UniversalCrm::Config.all
-        @configs = @configs.scoped_to(universal_scope) if !universal_scope.nil?
-        @universal_config = @configs.first
-      end
-      @universal_config
+      @universal_config ||= UniversalCrm::Config.find_by_scope(universal_scope)
     end
     
   end

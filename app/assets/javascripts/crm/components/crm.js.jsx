@@ -1,6 +1,7 @@
 var CRM = React.createClass({
   getInitialState: function(){
     return {
+      config: null,
       tickets: [],
       ticketId: null,
       ticket: null,
@@ -15,11 +16,26 @@ var CRM = React.createClass({
       customerPage: 1,
       pageTitle: null,
       pageSection: null,
-      status: 'active',
-      ticketFlags: []
+      status: 'active'
     };
   },
+  init: function(){
+    console.log('initialize config')
+    $.ajax({
+      method: 'GET',
+      url: `/crm/config.json`,
+      success: (function(_this){
+        return function(data){
+          _this.setState({config: data});
+        }
+      })(this)
+    });
+  },
+  ticketFlags: function(){
+    return (this.state.config==null ? [] : this.state.config.ticketFlags);
+  },
   componentDidMount: function(){
+    this.init();
     if (this.props.customerId){
       this.setState({customerId: this.props.customerId});
       this.loadCustomer(this.props.customerId);
@@ -32,9 +48,6 @@ var CRM = React.createClass({
     }
     if (this.props.ticketId){
       this.setTicket(this.props.ticketId);
-    }
-    if (this.props.config){
-      this.setState({ticketFlags: this.props.config.ticketFlags});
     }
   },
   render: function() {
@@ -94,7 +107,8 @@ var CRM = React.createClass({
                   changeTicketStatusClosed={this.changeTicketStatusClosed}
                   changeTicketFlagPriority={this.changeTicketFlagPriority}
                   changeTicketFlagNormal={this.changeTicketFlagNormal}
-                  ticketFlags={this.state.ticketFlags}
+                  changeTicketFlag={this.changeTicketFlag}
+                  ticketFlags={this.ticketFlags()}
                   />
                 <NewTicket key="new_ticket"
                   customerId={this.state.customerId}
@@ -113,7 +127,8 @@ var CRM = React.createClass({
                   priorityIcon={this.priorityIcon}
                   closedLabel={this.closedLabel}
                   priorityTicket={this.priorityTicket}
-                  ticketFlags={this.state.ticketFlags}
+                  ticketFlags={this.ticketFlags()}
+                  config={this.state.config}
                 />
               </div>
             </div>
@@ -145,7 +160,6 @@ var CRM = React.createClass({
   },
   loadCustomers: function(page){
     if (page==undefined){page=1;}
-    console.log(this.state.searchWord)
     if(this.state.searchWord==''){
       this.setState({customers: [], searchTimer: null});
       this.hideCustomerList();

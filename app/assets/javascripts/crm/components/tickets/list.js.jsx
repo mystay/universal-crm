@@ -18,6 +18,7 @@ var TicketList = React.createClass({
             changeTicketFlagNormal={this.props.changeTicketFlagNormal}
             changeTicketStatusActive={this.props.changeTicketStatusActive}
             changeTicketStatusClosed={this.props.changeTicketStatusClosed}
+            config={this.props.config}
             />
         </li>
       )
