@@ -36,6 +36,7 @@ var Ticket = React.createClass({
               changeTicketStatusActive={this.props.changeTicketStatusActive}
               changeTicketStatusClosed={this.props.changeTicketStatusClosed}
               countComments={this.countComments}
+              ticketFlags={this.props.ticketFlags}
               />
           </div>
         </div>

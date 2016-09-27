@@ -1,11 +1,23 @@
 var TicketFunctions = React.createClass({
   render: function(){
     return(
-      <div className="btn-group">
-        {this.priorityButton()}
-        {this.closeButton()}
+      <div>
+        <div className="pull-right">
+          {this.closeButton()}
+        </div>
+        {this.ticketFlags()}
+        <div className="btn-group">
+          {this.priorityButton()}
+        </div>
       </div>
     )
+  },
+  ticketFlags: function(){
+    var btns = [];
+    this.props.ticketFlags.forEach(function(flag){
+      btns.push(<button className="btn btn-xs btn-default">{flag}</button>)
+    })
+    return (<div className="btn-group">{btns}</div>);
   },
   priorityButton: function(){
     if (this.props.status != 'closed'){

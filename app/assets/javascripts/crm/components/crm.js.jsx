@@ -15,7 +15,8 @@ var CRM = React.createClass({
       customerPage: 1,
       pageTitle: null,
       pageSection: null,
-      status: 'active'
+      status: 'active',
+      ticketFlags: []
     };
   },
   componentDidMount: function(){
@@ -31,6 +32,9 @@ var CRM = React.createClass({
     }
     if (this.props.ticketId){
       this.setTicket(this.props.ticketId);
+    }
+    if (this.props.config){
+      this.setState({ticketFlags: this.props.config.ticketFlags});
     }
   },
   render: function() {
@@ -90,6 +94,7 @@ var CRM = React.createClass({
                   changeTicketStatusClosed={this.changeTicketStatusClosed}
                   changeTicketFlagPriority={this.changeTicketFlagPriority}
                   changeTicketFlagNormal={this.changeTicketFlagNormal}
+                  ticketFlags={this.state.ticketFlags}
                   />
                 <NewTicket key="new_ticket"
                   customerId={this.state.customerId}
@@ -108,6 +113,7 @@ var CRM = React.createClass({
                   priorityIcon={this.priorityIcon}
                   closedLabel={this.closedLabel}
                   priorityTicket={this.priorityTicket}
+                  ticketFlags={this.state.ticketFlags}
                 />
               </div>
             </div>
