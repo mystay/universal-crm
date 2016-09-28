@@ -4,7 +4,6 @@ var ExpandedTicket = React.createClass({
     if (this.props.ticketId == this.props.ticket.id){
       return(
         <div>
-          {this.ticketNotes()}
           <p className='small'>
             Opened: {this.props.ticket.created_at} | Flagged: {this.props.ticket.flags.join(', ')}
           </p>
@@ -21,6 +20,7 @@ var ExpandedTicket = React.createClass({
               ticketFlags={this.props.ticketFlags}
               />
           </div>
+          {this.ticketNotes()}
           <Comments 
             subject_type='UniversalCrm::Ticket'
             subject_id={this.props.ticket.id}
