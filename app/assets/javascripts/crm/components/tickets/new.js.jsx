@@ -43,6 +43,12 @@ var NewTicket = React.createClass({
             {titleField}
             {contentField}
             {submitButton}
+            <p className="small text-muted">
+              Or, send an email to:
+              <a href={`mailto:${this.props.customer.inbound_email_address}`} target="_blank">
+                {this.props.customer.inbound_email_address}
+              </a>
+            </p>
           </div>
         </div>
       )

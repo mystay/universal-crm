@@ -15,6 +15,7 @@ module UniversalCrm
         include Universal::Concerns::Commentable
         include Universal::Concerns::Numbered
         include Universal::Concerns::Scoped
+        include Universal::Concerns::Tokened
         
         store_in session: UniversalCrm::Configuration.mongoid_session_name, collection: 'crm_tickets'
 
@@ -22,6 +23,7 @@ module UniversalCrm
         field :c, as: :content
 
         statuses %w(active closed), default: :active
+        kinds %w(normal email), :normal
 
         flags %w(priority)
 
@@ -29,6 +31,10 @@ module UniversalCrm
         belongs_to :responsible, class_name: Universal::Configuration.class_name_user, foreign_key: :responsible_id
 
         default_scope ->(){order_by(status: :asc, updated_at: :desc)}
+        
+        def inbound_email_address
+          "tk-#{self.token}@#{UniversalCrm::Configuration.inbound_postmark_email_address}"
+        end
         
         def close!(user)
           if self.active?

@@ -13,6 +13,7 @@ module UniversalCrm
         include Universal::Concerns::Taggable
         include Universal::Concerns::Scoped
         include Universal::Concerns::Polymorphic
+        include Universal::Concerns::Tokened
         
         store_in session: UniversalCrm::Configuration.mongoid_session_name, collection: 'crm_customers'
 
@@ -28,6 +29,10 @@ module UniversalCrm
         search_in :n, :e
         
         default_scope ->(){order_by(created_at: :desc)}
+        
+        def inbound_email_address
+          "cr-#{self.token}@#{UniversalCrm::Configuration.inbound_postmark_email_address}"
+        end
         
       end
     end

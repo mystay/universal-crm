@@ -19,7 +19,12 @@ module UniversalCrm
           per_page: 20
         },
         customers: @customers.map{|c| {id: c.id.to_s,
-        number: c.number.to_s, name: c.name, email: c.email, ticket_count: c.tickets.not_closed.count}}
+          number: c.number.to_s, 
+          name: c.name, 
+          email: c.email, 
+          token: c.token,
+          ticket_count: c.tickets.not_closed.count
+          }}
         }
     end
     
@@ -44,7 +49,9 @@ module UniversalCrm
           phone_work: @customer.phone_work,
           phone_mobile: @customer.phone_mobile,
           tags: @customer.tags,
-          ticket_count: @customer.tickets.count,
+          ticket_count: @customer.tickets.count, 
+          token: @customer.token,
+          inbound_email_address: @customer.inbound_email_address,
           closed_ticket_count: @customer.tickets.unscoped.closed.count}}
       end
     end

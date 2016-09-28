@@ -5,6 +5,7 @@ UniversalCrm::Engine.routes.draw do
   get '/customer/:customer_id', to: 'home#index'
   get '/company/:company_id', to: 'home#index'
   get '/ticket/:ticket_id', to: 'home#index'
+  post '/inbound', to: 'home#inbound'
   
   resource :config, controller: :config
   

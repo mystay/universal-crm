@@ -10,6 +10,7 @@ var TicketTitleButton = React.createClass({
           style={{cursor: 'pointer', fontWeight: 'bold'}}>
           <div className='pull-right small hidden-xs'>Ticket: #{this.props.ticket.number}</div>
           {this.props.closedLabel()}
+          {this.emailIcon()}
           {this.props.ticket.title}
           <Flags
             flags={this.props.ticket.flags}
@@ -19,6 +20,11 @@ var TicketTitleButton = React.createClass({
       )
     }else{
       return(<div></div>)   
+    }
+  },
+  emailIcon: function(){
+    if (this.props.ticket.kind.toString()=='email'){
+      return(<i className="fa fa-envelope fa-fw" style={{marginRight: '5px'}} />)
     }
   }
 });

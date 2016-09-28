@@ -53,12 +53,14 @@ module UniversalCrm
     def ticket(t)
       {
         id: t.id.to_s, number: t.number.to_s, status: t.status, 
+        kind: t.kind.to_s,
         subject_name: t.subject.name,
         subject_id: t.subject_id.to_s,
         title: t.title, content: t.content,
         updated_at: t.updated_at.strftime('%b %d, %Y, %l:%M%P'),
         created_at: t.created_at.strftime('%b %d, %Y, %l:%M%P'),
         comment_count: t.comments.count,
+        token: t.token,
         flags: t.flags
       }
     end
