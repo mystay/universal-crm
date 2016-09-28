@@ -48,7 +48,7 @@ var CRM = React.createClass({
       this.loadTickets();
     }
     if (this.props.ticketId){
-      this.setTicket(this.props.ticketId);
+      this.setState({ticketId: this.props.ticketId});
     }
   },
   render: function() {
@@ -106,14 +106,10 @@ var CRM = React.createClass({
                 <Ticket 
                   ticket={this.state.ticket}
                   setCustomerId={this.setCustomerId}
-                  priorityIcon={this.priorityIcon}
                   closedLabel={this.closedLabel}
                   closeTicket={this.closeTicket}
-                  priorityTicket={this.priorityTicket}
                   changeTicketStatusActive={this.changeTicketStatusActive}
                   changeTicketStatusClosed={this.changeTicketStatusClosed}
-                  changeTicketFlagPriority={this.changeTicketFlagPriority}
-                  changeTicketFlagNormal={this.changeTicketFlagNormal}
                   changeTicketFlag={this.changeTicketFlag}
                   ticketFlags={this.ticketFlags()}
                   />
@@ -131,9 +127,7 @@ var CRM = React.createClass({
                   pagination={this.state.ticketPagination}
                   currentPage={this.state.ticketPage}
                   setCustomerId={this.setCustomerId}
-                  priorityIcon={this.priorityIcon}
                   closedLabel={this.closedLabel}
-                  priorityTicket={this.priorityTicket}
                   ticketFlags={this.ticketFlags()}
                   config={this.state.config}
                 />
@@ -221,7 +215,7 @@ var CRM = React.createClass({
         })(this)
       });
     }else{
-      this.handlePageHistory('All customers', '/crm')
+      this.handlePageHistory('Home', '/crm')
     }
   },
   loadTickets: function(customerId, status, page){
@@ -241,7 +235,7 @@ var CRM = React.createClass({
           ticketPagination: data.pagination,
           ticketPage: page});
         if (t.state.ticketId){
-          t.setTicket(t.state.ticketId);
+          t.setTicketId(t.state.ticketId);
         }
       }
     });
@@ -259,7 +253,6 @@ var CRM = React.createClass({
   setTicketId: function(id){
     this.setTicket(id);
     if (id!=null){
-      this.handlePageHistory('', `/crm/ticket/${id}`);
       scrollTo("body");
     }else{
       this.handlePageHistory('All customers', '/crm');
@@ -275,6 +268,7 @@ var CRM = React.createClass({
       });
       if (ticketId && result[0]){
         this.setState({ticketId: ticketId, ticket: result[0], pageTitle: `${result[0].number}: ${result[0].title}`});
+        this.handlePageHistory(`${result[0].number}: ${result[0].title}`, `/crm/ticket/${ticketId}`);
       }
     }
   },
@@ -302,12 +296,6 @@ var CRM = React.createClass({
   },    
   changeTicketStatusClosed: function(){
     this.changeTicketStatus('closed')
-  },    
-  changeTicketFlagNormal: function(){
-    this.changeTicketFlag('priority', false);
-  },
-  changeTicketFlagPriority: function(){
-    this.changeTicketFlag('priority', true);
   },
   updateTicketInArray: function(ticket){
     var ticketIndex = this.indexByTicketId(ticket.id);

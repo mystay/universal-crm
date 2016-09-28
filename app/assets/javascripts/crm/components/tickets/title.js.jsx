@@ -4,7 +4,6 @@ var TicketTitle = React.createClass({
     if (this.props.ticket){
       return(
         <h4>
-          {this.props.priorityIcon()}
           {this.props.closedLabel()}
           {this.props.ticket.title}
         </h4>  
