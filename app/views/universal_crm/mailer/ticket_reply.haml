@@ -1,0 +1,13 @@
+%p
+  Hello #{@customer.name},
+%p
+  You have received a new reply to your ticket:
+  %strong= @ticket.numbered_title
+  
+%p
+  %strong Reply:
+= simple_format @comment.content
+
+%p
+  From:
+  #{@comment.author}

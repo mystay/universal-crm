@@ -32,12 +32,20 @@ module UniversalCrm
         if to[0,3]=='cr-'
           subject = UniversalCrm::Customer.find_by(token: token)
           if !subject.nil?
-            subject.tickets.create kind: :email, title: params['Subject'], content: params['TextBody'], scope: subject.scope, responsible: sender
+            subject.tickets.create  kind: :email,
+                                    title: params['Subject'],
+                                    content: params['TextBody'],
+                                    scope: subject.scope,
+                                    responsible: sender
           end
         elsif to[0,3] == 'tk-'
           subject = UniversalCrm::Ticket.find_by(token: token)
           if !subject.nil?
-            subject.comments.create content: params['TextBody'], user: sender, kind: :email
+            subject.comments.create content: params['TextBody'],
+                                    user: sender,
+                                    kind: :email,
+                                    when: Time.now.utc,
+                                    author: (sender.nil? ? 'Unknown' : sender.name)
           end
         else #we may be sending directly to an inbound adress of an existing customer:
           subject = UniversalCrm::Customer.find_by(email: to)

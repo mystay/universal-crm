@@ -1,7 +1,10 @@
 var Comment = React.createClass({
   
   render: function(){
-    var timeago = jQuery.timeago(this.props.comment.when)
+    var timeago
+    if (this.props.comment.when){
+       timeago = jQuery.timeago(this.props.comment.when);
+    }
     return(
       <div className="row wrapper animated fadeInRight">
         <div className="col-sm-2">

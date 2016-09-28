@@ -32,6 +32,10 @@ module UniversalCrm
 
         default_scope ->(){order_by(status: :asc, updated_at: :desc)}
         
+        def numbered_title
+          [self.number, self.title].join(' - ')
+        end
+        
         def inbound_email_address
           "tk-#{self.token}@#{UniversalCrm::Configuration.inbound_postmark_email_address}"
         end

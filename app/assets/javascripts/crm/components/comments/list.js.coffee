@@ -18,6 +18,7 @@
     $.post '/universal/comments', { subject_type: @props.subject_type, subject_id: @props.subject_id, content: @state.content}, (data) =>
       @replaceState comments: data, content: '', focused: false
       @props.countComments(data.length)
+      showSuccess("Comments saved")
     , 'JSON'
     
   handleChange: (e) ->
@@ -43,7 +44,7 @@
     R.div null,
       R.form className: '', onSubmit: @handleSubmit,
         R.div className: 'form-group',
-          R.textarea className: 'form-control', value: @state.content, placeholder: 'Leave a comment...', onChange: @handleChange, style: {minHeight: '80px'}
+          R.textarea className: 'form-control', value: @state.content, placeholder: this.props.newCommentPlaceholder, onChange: @handleChange, style: {minHeight: '80px'}
 
         if @valid()
           R.div className: 'form-group',

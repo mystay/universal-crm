@@ -24,7 +24,9 @@ var ExpandedTicket = React.createClass({
             countComments={this.props.countComments}
             newCommentPosition='bottom'
             status={this.props.status}
+            newCommentPlaceholder={this.newCommentPlaceholder()}
             />
+          {this.emailWarning()}
         </div>
       )
     }else{
@@ -38,6 +40,27 @@ var ExpandedTicket = React.createClass({
           {nl2br(this.props.ticket.content)}
         </blockquote>
       )
+    }
+  },
+  email: function(){
+    return this.props.ticket.kind.toString() == 'email';
+  },
+  emailWarning: function(){
+    if (this.email()){
+      return(
+        <div className="alert alert-warning alert-sm">
+          <i className="fa fa-exclamation-triangle" /> <strong>Note:</strong> This reply will be emailed to the customer
+        </div>
+      )
+    }else{
+      return(null)
+    }
+  },
+  newCommentPlaceholder: function(){
+    if (this.email()){
+      return 'Reply...';
+    }else{
+      return 'New comment...';
     }
   }
 });
