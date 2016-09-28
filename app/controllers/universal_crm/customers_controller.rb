@@ -56,6 +56,25 @@ module UniversalCrm
       end
     end
     
+    def create
+      #make sure we don't have an existing customer
+      @customer = UniversalCrm::Customer.find_or_create_by(scope: universal_scope, email: params[:email])
+      if !@customer.nil?
+        @customer.update(name: params[:name])
+        #Check if we need to link this to a User model
+        if @customer.subject.nil?
+          if !Universal::Configuration.class_name_user.blank?
+            user = Universal::Configuration.class_name_user.classify.constantize.find_by(email: @customer.email)
+            @customer.update(subject: user, kind: :user)
+          end
+        end
+        
+        render json: {name: @customer.name, email: @customer.email}
+      else
+        render json: {}
+      end
+    end
+    
     def update
       @customer = UniversalCrm::Customer.find(params[:id])
       @customer.update(params.require(:customer).permit(:name, :email, :phone_home, :phone_work, :phone_mobile))

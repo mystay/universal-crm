@@ -12,4 +12,7 @@
 //= require_tree ./components/comments
 //= require_tree ./components/customers
 //= require_tree ./components/tickets
+//= require ./underscore
+//= require ./backbone
+//= require ./messenger
 //= require_tree .

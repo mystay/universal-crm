@@ -6,6 +6,9 @@ var Aside = React.createClass({
     this.props.setCustomerId(null);
     this.props.setTicketId(null);
   },
+  newCustomer: function(){
+    this.props.displayNewCustomer(true);
+  },
   render: function(){
     return(
       <aside className="sidebar sidebar-left">
@@ -34,6 +37,15 @@ var Aside = React.createClass({
               <a style={{cursor: 'pointer'}} onClick={this.props.loadClosedTickets}>
                 <i className="fa fa-check fa-fw" />
                 Closed
+              </a>
+            </li>
+          </ul>
+          <h5 className="sidebar-header">Customers</h5>
+          <ul className="nav nav-pills nav-stacked">
+            <li>
+              <a style={{cursor: 'pointer'}} onClick={this.newCustomer}>
+                <i className="fa fa-plus fa-fw" />
+                New
               </a>
             </li>
           </ul>
