@@ -1,0 +1,10 @@
+%p
+  Hello #{@customer.name},
+%p
+  Here is a copy of your message:
+  %strong= @ticket.numbered_title
+  
+= simple_format @ticket.content
+
+%p
+  To continue this message, you can reply to this email.

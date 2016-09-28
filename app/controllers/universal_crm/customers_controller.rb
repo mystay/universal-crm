@@ -62,13 +62,7 @@ module UniversalCrm
       if !@customer.nil?
         @customer.update(name: params[:name])
         #Check if we need to link this to a User model
-        if @customer.subject.nil?
-          if !Universal::Configuration.class_name_user.blank?
-            user = Universal::Configuration.class_name_user.classify.constantize.find_by(email: @customer.email)
-            @customer.update(subject: user, kind: :user)
-          end
-        end
-        
+        @customer.assign_user_subject!(universal_scope)        
         render json: {name: @customer.name, email: @customer.email}
       else
         render json: {}

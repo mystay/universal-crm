@@ -1,7 +1,7 @@
 require_dependency "universal_crm/application_controller"
 
 module UniversalCrm
-  class TicketsController < ::ApplicationController
+  class TicketsController < ApplicationController
     
     def index
       params[:page] = 1 if params[:page].blank?
@@ -27,10 +27,31 @@ module UniversalCrm
         }
     end
     
+    def new
+      
+    end
+    
     def create
-      subject = UniversalCrm::Customer.find params[:customer_id]
-      ticket = subject.tickets.new title: params[:title], content: params[:content], scope: universal_scope, responsible: universal_user
-      ticket.save
+      if !params[:customer_id].blank?
+        subject = UniversalCrm::Customer.find params[:customer_id]
+        kind = :normal
+      elsif !params[:customer_name].blank? and !params[:customer_email].blank?
+        #find a customer by this email
+        subject = UniversalCrm::Customer.find_or_create_by(scope: universal_scope, email: params[:customer_email])
+        subject.assign_user_subject!(universal_scope)
+        kind = :email
+      end
+      if !params[:title].blank?
+        ticket = subject.tickets.create kind: kind,
+                                        title: params[:title],
+                                        content: params[:content],
+                                        scope: universal_scope,
+                                        responsible: universal_user
+        if ticket.valid? and ticket.email?
+          #Send the contact form to the customer for their reference
+          UniversalCrm::Mailer.new_ticket(subject, ticket).deliver_now
+        end
+      end
       render json: {}
     end
     

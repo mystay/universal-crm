@@ -34,6 +34,15 @@ module UniversalCrm
           "cr-#{self.token}@#{UniversalCrm::Configuration.inbound_postmark_email_address}"
         end
         
+        # Look through our user model, and see if we can find someone with the same email address,
+        # and if so, assign them as the subject of this customer
+        def assign_user_subject!(scope=nil)
+          if !Universal::Configuration.class_name_user.blank? and self.subject.nil?
+            user = Universal::Configuration.class_name_user.classify.constantize.find_by(scope: scope, email: self.email)
+            self.update(subject: user, kind: :user) if !user.nil?
+          end
+        end
+        
       end
     end
   end
