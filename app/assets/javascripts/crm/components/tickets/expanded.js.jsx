@@ -6,16 +6,13 @@ var ExpandedTicket = React.createClass({
         <div>
           {this.ticketNotes()}
           <p className='small'>
-            Opened: {this.props.ticket.created_at} | Flagged: {this.props.ticket.flags.join(', ')}
+            Opened: {this.props.ticket.created_at}
           </p>
           <div className="well well-sm">
             <TicketFunctions
               status={this.props.status}
               flags={this.props.ticket.flags}
-              priorityTicket={this.props.priorityTicket}
               changeTicketFlag={this.props.changeTicketFlag}
-              changeTicketFlagPriority={this.props.changeTicketFlagPriority}
-              changeTicketFlagNormal={this.props.changeTicketFlagNormal}
               changeTicketStatusActive={this.props.changeTicketStatusActive}
               changeTicketStatusClosed={this.props.changeTicketStatusClosed}
               ticketFlags={this.props.ticketFlags}

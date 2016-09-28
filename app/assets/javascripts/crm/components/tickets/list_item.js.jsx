@@ -12,7 +12,6 @@ var TicketListItem = React.createClass({
         <h4 className="list-group-item-heading">
           <TicketTitleButton 
             ticket={this.props.ticket}
-            priorityIcon={this.priorityIcon}
             closedLabel={this.closedLabel}
             selectTicketId={this.selectTicketId}
             config={this.props.config}
@@ -50,28 +49,9 @@ var TicketListItem = React.createClass({
       return 'text-success'
     }
   },
-  priorityTicket: function(){
-    return (this.props.ticket && this.props.ticket.flags.indexOf('priority')>-1);
-  },
-  priorityIcon: function(){
-    if (this.props.ticket && this.priorityTicket() && this.props.ticket.status != 'closed'){
-      return <i className='fa fa-flag text-danger' style={{marginRight: '5px'}} />
-    }
-  },
   closedLabel: function(){
     if (this.props.ticket && this.props.ticket.status == 'closed'){
       return <span className='label label-default' style={{marginRight: '5px'}}>Closed</span>
     }
-  },
-  ticketClass: function(e){
-    if (e == 'pending'){
-      return "label label-info";
-    }else if (e == 'active'){
-      return "label label-danger";
-    }else if (e == 'closed'){
-      return "label label-default";
-    }else if (e == 'priority'){
-      return "label label-warning";
-    }
-  }  
+  }
 });

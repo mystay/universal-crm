@@ -44,8 +44,10 @@ module UniversalCrm
       @ticket = UniversalCrm::Ticket.find(params[:id])
       if params[:add] == 'true'
         @ticket.flag!(params[:flag], universal_user)
+        @ticket.save_comment!("Added flag: '#{params[:flag]}'", current_user)
       else
         @ticket.remove_flag!(params[:flag])
+        @ticket.save_comment!("Removed flag: '#{params[:flag]}'", current_user)
       end
       render json: {ticket: ticket(@ticket)}
     end

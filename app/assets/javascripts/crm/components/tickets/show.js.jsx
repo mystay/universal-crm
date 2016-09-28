@@ -30,10 +30,7 @@ var Ticket = React.createClass({
               ticketId={this.props.ticket.id}
               ticket={this.props.ticket}
               status={this.props.ticket.status}
-              priorityTicket={this.priorityTicket}
               changeTicketFlag={this.props.changeTicketFlag}
-              changeTicketFlagPriority={this.props.changeTicketFlagPriority}
-              changeTicketFlagNormal={this.props.changeTicketFlagNormal}
               changeTicketStatusActive={this.props.changeTicketStatusActive}
               changeTicketStatusClosed={this.props.changeTicketStatusClosed}
               countComments={this.countComments}
@@ -47,8 +44,5 @@ var Ticket = React.createClass({
         <div></div>
       )
     }
-  },
-  priorityTicket: function(){
-    return (this.props.ticket && this.props.ticket.flags.indexOf('priority')>-1);
   }
 });
