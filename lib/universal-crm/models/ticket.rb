@@ -32,6 +32,8 @@ module UniversalCrm
 
         default_scope ->(){order_by(status: :asc, updated_at: :desc)}
         
+        search_in :t
+        
         def numbered_title
           [self.number, self.title].join(' - ')
         end
