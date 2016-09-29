@@ -36,8 +36,8 @@ module UniversalCrm
           [self.number, self.title].join(' - ')
         end
         
-        def inbound_email_address
-          "tk-#{self.token}@#{UniversalCrm::Configuration.inbound_postmark_email_address}"
+        def inbound_email_address(config)
+          "tk-#{self.token}@#{config.inbound_domain}"
         end
         
         def close!(user)

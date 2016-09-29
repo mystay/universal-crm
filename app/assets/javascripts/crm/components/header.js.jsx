@@ -4,12 +4,7 @@ var Header = React.createClass({
     return(
       
       <header id="header">
-        <div className="brand">
-          <a href="/crm" className="logo">
-            <i className="fa fa-comments" style={{marginRight: '5px'}}/>
-            <span>{this.props.crm_title == null ? 'CRM' : this.props.crm_title}</span>
-          </a>
-        </div>
+        <BrandLogo crm_title={this.props.crm_title} />
         <ul className="nav navbar-nav navbar-left">
           <li className="toggle-navigation toggle-left">
             <button className="sidebar-toggle" id="toggle-left">

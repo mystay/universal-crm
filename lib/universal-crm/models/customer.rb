@@ -30,8 +30,8 @@ module UniversalCrm
         
         default_scope ->(){order_by(created_at: :desc)}
         
-        def inbound_email_address
-          "cr-#{self.token}@#{UniversalCrm::Configuration.inbound_postmark_email_address}"
+        def inbound_email_address(config)
+          "cr-#{self.token}@#{config.inbound_domain}"
         end
         
         # Look through our user model, and see if we can find someone with the same email address,

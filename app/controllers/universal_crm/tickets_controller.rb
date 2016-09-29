@@ -49,7 +49,7 @@ module UniversalCrm
                                         responsible: universal_user
         if ticket.valid? and ticket.email?
           #Send the contact form to the customer for their reference
-          UniversalCrm::Mailer.new_ticket(subject, ticket).deliver_now
+          UniversalCrm::Mailer.new_ticket(universal_config, subject, ticket).deliver_now
         end
       end
       render json: {}
