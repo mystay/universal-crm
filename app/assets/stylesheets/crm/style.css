@@ -9,4 +9,4 @@ small{font-size:0.7em;}
   h4{font-size:0.8em;}
 }
 .alert-sm{font-size:0.8em;padding:8px;}
-blockquote{font-size:10pt;}
+blockquote, .post>p{font-size:10pt!important;}
