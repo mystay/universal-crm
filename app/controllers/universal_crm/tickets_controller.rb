@@ -59,7 +59,11 @@ module UniversalCrm
     
     def update_status
       @ticket = UniversalCrm::Ticket.find(params[:id])
-      @ticket.update(status: params[:status])
+      if params[:status]=='closed'
+        @ticket.close!(universal_user)
+      else
+        @ticket.open!(universal_user)
+      end
       render json: {ticket: ticket(@ticket)}
     end
     
