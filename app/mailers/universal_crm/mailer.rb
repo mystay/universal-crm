@@ -10,7 +10,7 @@ module UniversalCrm
         mail  to: @customer.email,
               from: "#{config.transaction_email_from} <#{config.transaction_email_address}>",
               reply_to: ticket.inbound_email_address(config),
-              subject: "Ticket: ##{ticket.number}"
+              subject: "#{ticket.title}"
       end
     end
 
@@ -23,7 +23,7 @@ module UniversalCrm
         mail  to: @customer.email,
               from: "#{config.transaction_email_from} <#{config.transaction_email_address}>",
               reply_to: ticket.inbound_email_address(config),
-              subject: "Ticket: ##{ticket.number}"
+              subject: "#{ticket.title}"
       end
     end
   end
