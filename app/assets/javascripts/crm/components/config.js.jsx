@@ -22,7 +22,7 @@ var Config = React.createClass({
   render: function(){
     return(
       <div>
-        <header><BrandLogo crm_title={this.props.crm_title} /></header>
+        <header><BrandLogo system_name={this.props.config ? this.props.config.system_name : null} /></header>
         <div className="panel panel-primary" id="locked-screen">
           <div className="panel-heading">
             <h3 className="panel-title">Config</h3>
@@ -95,8 +95,13 @@ var Config = React.createClass({
       dataType: 'JSON',
       data:{
         config: {
+          system_name: ReactDOM.findDOMNode(refs.system_name).value,
           inbound_domain: ReactDOM.findDOMNode(refs.inbound_domain).value,
-          transaction_email_address: ReactDOM.findDOMNode(refs.transaction_email_address).value
+          transaction_email_address: ReactDOM.findDOMNode(refs.transaction_email_address).value,
+          transaction_email_from: ReactDOM.findDOMNode(refs.transaction_email_from).value,
+          new_ticket_header: ReactDOM.findDOMNode(refs.new_ticket_header).value,
+          new_reply_header: ReactDOM.findDOMNode(refs.new_reply_header).value,
+          email_footer: ReactDOM.findDOMNode(refs.email_footer).value
         }
       },
       success: (function(_this){

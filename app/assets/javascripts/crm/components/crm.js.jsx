@@ -56,7 +56,7 @@ var CRM = React.createClass({
       <section id="main-wrapper" className="theme-blue">
         <Header
           username={this.props.username}
-          crm_title={this.props.crm_title}
+          system_name={this.props.config ? this.props.config.system_name : null}
           loadCustomers={this.loadCustomers}
           handleSearch={this.handleSearch}
           />
@@ -116,7 +116,9 @@ var CRM = React.createClass({
                 <NewTicket key="new_ticket"
                   customerId={this.state.customerId}
                   customer={this.state.customer}
-                  loadTickets={this.loadTickets}/>
+                  loadTickets={this.loadTickets}
+                  config={this.state.config}
+                  />
                 <TicketList key='tickets'
                   customerId={this.state.customerId}
                   ticketId={this.state.ticketId}

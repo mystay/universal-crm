@@ -11,7 +11,7 @@ module UniversalCrm
     end
     
     def update
-      universal_config.update(params.require(:config).permit(:inbound_domain, :transaction_email_address))
+      universal_config.update(params.require(:config).permit(:system_name, :inbound_domain, :transaction_email_address, :transaction_email_from, :new_ticket_header, :new_reply_header, :email_footer))
       render json: universal_config.to_json
     end
     

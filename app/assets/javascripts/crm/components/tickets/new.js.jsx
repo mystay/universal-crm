@@ -15,6 +15,7 @@ var NewTicket = React.createClass({
     var titleField=null;
     var contentField=null;
     var submitButton=null;
+    var emailCheckbox=null
     if (this.props.customer){
       var placeholder=`New ticket for ${this.props.customer.name}...`
       titleField = <div className='form-group'>
@@ -33,15 +34,25 @@ var NewTicket = React.createClass({
           </div>
         submitButton = <div className="form-group m-0">
             <button className='btn btn-primary btn-sm' onClick={this.handleSubmit}>
-              <i className='fa fa-plus' /> Add this ticket
+              <i className='fa fa-check' /> Save
             </button>
           </div>
+        if (this.props.config.transaction_email_address){
+          emailCheckbox = (
+            <div className="form-group">
+              <label>
+                <input type="checkbox" ref="email" /> Send as email
+              </label>
+            </div>
+          )
+        }
       }
       return(
         <div className="panel">
           <div className="panel-body">
             {titleField}
             {contentField}
+            {emailCheckbox}
             {submitButton}
             <p className="small text-muted">
               Or, send an email to:
@@ -53,16 +64,18 @@ var NewTicket = React.createClass({
         </div>
       )
     }else{
-      return(<div></div>)                              
+      return(null);                              
     }
   },
   handleSubmit: function(e){
     e.preventDefault();
+    var email = ReactDOM.findDOMNode(this.refs.email);
+    email = (email!=undefined ? email.checked : false)
     $.ajax({
       method: 'POST',
       url: '/crm/tickets',
       dataType: 'JSON',
-      data:{title: this.state.title, content: this.state.content, customer_id: this.props.customerId},
+      data:{title: this.state.title, content: this.state.content, customer_id: this.props.customerId, email: email},
       success: (function(_this){
         return function(data){
           _this.setState({title: '', content: ''});

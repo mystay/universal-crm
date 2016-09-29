@@ -50,7 +50,7 @@
           R.div className: 'form-group',
             R.button className: 'btn btn-primary btn-sm', disabled: !@valid(),
               R.i className: 'fa fa-check'
-              ' Save this comment'
+              ' Send'
               
   renderCommentList: ->
     R = React.DOM

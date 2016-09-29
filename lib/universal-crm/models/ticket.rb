@@ -47,7 +47,7 @@ module UniversalCrm
           end
         end
         
-        def open!(user)
+        def open!(user=nil)
           if self.closed?
             self.save_comment!("Ticket Opened", user)
             self.active!

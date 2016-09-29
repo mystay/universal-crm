@@ -1,25 +1,30 @@
 module UniversalCrm
   class Mailer < ActionMailer::Base
   
-    def new_ticket(config, customer, ticket)
-      @customer = customer
-      @ticket = ticket
-      mail  to: 'bpetro@feet.shoes',#@customer.email,
-            from: config.transaction_email_address,
-            reply_to: ticket.inbound_email_address(config),
-            subject: "Ticket Raised ##{ticket.number}"
-
+    def new_ticket(config, customer, ticket, sent_from_crm=true)
+      if !config.transaction_email_address.blank?
+        @customer = customer
+        @ticket = ticket
+        @config = config
+        @sent_from_crm = sent_from_crm
+        mail  to: @customer.email,
+              from: "#{config.transaction_email_from} <#{config.transaction_email_address}>",
+              reply_to: ticket.inbound_email_address(config),
+              subject: "Ticket: ##{ticket.number}"
+      end
     end
 
     def ticket_reply(config, customer, ticket, comment)
-      @customer = customer
-      @ticket = ticket
-      @comment = comment
-      mail  to: 'bpetro@feet.shoes',#@customer.email,
-            from: config.transaction_email_address,
-            reply_to: ticket.inbound_email_address(config),
-            subject: "Ticket ##{ticket.number} - New reply"
-
+      if !config.transaction_email_address.blank?
+        @customer = customer
+        @ticket = ticket
+        @comment = comment
+        @config = config
+        mail  to: @customer.email,
+              from: "#{config.transaction_email_from} <#{config.transaction_email_address}>",
+              reply_to: ticket.inbound_email_address(config),
+              subject: "Ticket: ##{ticket.number}"
+      end
     end
   end
 end

@@ -6,7 +6,7 @@ module Universal
 
     def index
       @model = find_model
-      render json: @model.comments.map{|c| {id: c.id.to_s, kind: c.kind.to_s, author: (c.user.nil? ? c.author : c.user.name), content: c.content, when: c.when}}
+      render json: @model.comments.map{|c| {id: c.id.to_s, kind: c.kind.to_s, author: (c.user.nil? ? c.author : c.user.name), content: c.content.html_safe, when: c.when}}
     end
     
     def create

@@ -5,7 +5,7 @@ var BrandLogo = React.createClass({
       <div className="brand">
         <a href="/crm" className="logo">
           <i className="fa fa-comments" style={{marginRight: '5px'}}/>
-          <span>{this.props.crm_title == null ? 'CRM' : this.props.crm_title}</span>
+          <span>{this.props.system_name == null ? 'CRM' : this.props.system_name}</span>
         </a>
       </div>
     )

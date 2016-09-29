@@ -4,7 +4,7 @@ var Header = React.createClass({
     return(
       
       <header id="header">
-        <BrandLogo crm_title={this.props.crm_title} />
+        <BrandLogo system_name={this.props.system_name} />
         <ul className="nav navbar-nav navbar-left">
           <li className="toggle-navigation toggle-left">
             <button className="sidebar-toggle" id="toggle-left">

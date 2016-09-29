@@ -40,7 +40,7 @@ module UniversalCrm
           customer.update(name: params['FromName']) if customer.name.blank?
           ticket = customer.tickets.create  kind: :email,
                                   title: params['Subject'],
-                                  content: params['TextBody'],
+                                  content: params['TextBody'].hideQuotedLines,
                                   scope: config.scope
           
           #Send this ticket to the customer now, so they can reply to it
@@ -63,16 +63,18 @@ module UniversalCrm
             if !subject.nil?
               subject.tickets.create  kind: :email,
                                       title: params['Subject'],
-                                      content: params['TextBody'],
+                                      content: params['TextBody'].hideQuotedLines,
                                       scope: subject.scope,
                                       responsible: sender
             end
           elsif to[0,3] == 'tk-'
             ticket = UniversalCrm::Ticket.find_by(token: possible_token)
             customer = ticket.subject
+            user = (customer.subject.class.to_s == Universal::Configuration.class_name_user.to_s ? customer.subject : nil),
             if !ticket.nil?
-              ticket.comments.create content: params['TextBody'],
-                                      user: (customer.subject.class == Universal::Configuration.class_name_user ? customer.subejct : nil),
+              ticket.open!(user)
+              ticket.comments.create content: params['TextBody'].hideQuotedLines,
+                                      user: user
                                       kind: :email,
                                       when: Time.now.utc,
                                       author: (customer.nil? ? 'Unknown' : customer.name)
