@@ -1,7 +1,7 @@
 - if !@config.new_reply_header.blank?
   = simple_format @config.new_reply_header
   %p= '------------------------------------------------------'
-%h3 Ticket: #{@ticket.numbered_title}
+%h3 Ticket: ##{@ticket.numbered_title}
 = simple_format @comment.content
 - if !@config.email_footer.blank?
   %p= '------------------------------------------------------'

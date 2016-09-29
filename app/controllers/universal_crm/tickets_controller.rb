@@ -35,11 +35,13 @@ module UniversalCrm
       if !params[:customer_id].blank?
         subject = UniversalCrm::Customer.find params[:customer_id]
         kind = (params[:email].to_s == 'true' ? :email : :normal)
+        sent_from_crm=true
       elsif !params[:customer_name].blank? and !params[:customer_email].blank?
         #find a customer by this email
         subject = UniversalCrm::Customer.find_or_create_by(scope: universal_scope, email: params[:customer_email])
         subject.assign_user_subject!(universal_scope)
         kind = :email
+        sent_from_crm=false
       end
       if !params[:title].blank?
         ticket = subject.tickets.create kind: kind,
@@ -49,7 +51,7 @@ module UniversalCrm
                                         responsible: universal_user
         if ticket.valid? and ticket.email?
           #Send the contact form to the customer for their reference
-          UniversalCrm::Mailer.new_ticket(universal_crm_config, subject, ticket, false).deliver_now
+          UniversalCrm::Mailer.new_ticket(universal_crm_config, subject, ticket, sent_from_crm).deliver_now
         end
       end
       render json: {}

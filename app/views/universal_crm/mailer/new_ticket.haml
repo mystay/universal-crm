@@ -1,7 +1,7 @@
 - if !@config.new_ticket_header.blank? and !@sent_from_crm
   = simple_format @config.new_ticket_header
   %p= '------------------------------------------------------'
-%h3 Ticket: #{@ticket.numbered_title}
+%h3 Ticket: ##{@ticket.numbered_title}
 = simple_format @ticket.content
 - if !@config.email_footer.blank?
   %p= '------------------------------------------------------'
