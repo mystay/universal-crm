@@ -51,7 +51,7 @@ module UniversalCrm
           tags: @customer.tags,
           ticket_count: @customer.tickets.count, 
           token: @customer.token,
-          inbound_email_address: @customer.inbound_email_address(universal_config),
+          inbound_email_address: @customer.inbound_email_address(universal_crm_config),
           closed_ticket_count: @customer.tickets.unscoped.closed.count}}
       end
     end

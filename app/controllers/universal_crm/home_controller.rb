@@ -56,10 +56,10 @@ module UniversalCrm
           elsif !bcc.blank? and inbound_domains.include?(bcc[bcc.index('@')+1, bcc.length])
             to = bcc
           end
-          possible_token = to[3, to.index('@')-3]
-          puts possible_token
+          token = to[3, to.index('@')-3]
+          puts token
           if to[0,3]=='cr-'
-            subject = UniversalCrm::Customer.find_by(token: possible_token)
+            subject = UniversalCrm::Customer.find_by(token: token)
             if !subject.nil?
               subject.tickets.create  kind: :email,
                                       title: params['Subject'],
@@ -68,13 +68,13 @@ module UniversalCrm
                                       responsible: sender
             end
           elsif to[0,3] == 'tk-'
-            ticket = UniversalCrm::Ticket.find_by(token: possible_token)
+            ticket = UniversalCrm::Ticket.find_by(token: token)
             customer = ticket.subject
             user = (customer.subject.class.to_s == Universal::Configuration.class_name_user.to_s ? customer.subject : nil),
             if !ticket.nil?
               ticket.open!(user)
               ticket.comments.create content: params['TextBody'].hideQuotedLines,
-                                      user: user
+                                      user: user,
                                       kind: :email,
                                       when: Time.now.utc,
                                       author: (customer.nil? ? 'Unknown' : customer.name)

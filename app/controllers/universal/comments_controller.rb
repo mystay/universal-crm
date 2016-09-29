@@ -15,7 +15,7 @@ module Universal
       @comment.when = Time.now.utc
       @comment.user = current_user
       if @comment.save
-        UniversalCrm::Mailer.ticket_reply(universal_config, @model.subject, @model, @comment).deliver_now if @model.class == UniversalCrm::Ticket and @model.email?
+        UniversalCrm::Mailer.ticket_reply(universal_crm_config, @model.subject, @model, @comment).deliver_now if @model.class == UniversalCrm::Ticket and @model.email?
         @model.touch
       else
         logger.debug @comment.errors.to_json
