@@ -116,8 +116,7 @@ var Comments = React.createClass({
         },
         success: (function(_this){
           return function(data){
-            _this.setState({comments: data, subject_id: _this.props.subject_id});
-            _this.setState({loading: false});
+            _this.setState({comments: data, subject_id: _this.props.subject_id, loading: false});
           }
         })(this)
       });

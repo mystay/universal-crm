@@ -1,6 +1,7 @@
 var Tags = React.createClass({
   getInitialState: function(){
     return {
+      propTags: null,
       tags: [],
       editedTags: [],
       edit: false,
@@ -8,12 +9,15 @@ var Tags = React.createClass({
     }
   },
   componentDidMount: function(){
-    this.setState({tags: this.props.tags});
+    this.setState({tags: this.props.tags, propTags: this.props.tags});
   },
   componentDidUpdate: function(){
     field = ReactDOM.findDOMNode(this.refs.edit_field);
     if (this.state.edit && field){
       field.focus();
+    }
+    if (this.props.tags != this.state.propTags){ //we have sent new props
+      this.setState({tags: this.props.tags, propTags: this.props.tags});
     }
   }, 
   handleToggle: function(e){

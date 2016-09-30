@@ -1,16 +1,19 @@
 var Attachments = React.createClass({
   getInitialState: function(){
     return({
+      subjectId: null,
       attachments: [],
-      newAttachment: false
+      newAttachment: false,
+      loading: false
     })
   },
-  componentDidMount: function(){
-    this.loadAttachments();
-    var file = ReactDOM.findDOMNode(this.refs.fileUpload);
+  init: function(){
+    var input_id = `#file_input_${this.props.customerId}`;
+    var file = $(input_id);
     var _this = this;
     $(file).fileupload({
       dataType: 'json',
+      url: this.url(),
       done: function (e, data) {
         _this.loadAttachments();
         $('#progress').hide();
@@ -25,6 +28,16 @@ var Attachments = React.createClass({
       }
     });
   },
+  componentDidMount: function(){
+    this.loadAttachments();
+    this.init();
+  },
+  componentDidUpdate: function(){
+    if (this.props.subjectId != null && this.props.subjectId != this.state.subjectId && !this.state.loading){
+      this.loadAttachments();
+      this.init();
+    }
+  },
   url: function(){
     return `/crm/attachments?subject_id=${this.props.subjectId}&subject_type=${this.props.subjectType}`
   },
@@ -36,7 +49,7 @@ var Attachments = React.createClass({
         {this.newAttachment()}
         <div id="new_attachment_form" style={{display: 'none'}}>
           <div className="form-group">
-            <input id="file_input" type="file" className="form-control" ref='fileUpload' data-url={this.url()} />
+            <input id={`file_input_${this.props.customerId}`} type="file" className="form-control" ref='fileUpload' />
             <div id="progress" className="progress" style={{display: 'none'}}>
               <div className="progress-bar progress-bar-primary"></div>
             </div>
@@ -59,17 +72,20 @@ var Attachments = React.createClass({
     }
   },
   loadAttachments: function(){
-    $.ajax({
-      method: 'GET',
-      url: `/crm/attachments?subject_id=${this.props.subjectId}&subject_type=${this.props.subjectType}`,
-      success: (function(_this){
-        return function(data){
-          if (data){
-            _this.setState({attachments: data.attachments});
+    if (!this.state.loading){
+      this.setState({loading: true});
+      $.ajax({
+        method: 'GET',
+        url: `/crm/attachments?subject_id=${this.props.subjectId}&subject_type=${this.props.subjectType}`,
+        success: (function(_this){
+          return function(data){
+            if (data){
+              _this.setState({subjectId: _this.props.subjectId, attachments: data.attachments, loading: false});
+            }
           }
-        }
-      })(this)
-    });
+        })(this)
+      });
+    }
   },
   toggleNew: function(){
     this.setState({newAttachment: true});
