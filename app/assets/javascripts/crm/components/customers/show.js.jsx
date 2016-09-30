@@ -108,7 +108,7 @@ var CustomerShow = React.createClass({
               <dt>Phone (Mobile):</dt>
               <dd>{this.state.customer.phone_mobile}</dd>
             </dl>
-            <Tags subject_type="UniversalCrm::Customer" subject_id={this.state.customer.id} tags={this.state.customer.tags} />
+            <Tags subjectType="UniversalCrm::Customer" subjectId={this.state.customer.id} tags={this.state.customer.tags} />
           </div>
         </div>
       )

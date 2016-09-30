@@ -7,30 +7,36 @@ var Tags = React.createClass({
       subjectId: null
     }
   },
-  handleToggle: function(e){
-    e.preventDefault();
-    this.setState({edit: !this.state.edit});
+  componentDidMount: function(){
+    this.setState({tags: this.props.tags});
   },
   componentDidUpdate: function(){
     field = ReactDOM.findDOMNode(this.refs.edit_field);
     if (this.state.edit && field){
       field.focus();
     }
-    if (this.state.tags!=this.props.tags){
-      this.setState({tags: this.props.tags});
-    }
-  },    
+  }, 
+  handleToggle: function(e){
+    e.preventDefault();
+    this.setState({edit: !this.state.edit});
+  },
   handleEdit: function(e){
     this.setState({editedTags: e.target.value.replace(', ',',').split(',')});
   },
   handleSubmit: function(e){
     e.preventDefault();
-    this.setState({edit: false, tags: this.state.editedTags});
+    this.setState({edit: false});
     $.ajax({
       method: 'POST',
-      url: `/universal/tags?model_class=${this.props.subject_type}&model_id=${this.props.subject_id}`,
+      url: `/universal/tags?model_class=${this.props.subjectType}&model_id=${this.props.subjectId}`,
       dataType: 'JSON',
-      data: {tags: this.state.editedTags.join(',')}
+      data: {tags: this.state.editedTags.join(',')},
+      success: (function(_this){
+        return function(data){
+          console.log(data)
+          _this.setState({tags: data.tags});
+        }
+      })(this)
     });
   },
   onIcon: function(e){
@@ -41,6 +47,7 @@ var Tags = React.createClass({
   },
   listTags: function(){
     var tags = []
+    console.log(this.state.tags)
     for (var i=0;i<this.state.tags.length;i++){
       var tag = this.state.tags[i];
       tags.push(<span key={i} className="label label-info" style={{display: 'inline-block', marginRight: '5px'}}>{tag}</span>)
@@ -56,32 +63,28 @@ var Tags = React.createClass({
   },
   editForm: function(){
     return (
-      <div>
-        <form className='form' onSubmit={this.handleSubmit}>
-          <div className='form-group'>
+      <div className="input-group">
+        <span className="input-group-btn">
+          <button className='btn btn-default' onClick={this.handleToggle}><i className="fa fa-times" /></button>
+        </span>
+        <div className='form-group'>
+          <form className='form' onSubmit={this.handleSubmit}>
             <input
               className='form-control'
-              defaultValue={this.props.tags.join(', ')}
+              defaultValue={this.state.tags.join(', ')}
               onChange={this.handleEdit}
-              id="tag_edit_field_{this.props.subject_id}"
+              id="tag_edit_field_{this.props.subjectId}"
               ref='edit_field' />
-          </div>
-        </form>
-        <div className='form-group'>
-          <button className='btn btn-xs btn-warning white-text' onClick={this.handleToggle}>Cancel</button>
+          </form>
         </div>
       </div>
     )
   },        
   render: function(){
-    var html;
     if (this.state.edit){
-      html = this.editForm();
+      return(this.editForm());
     }else{
-      html = this.listTags();
+      return(this.listTags());
     }
-    return(
-      <div>{html}</div>
-    )
   }
 });
