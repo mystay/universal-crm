@@ -49,8 +49,7 @@ This project rocks and uses MIT-LICENSE.
     model.crm_company(scoped_model)
     
 == Configuration
-==== Inbound mail server
-    UniversalCrm::Configuration.inbound_postmark_domain = 'inbound.yourdomain.com'
+    http://yourdomain.com/crm/config
     
 http://developer.postmarkapp.com/developer-process-domain.html
     Inbound Webhook URL set to: http://yourdomain.com/crm/inbound
