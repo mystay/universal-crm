@@ -1,7 +1,5 @@
 var PageHeader = React.createClass({
   home: function(){
-    $("#customer_summary").hide();
-    $("#customer_search").show();
     this.props.setCustomerId(null);
     this.props.setTicketId(null);
   },
@@ -15,11 +13,10 @@ var PageHeader = React.createClass({
   breadcrumb: function(){
     if (this.props.pageTitle!=null){
       return (
-        <div className="breadcrumb-wrapper hidden-xs">
-          <span className="label">You are here:</span>
+        <div className="pull-left hidden-xs">
           <ol className="breadcrumb">
             <li><a href="javascript:void(0);" onClick={this.home}>Home</a></li>
-            <li className="active">{this.props.pageTitle}</li>
+            <li>&nbsp;</li>
           </ol>
         </div>
       )
@@ -28,6 +25,7 @@ var PageHeader = React.createClass({
   render: function(){
     return (
       <nav className="pageheader">
+        {this.breadcrumb()}
         {this.pageTitle()}
       </nav>
     )

@@ -2,7 +2,6 @@ var Aside = React.createClass({
   
   home: function(){
     $("#customer_summary").hide();
-    $("#customer_search").show();
     this.props.setCustomerId(null);
     this.props.setTicketId(null);
   },

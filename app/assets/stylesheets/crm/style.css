@@ -10,3 +10,6 @@ small{font-size:0.7em;}
 }
 .alert-sm{font-size:0.8em;padding:8px;}
 blockquote, .post>p{font-size:10pt!important;}
+.chat-widget span {
+    font-size: 0.85em;
+}

@@ -10,8 +10,8 @@ var CustomerEdit = React.createClass({
       },
       success: (function(_this){
         return function(data){
-          _this.props.handleEdit();
-          _this.props.setCustomerId(_this.props.customer.id)
+          console.log(data)
+          _this.props.setCustomer(data.customer);
         }
       })(this)
     });

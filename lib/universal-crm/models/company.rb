@@ -13,6 +13,7 @@ module UniversalCrm
         include Universal::Concerns::Taggable
         include Universal::Concerns::Scoped
         include Universal::Concerns::Polymorphic
+        include Universal::Concerns::Commentable
         
         store_in session: UniversalCrm::Configuration.mongoid_session_name, collection: 'crm_companies'
 

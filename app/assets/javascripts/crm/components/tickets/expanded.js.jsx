@@ -25,6 +25,7 @@ var ExpandedTicket = React.createClass({
             newCommentPosition='bottom'
             status={this.props.status}
             newCommentPlaceholder={this.newCommentPlaceholder()}
+            fullWidth={false}
             />
           {this.emailWarning()}
         </div>

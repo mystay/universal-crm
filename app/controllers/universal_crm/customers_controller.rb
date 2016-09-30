@@ -43,16 +43,12 @@ module UniversalCrm
       if @customer.nil?
         render json: {customer: nil}
       else
-        render json: {customer: {id: @customer.id.to_s, number: @customer.number.to_s, 
-          name: @customer.name, email: @customer.email, 
-          phone_home: @customer.phone_home,
-          phone_work: @customer.phone_work,
-          phone_mobile: @customer.phone_mobile,
-          tags: @customer.tags,
-          ticket_count: @customer.tickets.count, 
-          token: @customer.token,
-          inbound_email_address: @customer.inbound_email_address(universal_crm_config),
-          closed_ticket_count: @customer.tickets.unscoped.closed.count}}
+        respond_to do |format|
+          format.html{}
+          format.json{
+            render json: {customer: @customer.to_json(universal_crm_config)}
+          }
+        end
       end
     end
     
@@ -72,8 +68,7 @@ module UniversalCrm
     def update
       @customer = UniversalCrm::Customer.find(params[:id])
       @customer.update(params.require(:customer).permit(:name, :email, :phone_home, :phone_work, :phone_mobile))
-      puts @customer.errors.to_json
-      render json: {}
+      render json: {customer: @customer.to_json(universal_crm_config)}
     end
     
   end

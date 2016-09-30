@@ -13,6 +13,7 @@ module UniversalCrm
         include Universal::Concerns::Taggable
         include Universal::Concerns::Scoped
         include Universal::Concerns::Polymorphic
+        include Universal::Concerns::Commentable
         include Universal::Concerns::Tokened
         
         store_in session: UniversalCrm::Configuration.mongoid_session_name, collection: 'crm_customers'
@@ -41,6 +42,23 @@ module UniversalCrm
             user = Universal::Configuration.class_name_user.classify.constantize.find_by(scope: scope, email: self.email)
             self.update(subject: user, kind: :user) if !user.nil?
           end
+        end
+        
+        def to_json(config)
+          return {
+            id: self.id.to_s,
+            number: self.number.to_s, 
+            name: self.name,
+            email: self.email, 
+            phone_home: self.phone_home,
+            phone_work: self.phone_work,
+            phone_mobile: self.phone_mobile,
+            tags: self.tags,
+            ticket_count: self.tickets.count, 
+            token: self.token,
+            inbound_email_address: self.inbound_email_address(config),
+            closed_ticket_count: self.tickets.unscoped.closed.count
+            }
         end
         
       end

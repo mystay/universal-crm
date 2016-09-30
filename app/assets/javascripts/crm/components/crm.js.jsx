@@ -38,8 +38,7 @@ var CRM = React.createClass({
   componentDidMount: function(){
     this.init();
     if (this.props.customerId){
-      this.setState({customerId: this.props.customerId});
-      this.loadCustomer(this.props.customerId);
+      this.setCustomerId(this.props.customerId);
       this.loadTickets(this.props.customerId, 'all');
       $("#customer_list").effect('blind');
       $("#customer_search").effect('blind');
@@ -99,10 +98,11 @@ var CRM = React.createClass({
                 />
               </div>
               <div className="col-lg-12">
-                <CustomerSummary
+                <CustomerShow
                   key="customer_summary"
-                  setCustomerId={this.setCustomerId}
-                  customer={this.state.customer} />
+                  customerId={this.state.customerId}
+                  customerDidLoad={this.customerDidLoad}
+                  />
                 <Ticket 
                   ticket={this.state.ticket}
                   setCustomerId={this.setCustomerId}
@@ -188,37 +188,16 @@ var CRM = React.createClass({
     }
   },
   setCustomerId: function(id){
-    if (id!=null){
-      $("#customer_search").effect('blind');
-      $("#customer_list").effect('blind');
-    }else{
-//       this.loadCustomers();
+    if (id==null){
       $("#customer_list").show();
       this.setState({pageTitle: null, customer: null});
     }
     this.setState({customerId: id});
-    this.loadCustomer(id);
-    this.loadTickets(id, 'all');
+    this.loadTickets(id, 'active');
   },
-  loadCustomer: function(id){
-    this.setState({ticketId: null});
-    if (id!=null){
-      $.ajax({
-        method: 'GET',
-        url: `/crm/customers/${id}`,
-        success: (function(_this){
-          return function(data){
-            if (data.customer){
-              _this.setState({customer: data.customer, pageTitle: data.customer.name});
-              _this.handlePageHistory(data.customer.name, `/crm/customer/${data.customer.id}`);
-              $("#customer_summary").show();
-            }
-          }
-        })(this)
-      });
-    }else{
-      this.handlePageHistory('Home', '/crm')
-    }
+  customerDidLoad: function(customer){
+    this.setState({pageTitle: customer.name});
+    this.handlePageHistory(customer.name, `/crm/customer/${customer.id}`);
   },
   loadTickets: function(customerId, status, page){
     this.setTicketId(null);
@@ -233,7 +212,6 @@ var CRM = React.createClass({
       success: function(data){
         t.setState({
           tickets: data.tickets,
-          customerId: customerId,
           ticketPagination: data.pagination,
           ticketPage: page});
         if (t.state.ticketId){
@@ -263,7 +241,7 @@ var CRM = React.createClass({
   },
   setTicket: function(ticketId){
     if (ticketId==null){
-        this.setState({ticket: null, ticketId: null});
+      this.setState({ticket: null, ticketId: null});
     }else{
       var result = this.state.tickets.filter(function( obj ) {
         return obj.id == ticketId;
