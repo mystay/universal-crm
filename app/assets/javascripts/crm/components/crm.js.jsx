@@ -16,8 +16,7 @@ var CRM = React.createClass({
       customerPage: 1,
       pageTitle: null,
       pageSection: null,
-      status: 'active',
-      displayNewCustomer: false
+      status: 'active'
     };
   },
   init: function(){
@@ -65,7 +64,6 @@ var CRM = React.createClass({
           loadPriorityTickets={this.loadPriorityTickets}
           loadActiveTickets={this.loadActiveTickets}
           loadClosedTickets={this.loadClosedTickets}
-          displayNewCustomer={this.displayNewCustomer}
           />
         <section className="main-content-wrapper">
           <PageHeader
@@ -77,11 +75,6 @@ var CRM = React.createClass({
           <section id="main-content" className="animated fadeInUp">
             <div className="row">
               <div className="col-lg-12">
-                <NewCustomer 
-                  ref="new_customer"
-                  display={this.state.displayNewCustomer}
-                  displayNewCustomer={this.displayNewCustomer}
-                />
                 <CustomerList 
                   ref="customer_list"
                   key="customers"
@@ -155,9 +148,6 @@ var CRM = React.createClass({
     });
     return result;
   },
-  displayNewCustomer: function(d){
-    this.setState({displayNewCustomer: d});
-  },
   hideCustomerList: function(){
     $(ReactDOM.findDOMNode(this.refs.customer_list)).effect('blind');
   },
@@ -193,7 +183,7 @@ var CRM = React.createClass({
       this.setState({pageTitle: null, customer: null});
     }
     this.setState({customerId: id});
-    this.loadTickets(id, 'active');
+    this.loadTickets(id, 'all');
   },
   customerDidLoad: function(customer){
     this.setState({pageTitle: customer.name});

@@ -5,9 +5,6 @@ var Aside = React.createClass({
     this.props.setCustomerId(null);
     this.props.setTicketId(null);
   },
-  newCustomer: function(){
-    this.props.displayNewCustomer(true);
-  },
   render: function(){
     return(
       <aside className="sidebar sidebar-left">
@@ -42,14 +39,21 @@ var Aside = React.createClass({
           <h5 className="sidebar-header">Customers</h5>
           <ul className="nav nav-pills nav-stacked">
             <li>
-              <a style={{cursor: 'pointer'}} onClick={this.newCustomer}>
+              <a style={{cursor: 'pointer'}} onClick={this.displayNewCustomer}>
                 <i className="fa fa-plus fa-fw" />
                 New
               </a>
             </li>
           </ul>
         </nav>
+        <Modal ref='new_customer_modal' modalTitle="New Customer" modalContent={<NewCustomer />} />
       </aside>
     )
-  }
+  },
+  displayNewCustomer: function(){
+    var modal = ReactDOM.findDOMNode(this.refs.new_customer_modal);
+    if (modal){
+      $(modal).modal('show', {backdrop: 'static'});
+    }
+  }  
 })
