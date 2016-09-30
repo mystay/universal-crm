@@ -78,7 +78,7 @@ var Comments = React.createClass({
     }
   },
   submitButton: function(){
-    if (this.valid){
+    if (this.valid()){
       return(
         <button className="btn btn-primary btn-sm">
           <i className="fa fa-check" /> Save

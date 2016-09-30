@@ -12,6 +12,7 @@ UniversalCrm::Engine.routes.draw do
   
   resource :config, controller: :config
   
+  resources :attachments
   resources :customers do
     collection do
       get :autocomplete

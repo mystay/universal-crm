@@ -18,7 +18,6 @@ var CustomerShow = React.createClass({
     }
   },
   loadCustomer: function(id){
-    console.log("Load: " + this.props.customerId)
     if (id!=undefined&& id != ''&&!this.state.loading){
       this.setState({loading: true});
       $.ajax({
@@ -60,21 +59,30 @@ var CustomerShow = React.createClass({
                 </button>
               </div>
             </div>
+            
           </div>
           <div className="col-sm-6">
-            <div className="panel panel-default">
-              <div className="panel-heading">
-                <h3 className="panel-title">General Notes</h3>
-              </div>
-              <div className="panel-body">
-                <Comments 
-                  subject_type='UniversalCrm::Customer'
-                  subject_id={this.state.customer.id}
-                  newCommentPosition='bottom'
-                  status='active'
-                  newCommentPlaceholder='New note...'
-                  fullWidth={true}
-                  />
+            <div className="panel">
+              <div className="tab-wrapper tab-primary">
+                <ul className="nav nav-tabs">
+                  <li className="active"><a data-toggle="tab" href="#tab-notes">Notes</a></li>
+                  <li><a data-toggle="tab" href="#tab-attachments">Attachments</a></li>
+                </ul>
+                <div className="tab-content">
+                  <div className="tab-pane active" id="tab-notes">
+                    <Comments 
+                      subject_type='UniversalCrm::Customer'
+                      subject_id={this.state.customer.id}
+                      newCommentPosition='bottom'
+                      status='active'
+                      newCommentPlaceholder='New note...'
+                      fullWidth={true}
+                      />
+                  </div>
+                  <div className="tab-pane" id="tab-attachments">
+                    <Attachments subjectId={this.state.customer.id} subjectType='UniversalCrm::Customer' />
+                  </div>
+                </div>
               </div>
             </div>
           </div>

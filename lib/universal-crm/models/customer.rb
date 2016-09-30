@@ -15,6 +15,7 @@ module UniversalCrm
         include Universal::Concerns::Polymorphic
         include Universal::Concerns::Commentable
         include Universal::Concerns::Tokened
+        include Universal::Concerns::HasAttachments
         
         store_in session: UniversalCrm::Configuration.mongoid_session_name, collection: 'crm_customers'
 
