@@ -43,6 +43,11 @@ var ConfigForm = React.createClass({
           <textarea className="form-control small" defaultValue={this.props.config.email_footer} id="email_footer" ref="email_footer"></textarea>
         </div>
         <div className="form-group">
+          <label htmlFor="ticket_flags">Ticket Flags</label>
+          <p className="small">label|color</p>
+          <textarea className="form-control small" defaultValue={this.parseFlags(this.props.config.ticket_flags)} id="ticket_flags" ref="ticket_flags" style={{height: '100px'}}></textarea>
+        </div>
+        <div className="form-group">
           <label htmlFor="token">Token</label>
           <input type="text" className="form-control" defaultValue={this.props.config.token} id="token" disabled="disabled"/>
         </div>
@@ -70,5 +75,14 @@ var ConfigForm = React.createClass({
     }else{
       return(null)
     }
+  },
+  parseFlags: function(flags){
+    f = [];
+    console.log(flags);
+    for(var i=0;i<flags.length;i++){
+      flag = flags[i];
+      f.push(flag['label'] + '|' + flag['color']);
+    }
+    return f.join("\r\n")
   }
 })

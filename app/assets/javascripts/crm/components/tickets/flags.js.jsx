@@ -18,7 +18,7 @@ var Flags = React.createClass({
     }
   },
   flagColor: function(flag_label){
-    var obj = findObjectByKeyValue(this.props.config.ticketFlags, 'label', flag_label);
+    var obj = findObjectByKeyValue(this.props.config.ticket_flags, 'label', flag_label);
     if (obj){
       return obj['color'];
     }else{

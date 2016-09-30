@@ -24,7 +24,7 @@ module UniversalCrm
           {
             scope_id: self.scope_id.to_s,
             system_name: self.system_name,
-            ticketFlags: self.ticket_flags,
+            ticket_flags: self.ticket_flags,
             hashed_password: self.hashed_password,
             inbound_domain: inbound_domain,
             transaction_email_address: transaction_email_address,

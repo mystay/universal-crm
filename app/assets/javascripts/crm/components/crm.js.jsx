@@ -32,7 +32,7 @@ var CRM = React.createClass({
     });
   },
   ticketFlags: function(){
-    return (this.state.config==null ? [] : this.state.config.ticketFlags);
+    return (this.state.config==null ? [] : this.state.config.ticket_flags);
   },
   componentDidMount: function(){
     this.init();
