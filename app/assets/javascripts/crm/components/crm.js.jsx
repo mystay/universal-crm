@@ -54,7 +54,7 @@ var CRM = React.createClass({
       <section id="main-wrapper" className="theme-blue">
         <Header
           username={this.props.username}
-          system_name={this.props.config ? this.props.config.system_name : null}
+          system_name={this.state.config ? this.state.config.system_name : null}
           loadCustomers={this.loadCustomers}
           handleSearch={this.handleSearch}
           />
