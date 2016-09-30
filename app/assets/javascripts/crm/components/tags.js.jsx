@@ -33,7 +33,6 @@ var Tags = React.createClass({
       data: {tags: this.state.editedTags.join(',')},
       success: (function(_this){
         return function(data){
-          console.log(data)
           _this.setState({tags: data.tags});
         }
       })(this)
@@ -47,7 +46,6 @@ var Tags = React.createClass({
   },
   listTags: function(){
     var tags = []
-    console.log(this.state.tags)
     for (var i=0;i<this.state.tags.length;i++){
       var tag = this.state.tags[i];
       tags.push(<span key={i} className="label label-info" style={{display: 'inline-block', marginRight: '5px'}}>{tag}</span>)
