@@ -59,7 +59,13 @@ var CustomerShow = React.createClass({
                 </button>
               </div>
             </div>
-            
+            <NewTicket key="new_ticket"
+              customerId={this.state.customerId}
+              customer={this.state.customer}
+              loadTickets={this.props.loadTickets}
+              config={this.props.config}
+              />
+
           </div>
           <div className="col-sm-6">
             <div className="panel panel-default">

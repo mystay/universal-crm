@@ -95,6 +95,8 @@ var CRM = React.createClass({
                   key="customer_summary"
                   customerId={this.state.customerId}
                   customerDidLoad={this.customerDidLoad}
+                  config={this.state.config}
+                  loadTickets={this.loadTickets}
                   />
                 <Ticket 
                   ticket={this.state.ticket}
@@ -105,12 +107,6 @@ var CRM = React.createClass({
                   changeTicketStatusClosed={this.changeTicketStatusClosed}
                   changeTicketFlag={this.changeTicketFlag}
                   ticketFlags={this.ticketFlags()}
-                  />
-                <NewTicket key="new_ticket"
-                  customerId={this.state.customerId}
-                  customer={this.state.customer}
-                  loadTickets={this.loadTickets}
-                  config={this.state.config}
                   />
                 <TicketList key='tickets'
                   customerId={this.state.customerId}
