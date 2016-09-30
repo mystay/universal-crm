@@ -47,12 +47,16 @@ var Attachments = React.createClass({
   },
   list: function(){
     var attachments = [];
-    this.state.attachments.forEach(function(attachment){
-      attachments.push(
-        <li key={attachment.id}><a href={attachment.url} target="_blank">{attachment.file}</a></li>
-      )
-    });
-    return(<ol>{attachments}</ol>)
+    if (this.state.attachments.length==0){
+      return(<div className="alert alert-info alert-sm">There are no attachments to list</div>);
+    }else{
+      this.state.attachments.forEach(function(attachment){
+        attachments.push(
+          <li key={attachment.id}><a href={attachment.url} target="_blank">{attachment.file}</a></li>
+        )
+      });
+      return(<ol>{attachments}</ol>)
+    }
   },
   loadAttachments: function(){
     $.ajax({
@@ -61,7 +65,6 @@ var Attachments = React.createClass({
       success: (function(_this){
         return function(data){
           if (data){
-            console.log(data)
             _this.setState({attachments: data.attachments});
           }
         }

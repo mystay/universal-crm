@@ -62,25 +62,30 @@ var CustomerShow = React.createClass({
             
           </div>
           <div className="col-sm-6">
-            <div className="panel">
-              <div className="tab-wrapper tab-primary">
-                <ul className="nav nav-tabs">
-                  <li className="active"><a data-toggle="tab" href="#tab-notes">Notes</a></li>
-                  <li><a data-toggle="tab" href="#tab-attachments">Attachments</a></li>
-                </ul>
-                <div className="tab-content">
-                  <div className="tab-pane active" id="tab-notes">
-                    <Comments 
-                      subject_type='UniversalCrm::Customer'
-                      subject_id={this.state.customer.id}
-                      newCommentPosition='bottom'
-                      status='active'
-                      newCommentPlaceholder='New note...'
-                      fullWidth={true}
-                      />
-                  </div>
-                  <div className="tab-pane" id="tab-attachments">
-                    <Attachments subjectId={this.state.customer.id} subjectType='UniversalCrm::Customer' />
+            <div className="panel panel-default">
+              <div className="panel-heading">
+                <h3 className="panel-title">Customer data</h3>
+              </div>
+              <div className="panel-body">
+                <div className="tab-wrapper tab-primary">
+                  <ul className="nav nav-tabs">
+                    <li className="active"><a data-toggle="tab" href="#tab-notes">Notes</a></li>
+                    <li><a data-toggle="tab" href="#tab-attachments">Attachments</a></li>
+                  </ul>
+                  <div className="tab-content">
+                    <div className="tab-pane active" id="tab-notes">
+                      <Comments 
+                        subject_type='UniversalCrm::Customer'
+                        subject_id={this.state.customer.id}
+                        newCommentPosition='bottom'
+                        status='active'
+                        newCommentPlaceholder='New note...'
+                        fullWidth={true}
+                        />
+                    </div>
+                    <div className="tab-pane" id="tab-attachments">
+                      <Attachments subjectId={this.state.customer.id} subjectType='UniversalCrm::Customer' />
+                    </div>
                   </div>
                 </div>
               </div>
