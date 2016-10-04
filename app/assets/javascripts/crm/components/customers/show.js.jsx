@@ -1,67 +1,26 @@
 var CustomerShow = React.createClass({
-  getInitialState: function(){
-    return {
-      edit: false,
-      customer: null,
-      customerId: null,
-      loading: false
-    };
-  },
-  componentDidMount: function(){
-    this.loadCustomer(this.props.customerId);
-  },
-  componentDidUpdate: function(){
-    if (this.props.customerId != null && this.props.customerId != this.state.customerId && !this.state.loading){
-      this.loadCustomer(this.props.customerId);
-    }else if (this.props.customerId==null && this.state.customerId!=null){
-      this.setState({customer: null, customerId: null})
-    }
-  },
-  loadCustomer: function(id){
-    if (id!=undefined&& id != ''&&!this.state.loading){
-      this.setState({loading: true});
-      $.ajax({
-        method: 'GET',
-        url: `/crm/customers/${id}.json`,
-        success: (function(_this){
-          return function(data){
-            if (data.customer){
-              _this.setCustomer(data.customer);
-            }
-          }
-        })(this)
-      });
-    }
-  },
-  setCustomer: function(customer){
-    this.setState({customer: customer, customerId: customer.id, edit: false, loading: false});
-    if (this.props.customerDidLoad){this.props.customerDidLoad(customer)}
-  },
-  handleEdit: function(){
-    this.setState({edit: !this.state.edit})
-  },
   render: function(){
-    if (this.props.customerId && this.state.customer){
+    if (this.props.customer.id && this.props.customer){
       return(
         <div className="row">
           <div className="col-sm-6">
             <div className="panel panel-info">
               <div className="panel-heading">
-                <h3 className="panel-title">{this.state.customer.name}</h3>
+                <h3 className="panel-title">{this.props.customer.name}</h3>
               </div>
               <div className="panel-body">
                 {this.renderViewEdit()}
               </div>
               <div className="panel-footer text-right">
-                <button className="btn btn-warning btn-sm m-0" onClick={this.handleEdit}>
+                <button className="btn btn-warning btn-sm m-0" onClick={this.props.handleEdit}>
                   <i className="fa fa-pencil" />
-                  {this.state.edit ? ' Cancel' : ' Edit'}
+                  {this.props.edit ? ' Cancel' : ' Edit'}
                 </button>
               </div>
             </div>
             <NewTicket key="new_ticket"
-              customerId={this.state.customerId}
-              customer={this.state.customer}
+              customerId={this.props.customer.id}
+              customer={this.props.customer}
               loadTickets={this.props.loadTickets}
               config={this.props.config}
               />
@@ -82,7 +41,7 @@ var CustomerShow = React.createClass({
                     <div className="tab-pane active" id="tab-notes">
                       <Comments 
                         subject_type='UniversalCrm::Customer'
-                        subject_id={this.state.customer.id}
+                        subject_id={this.props.customer.id}
                         newCommentPosition='bottom'
                         status='active'
                         newCommentPlaceholder='New note...'
@@ -90,7 +49,7 @@ var CustomerShow = React.createClass({
                         />
                     </div>
                     <div className="tab-pane" id="tab-attachments">
-                      <Attachments subjectId={this.state.customer.id} subjectType='UniversalCrm::Customer' />
+                      <Attachments subjectId={this.props.customer.id} subjectType='UniversalCrm::Customer' />
                     </div>
                   </div>
                 </div>
@@ -104,13 +63,13 @@ var CustomerShow = React.createClass({
     }
   },
   renderViewEdit: function(){
-    if (this.state.edit){
+    if (this.props.edit){
       return(
         <CustomerEdit
-          customer={this.state.customer}
-          handleEdit={this.handleEdit}
-          setCustomerId={this.setCustomerId}
-          setCustomer={this.setCustomer}
+          customer={this.props.customer}
+          handleEdit={this.props.handleEdit}
+          setCustomerId={this.props.setCustomerId}
+          setCustomer={this.props.setCustomer}
           />
       )
     }else{
@@ -119,23 +78,18 @@ var CustomerShow = React.createClass({
           <div className="col-sm-8">
             <dl className="dl-horizontal">
               <dt> Email:</dt>
-              <dd>{this.state.customer.email}</dd>
+              <dd>{this.props.customer.email}</dd>
               <dt>Phone (Home):</dt>
-              <dd>{this.state.customer.phone_home}</dd>
+              <dd>{this.props.customer.phone_home}</dd>
               <dt>Phone (Work):</dt>
-              <dd>{this.state.customer.phone_work}</dd>
+              <dd>{this.props.customer.phone_work}</dd>
               <dt>Phone (Mobile):</dt>
-              <dd>{this.state.customer.phone_mobile}</dd>
+              <dd>{this.props.customer.phone_mobile}</dd>
             </dl>
-            <Tags subjectType="UniversalCrm::Customer" subjectId={this.state.customer.id} tags={this.state.customer.tags} />
+            <Tags subjectType="UniversalCrm::Customer" subjectId={this.props.customer.id} tags={this.props.customer.tags} />
           </div>
         </div>
       )
-    }
-  },
-  setCustomerId: function(){
-    if (this.props.setCustomerId){
-      this.props.setCustomerId();
     }
   }
 });

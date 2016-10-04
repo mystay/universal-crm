@@ -20,7 +20,7 @@ UniversalCrm::Engine.routes.draw do
   end
   resources :companies do
     collection do
-      get :autocomplete
+      get :autocomplete, :recent
     end
   end
   resources :tickets do

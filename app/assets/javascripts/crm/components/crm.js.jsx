@@ -16,19 +16,19 @@ var CRM = React.createClass({
       customerPage: 1,
       pageTitle: null,
       pageSection: null,
-      status: 'active'
+      status: 'active',
+      mainComponent: null
     };
   },
   init: function(){
+    var _this = this;
     console.log('initialize config')
     $.ajax({
       method: 'GET',
       url: `/crm/config.json`,
-      success: (function(_this){
-        return function(data){
-          _this.setState({config: data});
-        }
-      })(this)
+      success: (function(data){
+        _this.setState({config: data});
+      })
     });
   },
   ticketFlags: function(){
@@ -61,6 +61,7 @@ var CRM = React.createClass({
         <Aside
           setCustomerId={this.setCustomerId}
           setTicketId={this.setTicketId}
+          setCompany={this.setCompany}
           loadPriorityTickets={this.loadPriorityTickets}
           loadActiveTickets={this.loadActiveTickets}
           loadClosedTickets={this.loadClosedTickets}
@@ -73,57 +74,52 @@ var CRM = React.createClass({
             setTicketId={this.setTicketId}
             />
           <section id="main-content" className="animated fadeInUp">
-            <div className="row">
-              <div className="col-lg-12">
-                <CustomerList 
-                  ref="customer_list"
-                  key="customers"
-                  customerId={this.state.customerId}
-                  setCustomerId={this.setCustomerId} 
-                  customers={this.state.customers}
-                  customer={this.state.customer}
-                  loadCustomers={this.loadCustomers}
-                  handleSearch={this.handleSearch}
-                  searchWord={this.state.searchWord}
-                  pagination={this.state.customerPagination}
-                  currentPage={this.state.customerPage}
-                  hideCustomerList={this.hideCustomerList}
-                />
-              </div>
-              <div className="col-lg-12">
-                <CustomerShow
-                  key="customer_summary"
-                  customerId={this.state.customerId}
-                  customerDidLoad={this.customerDidLoad}
-                  config={this.state.config}
-                  loadTickets={this.loadTickets}
-                  />
-                <Ticket 
-                  ticket={this.state.ticket}
-                  setCustomerId={this.setCustomerId}
-                  closedLabel={this.closedLabel}
-                  closeTicket={this.closeTicket}
-                  changeTicketStatusActive={this.changeTicketStatusActive}
-                  changeTicketStatusClosed={this.changeTicketStatusClosed}
-                  changeTicketFlag={this.changeTicketFlag}
-                  ticketFlags={this.ticketFlags()}
-                  />
-                <TicketList key='tickets'
-                  customerId={this.state.customerId}
-                  ticketId={this.state.ticketId}
-                  setTicketId={this.setTicketId}
-                  tickets={this.state.tickets}
-                  customer={this.state.customer}
-                  loadTickets={this.loadTickets}
-                  pagination={this.state.ticketPagination}
-                  currentPage={this.state.ticketPage}
-                  setCustomerId={this.setCustomerId}
-                  closedLabel={this.closedLabel}
-                  ticketFlags={this.ticketFlags()}
-                  config={this.state.config}
-                />
-              </div>
-            </div>
+            {this.state.mainComponent}
+            <CustomerList 
+              ref="customer_list"
+              key="customers"
+              customerId={this.state.customerId}
+              setCustomerId={this.setCustomerId} 
+              customers={this.state.customers}
+              customer={this.state.customer}
+              loadCustomers={this.loadCustomers}
+              handleSearch={this.handleSearch}
+              searchWord={this.state.searchWord}
+              pagination={this.state.customerPagination}
+              currentPage={this.state.customerPage}
+              hideCustomerList={this.hideCustomerList}
+            />
+            <CustomerShowContainer
+              key="customer_summary"
+              customerId={this.state.customerId}
+              customerDidLoad={this.customerDidLoad}
+              config={this.state.config}
+              loadTickets={this.loadTickets}
+              />
+            <Ticket 
+              ticket={this.state.ticket}
+              setCustomerId={this.setCustomerId}
+              closedLabel={this.closedLabel}
+              closeTicket={this.closeTicket}
+              changeTicketStatusActive={this.changeTicketStatusActive}
+              changeTicketStatusClosed={this.changeTicketStatusClosed}
+              changeTicketFlag={this.changeTicketFlag}
+              ticketFlags={this.ticketFlags()}
+              />
+            <TicketList key='tickets'
+              customerId={this.state.customerId}
+              ticketId={this.state.ticketId}
+              setTicketId={this.setTicketId}
+              tickets={this.state.tickets}
+              customer={this.state.customer}
+              loadTickets={this.loadTickets}
+              pagination={this.state.ticketPagination}
+              currentPage={this.state.ticketPage}
+              setCustomerId={this.setCustomerId}
+              closedLabel={this.closedLabel}
+              ticketFlags={this.ticketFlags()}
+              config={this.state.config}
+            />
           </section>
         </section>
       </section>
@@ -296,4 +292,7 @@ var CRM = React.createClass({
       })(this)
     });
   },
+  setCompany: function(companyId){
+    this.setState({mainComponent: <CompanyShowContainer companyId={companyId} />})
+  }
 });

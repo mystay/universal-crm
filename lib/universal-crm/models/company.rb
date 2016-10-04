@@ -16,6 +16,7 @@ module UniversalCrm
         include Universal::Concerns::Commentable
         include Universal::Concerns::Employer
         include Universal::Concerns::Tokened
+        include Universal::Concerns::HasAttachments
         
         store_in session: UniversalCrm::Configuration.mongoid_session_name, collection: 'crm_companies'
 
