@@ -26,6 +26,7 @@ var CompanyShowContainer = React.createClass({
         success: function(data){
           if (data.company){
             _this.setState({companyId: data.company.id, company: data.company, loading: false});
+            _this.props.handlePageHistory(`${data.company.name}`, `/crm/company/${id}`);
           }
         }
       });
@@ -33,7 +34,7 @@ var CompanyShowContainer = React.createClass({
   },
   render: function(){
     if (this.state.company){
-      return(<CompanyShow company={this.state.company} />);
+      return(<CompanyShow company={this.state.company} _goTicket={this.props._goTicket} config={this.props.config} loadTickets={this.props.loadTickets} />);
     }else{
       return(null);
     }
@@ -44,6 +45,7 @@ var CompanyShow = React.createClass({
   
   render: function(){
     return(
+      <div>
         <div className="row">
           <div className="col-sm-6">
             <div className="panel panel-info">
@@ -53,13 +55,14 @@ var CompanyShow = React.createClass({
               <div className="panel-body">
                 Email: {this.props.company.email}
               </div>
-              <div className="panel-footer text-right">
-                <button className="btn btn-warning btn-sm m-0" onClick={this.props.handleEdit}>
-                  <i className="fa fa-pencil" />
-                  {this.props.edit ? ' Cancel' : ' Edit'}
-                </button>
-              </div>
             </div>
+            <NewTicket key="new_ticket"
+              subjectId={this.props.company.id}
+              subjectType='UniversalCrm::Company'
+              subject={this.props.company}
+              loadTickets={this.props.loadTickets}
+              config={this.props.config}
+              />
           </div>
           <div className="col-sm-6">
             <div className="panel panel-default">
@@ -92,6 +95,12 @@ var CompanyShow = React.createClass({
             </div>
           </div>
         </div>
+        <div className="row">
+          <div className="col-sm-12">
+            <TicketList _goTicket={this.props._goTicket} config={this.props.config} subjectId={this.props.company.id} subjectType='UniversalCrm::Company' />
+          </div>
+        </div>
+      </div>
     );
   }
 });

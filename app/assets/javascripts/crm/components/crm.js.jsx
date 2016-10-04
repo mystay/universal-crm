@@ -3,50 +3,45 @@ var CRM = React.createClass({
     return {
       config: null,
       tickets: [],
-      ticketId: null,
-      ticket: null,
       customers: [],
       customerId: null,
       customer: null,
       searchWord: '',
       searchTimer: null,
-      ticketPagination: null,
       customerPagination: null,
       ticketPage: 1,
       customerPage: 1,
       pageTitle: null,
       pageSection: null,
       status: 'active',
-      mainComponent: null
+      mainComponent: null,
+      subComponent: null
     };
   },
-  init: function(){
+  componentDidMount: function(){
     var _this = this;
-    console.log('initialize config')
     $.ajax({
       method: 'GET',
       url: `/crm/config.json`,
       success: (function(data){
+        console.log('config loaded')
         _this.setState({config: data});
+        _this.init(_this);
       })
     });
   },
-  ticketFlags: function(){
-    return (this.state.config==null ? [] : this.state.config.ticket_flags);
-  },
-  componentDidMount: function(){
-    this.init();
-    if (this.props.customerId){
-      this.setCustomerId(this.props.customerId);
-      this.loadTickets(this.props.customerId, 'all');
-      $("#customer_list").effect('blind');
-      $("#customer_search").effect('blind');
-    }else{
-      $("#customer_list").show();
-      this.loadTickets();
+  init: function(_this){
+    console.log('initializing')
+    if (_this.props.customerId){
+      _this._goCustomer(_this.props.customerId);
+    }else 
+    if (_this.props.companyId){
+      _this._goCustomer(_this.props.companyId);
     }
-    if (this.props.ticketId){
-      this.setState({ticketId: this.props.ticketId});
+    if (_this.props.ticketId){
+      _this._goTicket(_this.props.ticketId);
+    }else{
+      _this._goTicketList('active')
     }
   },
   render: function() {
@@ -60,26 +55,24 @@ var CRM = React.createClass({
           />
         <Aside
           setCustomerId={this.setCustomerId}
-          setTicketId={this.setTicketId}
-          setCompany={this.setCompany}
-          loadPriorityTickets={this.loadPriorityTickets}
-          loadActiveTickets={this.loadActiveTickets}
-          loadClosedTickets={this.loadClosedTickets}
+          _goHome={this._goHome}
+          _goCompany={this._goCompany}
+          _goTicketList={this._goTicketList}
           />
         <section className="main-content-wrapper">
           <PageHeader
             pageSection={this.state.pageSection}
             pageTitle={this.state.pageTitle}
-            setCustomerId={this.setCustomerId}
-            setTicketId={this.setTicketId}
+            _goHome={this._goHome}
             />
           <section id="main-content" className="animated fadeInUp">
+            {this.state.subComponent}
             {this.state.mainComponent}
             <CustomerList 
               ref="customer_list"
               key="customers"
               customerId={this.state.customerId}
-              setCustomerId={this.setCustomerId} 
+              _goCustomer={this._goCustomer} 
               customers={this.state.customers}
               customer={this.state.customer}
               loadCustomers={this.loadCustomers}
@@ -89,56 +82,10 @@ var CRM = React.createClass({
               currentPage={this.state.customerPage}
               hideCustomerList={this.hideCustomerList}
             />
-            <CustomerShowContainer
-              key="customer_summary"
-              customerId={this.state.customerId}
-              customerDidLoad={this.customerDidLoad}
-              config={this.state.config}
-              loadTickets={this.loadTickets}
-              />
-            <Ticket 
-              ticket={this.state.ticket}
-              setCustomerId={this.setCustomerId}
-              closedLabel={this.closedLabel}
-              closeTicket={this.closeTicket}
-              changeTicketStatusActive={this.changeTicketStatusActive}
-              changeTicketStatusClosed={this.changeTicketStatusClosed}
-              changeTicketFlag={this.changeTicketFlag}
-              ticketFlags={this.ticketFlags()}
-              />
-            <TicketList key='tickets'
-              customerId={this.state.customerId}
-              ticketId={this.state.ticketId}
-              setTicketId={this.setTicketId}
-              tickets={this.state.tickets}
-              customer={this.state.customer}
-              loadTickets={this.loadTickets}
-              pagination={this.state.ticketPagination}
-              currentPage={this.state.ticketPage}
-              setCustomerId={this.setCustomerId}
-              closedLabel={this.closedLabel}
-              ticketFlags={this.ticketFlags()}
-              config={this.state.config}
-            />
           </section>
         </section>
       </section>
     );
-  },
-  pageHeader: function(){
-    if (this.state.pageTitle){
-      return(<div className="page-header"><h1>{this.state.pageTitle}</h1></div>)
-    }
-  },
-  indexByTicketId: function(ticketId){
-    var result = null;
-    $.each(this.state.tickets, function(index, item){
-        if(item['id'].toString() == ticketId.toString()){
-           result = index;
-           return false;
-        }
-    });
-    return result;
   },
   hideCustomerList: function(){
     $(ReactDOM.findDOMNode(this.refs.customer_list)).effect('blind');
@@ -181,27 +128,6 @@ var CRM = React.createClass({
     this.setState({pageTitle: customer.name});
     this.handlePageHistory(customer.name, `/crm/customer/${customer.id}`);
   },
-  loadTickets: function(customerId, status, page){
-    this.setTicketId(null);
-    scrollTo('body');
-    if (customerId==null || customerId==undefined){customerId='';}
-    if (status==null || status==undefined){status=this.state.status;}
-    if (page==undefined){page=1;}
-    var t = this;
-    $.ajax({
-      method: 'GET',
-      url: `/crm/tickets?status=${status}&customer_id=${customerId}&page=${page}`,
-      success: function(data){
-        t.setState({
-          tickets: data.tickets,
-          ticketPagination: data.pagination,
-          ticketPage: page});
-        if (t.state.ticketId){
-          t.setTicketId(t.state.ticketId);
-        }
-      }
-    });
-  },
   handleSearch: function(e){
     this.setState({searchWord: e.target.value});
     if (this.state.searchTimer == null){
@@ -211,88 +137,27 @@ var CRM = React.createClass({
   handlePageHistory: function(title, url){
     document.title = title;
     window.history.replaceState({"pageTitle":title},'', url);
+    this.setState({pageTitle: title})
   },
-  setTicketId: function(id){
-    this.setTicket(id);
-    if (id!=null){
-      scrollTo("body");
-    }else{
-      this.handlePageHistory('All customers', '/crm');
-      scrollTo("body");
-    }
+  
+  //Faux Routing
+  _goHome: function(){
+    //this.setState({pageTitle: null, mainComponent: <Home config={this.state.config} />});
+    this._goTicketList('active');
+    this.handlePageHistory('Home', '/crm');
   },
-  setTicket: function(ticketId){
-    if (ticketId==null){
-      this.setState({ticket: null, ticketId: null});
-    }else{
-      var result = this.state.tickets.filter(function( obj ) {
-        return obj.id == ticketId;
-      });
-      if (ticketId && result[0]){
-        this.setState({ticketId: ticketId, ticket: result[0], pageTitle: `${result[0].number}: ${result[0].title}`});
-        this.handlePageHistory(`${result[0].number}: ${result[0].title}`, `/crm/ticket/${ticketId}`);
-      }
-    }
+  _goTicketList: function(status){
+    console.log('go ticket list - ' + status)
+    this.setState({mainComponent: <TicketList _goTicket={this._goTicket} config={this.state.config} status={status} />});
+    this.setState({status: status, pageTitle: `${status.charAt(0).toUpperCase() + status.slice(1)} Tickets`});
   },
-  loadClosedTickets: function(){
-    this.setState({status: 'closed', pageTitle: 'Closed Tickets'})
-    this.loadTickets(null, 'closed');
+  _goTicket: function(ticketId){
+    this.setState({subComponent: <TicketShowContainer ticketId={ticketId} config={this.state.config} handlePageHistory={this.handlePageHistory} />});
   },
-  loadPriorityTickets: function(){
-    console.log('priority')
-    this.setState({pageTitle: 'Priority Tickets'})
-    this.loadTickets(null, 'priority');
+  _goCompany: function(companyId){
+    this.setState({mainComponent: <CompanyShowContainer companyId={companyId} config={this.state.config} handlePageHistory={this.handlePageHistory} _goTicket={this._goTicket} />})
   },
-  loadActiveTickets: function(){
-    this.setState({status: 'active', pageTitle: 'Open Tickets'})
-    this.loadTickets(null, 'active');
-  },
-  openTicketCount: function(){
-    return 10;
-  },
-  closeTicket: function(){
-    this.setTicketId(null);
-  },  
-  changeTicketStatusActive: function(){
-    this.changeTicketStatus('active');
-  },    
-  changeTicketStatusClosed: function(){
-    this.changeTicketStatus('closed')
-  },
-  updateTicketInArray: function(ticket){
-    var ticketIndex = this.indexByTicketId(ticket.id);
-    var new_tickets = this.state.tickets;
-    new_tickets[ticketIndex] = ticket;
-    this.setState({tickets: new_tickets});
-  },
-  changeTicketFlag: function(f, add){
-    $.ajax({
-      method: 'PATCH',
-      url: `/crm/tickets/${this.state.ticket.id}/flag?flag=${f}&add=${add}`,
-      success: (function(_this){
-        return function(data){
-          _this.setState({ticket: data.ticket});
-          _this.updateTicketInArray(data.ticket);
-        }
-      })(this)
-    });
-  },
-  changeTicketStatus: function(s, add){
-    $.ajax({
-      method: 'PATCH',
-      url: `/crm/tickets/${this.state.ticket.id}/update_status?status=${s}`,
-      success: (function(_this){
-        return function(data){
-          if (s == 'closed'){
-            _this.setTicketId(null)
-          }
-          _this.setState({ticket: data.ticket});
-          _this.updateTicketInArray(data.ticket);
-        }
-      })(this)
-    });
-  },
-  setCompany: function(companyId){
-    this.setState({mainComponent: <CompanyShowContainer companyId={companyId} />})
+  _goCustomer: function(customerId){
+    this.setState({mainComponent: <CustomerShowContainer customerId={customerId} config={this.state.config} handlePageHistory={this.handlePageHistory} _goTicket={this._goTicket} />})
   }
 });

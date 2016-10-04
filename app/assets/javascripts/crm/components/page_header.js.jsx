@@ -1,7 +1,6 @@
 var PageHeader = React.createClass({
   home: function(){
-    this.props.setCustomerId(null);
-    this.props.setTicketId(null);
+    this.props._goHome();
   },
   pageTitle: function(){
     if (this.props.pageTitle==null){

@@ -19,7 +19,7 @@ var RecentCompanies = React.createClass({
       return(
         <div>
           <h5 className="sidebar-header">Recent Companies</h5>
-          <CompanyList companies={this.state.companies} setCompany={this.props.setCompany} />
+          <CompanyList companies={this.state.companies} _goCompany={this.props._goCompany} />
         </div>);
     }else{
       return(null);           

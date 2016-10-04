@@ -7,8 +7,9 @@ module UniversalCrm
       params[:page] = 1 if params[:page].blank?
       @tickets = UniversalCrm::Ticket.all
       @tickets = @tickets.scoped_to(universal_scope) if !universal_scope.nil?
-      @tickets = @tickets.where(subject_id: params[:customer_id]) if !params[:customer_id].blank?
-      if !params[:status].blank? and params[:status] != 'priority' and params[:status] != 'all'
+      if !params[:subject_id].blank? and params[:subject_id].to_s!='undefined' and !params[:subject_type].blank? and params[:subject_type].to_s!='undefined'
+        @tickets = @tickets.where(subject_id: params[:subject_id], subject_type: params[:subject_type])
+      elsif !params[:status].blank? and params[:status] != 'priority' and params[:status] != 'all' and params[:status] != 'null'
         @tickets = @tickets.for_status(params[:status])
       elsif params[:status] == 'priority'
         @tickets = @tickets.active.priority
@@ -23,7 +24,7 @@ module UniversalCrm
           current_page: params[:page].to_i,
           per_page: 20
         },
-        tickets: @tickets.map{|t| ticket(t)}
+        tickets: @tickets.map{|t| t.to_json}
         }
     end
     
@@ -31,9 +32,23 @@ module UniversalCrm
       
     end
     
+    def show
+      @ticket = UniversalCrm::Ticket.find(params[:id])
+      if @ticket.nil?
+        render json: {ticket: nil}
+      else
+        respond_to do |format|
+          format.html{}
+          format.json{
+            render json: {ticket: @ticket.to_json}
+          }
+        end
+      end
+    end
+    
     def create
-      if !params[:customer_id].blank?
-        subject = UniversalCrm::Customer.find params[:customer_id]
+      if !params[:subject_id].blank? and !params[:subject_type].blank?
+        subject = params[:subject_type].classify.constantize.find params[:subject_id]
         kind = (params[:email].to_s == 'true' ? :email : :normal)
         sent_from_crm=true
       elsif !params[:customer_name].blank? and !params[:customer_email].blank?
@@ -64,7 +79,7 @@ module UniversalCrm
       else
         @ticket.open!(universal_user)
       end
-      render json: {ticket: ticket(@ticket)}
+      render json: {ticket: @ticket.to_json}
     end
     
     def flag
@@ -76,22 +91,8 @@ module UniversalCrm
         @ticket.remove_flag!(params[:flag])
         @ticket.save_comment!("Removed flag: '#{params[:flag]}'", current_user)
       end
-      render json: {ticket: ticket(@ticket)}
+      render json: {ticket: @ticket.to_json}
     end
     
-    def ticket(t)
-      {
-        id: t.id.to_s, number: t.number.to_s, status: t.status, 
-        kind: t.kind.to_s,
-        subject_name: t.subject.name,
-        subject_id: t.subject_id.to_s,
-        title: t.title, content: t.content,
-        updated_at: t.updated_at.strftime('%b %d, %Y, %l:%M%P'),
-        created_at: t.created_at.strftime('%b %d, %Y, %l:%M%P'),
-        comment_count: t.comments.count,
-        token: t.token,
-        flags: t.flags
-      }
-    end
   end
 end

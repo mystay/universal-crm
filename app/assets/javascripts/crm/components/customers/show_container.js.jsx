@@ -27,6 +27,7 @@ var CustomerShowContainer = React.createClass({
         success: function(data){
           if (data.customer){
             _this.setCustomer(data.customer);
+            _this.props.handlePageHistory(`${data.customer.name}`, `/crm/customer/${id}`);
           }
         }
       });

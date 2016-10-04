@@ -19,8 +19,9 @@ var CustomerShow = React.createClass({
               </div>
             </div>
             <NewTicket key="new_ticket"
-              customerId={this.props.customer.id}
-              customer={this.props.customer}
+              subjectId={this.props.customer.id}
+              subjectType='UniversalCrm::Customer'
+              subject={this.props.customer}
               loadTickets={this.props.loadTickets}
               config={this.props.config}
               />

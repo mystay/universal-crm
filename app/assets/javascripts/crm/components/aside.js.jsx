@@ -1,9 +1,16 @@
 var Aside = React.createClass({
   
   home: function(){
-    $("#customer_summary").hide();
-    this.props.setCustomerId(null);
-    this.props.setTicketId(null);
+    this.props._goHome();
+  },
+  loadPriorityTickets: function(){
+    this.props._goTicketList('priority');
+  },
+  loadActiveTickets: function(){
+    this.props._goTicketList('active');
+  },
+  loadClosedTickets: function(){
+    this.props._goTicketList('closed');
   },
   render: function(){
     return(
@@ -18,19 +25,19 @@ var Aside = React.createClass({
               </a>
             </li>
             <li>
-              <a style={{cursor: 'pointer'}} onClick={this.props.loadPriorityTickets}>
+              <a style={{cursor: 'pointer'}} onClick={this.loadPriorityTickets}>
                 <i className="fa fa-flag fa-fw" />
                 Priority
               </a>
             </li>
             <li>
-              <a style={{cursor: 'pointer'}} onClick={this.props.loadActiveTickets}>
+              <a style={{cursor: 'pointer'}} onClick={this.loadActiveTickets}>
                 <i className="fa fa-folder-open fa-fw" />
                 Open
               </a>
             </li>
             <li>
-              <a style={{cursor: 'pointer'}} onClick={this.props.loadClosedTickets}>
+              <a style={{cursor: 'pointer'}} onClick={this.loadClosedTickets}>
                 <i className="fa fa-check fa-fw" />
                 Closed
               </a>
@@ -45,7 +52,7 @@ var Aside = React.createClass({
               </a>
             </li>
           </ul>
-          <RecentCompanies setCompany={this.props.setCompany} />
+          <RecentCompanies _goCompany={this.props._goCompany} />
         </nav>
         <Modal ref='new_customer_modal' modalTitle="New Customer" modalContent={<NewCustomer />} />
       </aside>

@@ -1,48 +1,94 @@
-var Ticket = React.createClass({
+var TicketShowContainer = React.createClass({
   getInitialState: function(){
     return ({
-      commentCount: (this.props.ticket ? this.props.ticket.comment_count : 0)
+      commentCount: 0,
+      ticketId: null,
+      ticket: null,
+      loading: null
     })
-  },  
-  setCustomerId: function(){
-    this.props.setCustomerId(this.props.ticket.subject_id);
   },
-  selectTicketId: function(e){
-    this.props.setTicketId(e.target.id);
-  },  
+  componentDidMount: function(){
+    this.loadTicket(this.props.ticketId);
+  },
+  componentDidUpdate: function(){
+    if (this.props.ticketId != null && this.props.ticketId != this.state.ticketId && !this.state.loading){
+      this.loadTicket(this.props.ticketId);
+    }else if (this.props.ticketId==null && this.state.ticketId!=null){
+      this.setState({ticket: null, ticketId: null})
+    }
+  },
+  loadTicket: function(id){
+    var _this=this;
+    if (id!=undefined&& id != ''&&!this.state.loading){
+      this.setState({loading: true});
+      $.ajax({
+        method: 'GET',
+        url: `/crm/tickets/${id}.json`,
+        success: function(data){
+          if (data.ticket){
+            _this.setState({ticketId: data.ticket.id, ticket: data.ticket, loading: false});
+            _this.props.handlePageHistory(`${data.ticket.number}: ${data.ticket.title}`, `/crm/ticket/${id}`);
+          }
+        }
+      });
+    }
+  },
   countComments: function(e){
     this.setState({commentCount: e});
   },
+  changeTicketFlag: function(f, add){
+    $.ajax({
+      method: 'PATCH',
+      url: `/crm/tickets/${this.state.ticket.id}/flag?flag=${f}&add=${add}`,
+      success: (function(_this){
+        return function(data){
+          _this.setState({ticket: data.ticket});
+        }
+      })(this)
+    });
+  },
+  changeTicketStatusActive: function(){
+    this.changeTicketStatus('active');
+  },    
+  changeTicketStatusClosed: function(){
+    this.changeTicketStatus('closed')
+  },
+  changeTicketStatus: function(s, add){
+    $.ajax({
+      method: 'PATCH',
+      url: `/crm/tickets/${this.state.ticket.id}/update_status?status=${s}`,
+      success: (function(_this){
+        return function(data){
+          _this.setState({ticket: data.ticket});
+        }
+      })(this)
+    });
+  },
   render: function(){
-    if (this.props.ticket){
+    if (this.state.ticket){
       return (
         <div className="panel panel-info">
           <div className="panel-heading">
             <h3 className="panel-title">
-              Customer: {this.props.ticket.subject_name}
+              Customer: {this.state.ticket.subject_name}
             </h3>
-            <div className="actions pull-right">
-              <i className="fa fa-times" onClick={this.props.closeTicket} />
-            </div>
           </div>
           <div className="panel-body">
             <ExpandedTicket
-              ticketId={this.props.ticket.id}
-              ticket={this.props.ticket}
-              status={this.props.ticket.status}
-              changeTicketFlag={this.props.changeTicketFlag}
-              changeTicketStatusActive={this.props.changeTicketStatusActive}
-              changeTicketStatusClosed={this.props.changeTicketStatusClosed}
+              ticketId={this.state.ticket.id}
+              ticket={this.state.ticket}
+              status={this.state.ticket.status}
+              changeTicketFlag={this.changeTicketFlag}
+              changeTicketStatusActive={this.changeTicketStatusActive}
+              changeTicketStatusClosed={this.changeTicketStatusClosed}
               countComments={this.countComments}
-              ticketFlags={this.props.ticketFlags}
+              ticketFlags={this.props.config.ticket_flags}
               />
           </div>
         </div>
       )
     }else{
-      return(
-        <div></div>
-      )
+      return(null);
     }
   }
 });

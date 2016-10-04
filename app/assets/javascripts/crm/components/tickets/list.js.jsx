@@ -1,46 +1,90 @@
 var TicketList = React.createClass({
   getInitialState: function(){
-    return({selectedTicketId: null})
+    return({
+      subjectId: null,
+      subjectType: null,
+      tickets: null,
+      selectedTicketId: null,
+      status: null,
+      loading: false
+    })
+  },
+  componentDidMount: function(){
+    this.setState({status: this.props.status, subjectId: this.props.subjectId, subjectType: this.props.subjectType});
+    this.loadTickets(this.props.status);
+  },
+  componentDidUpdate: function(){
+    if (this.props.status != null && this.props.status != this.state.status && !this.state.loading){
+      this.loadTickets(this.props.status);
+    }else if (this.props.subjectId != null && this.props.subjectId != this.state.subjectId && !this.state.loading){
+      this.loadTickets();
+    }else if (this.props.status==null && this.state.status!=null){
+      this.setState({tickets: null, status: null})
+    }
+  },
+  loadTickets: function(status, page){
+    console.log('loading')
+    if (!this.state.loading){
+      console.log('loading tickets')
+      this.setState({loading: true});
+      scrollTo('body');
+      if (status==null || status==undefined){status=this.state.status;}
+      if (page==undefined){page=1;}
+      var _this = this;
+      $.ajax({
+        method: 'GET',
+        url: `/crm/tickets?status=${status}&subject_id=${this.props.subjectId}&subject_type=${this.props.subjectType}&page=${page}`,
+        success: function(data){
+          _this.setState({
+            status: status,
+            loading: false,
+            subjectId: _this.props.subjectId,
+            tickets: data.tickets,
+            ticketPagination: data.pagination,
+            ticketPage: page});
+        }
+      });
+    }
   },
   render: function(){
-    var t = []
-    for (var i=0;i<this.props.tickets.length;i++){
-      t.push(
-        <li key={i} className="list-group-item">
-          <TicketListItem ticket={this.props.tickets[i]}
-            ticketId={this.props.ticketId}
-            setTicketId={this.props.setTicketId}
-            setCustomerId={this.props.setCustomerId}
-            closedLabel={this.props.closedLabel}
-            changeTicketStatusActive={this.props.changeTicketStatusActive}
-            changeTicketStatusClosed={this.props.changeTicketStatusClosed}
-            config={this.props.config}
-            />
-        </li>
+    if (this.state.tickets && this.state.tickets.length>0){
+      var t = []
+      for (var i=0;i<this.state.tickets.length;i++){
+        t.push(
+          <li key={i} className="list-group-item">
+            <TicketListItem ticket={this.state.tickets[i]}
+              _goTicket={this.props._goTicket}
+              setCustomerId={this.props.setCustomerId}
+              config={this.props.config}
+              />
+          </li>
+        )
+      }
+      ticketCountTitle = null
+      if (this.ticketCount()){
+        ticketCountTitle = this.ticketCountTitle()
+      }
+      return(
+        <div className="panel panel-default">
+          <div className="panel-heading">
+            <h3 className="panel-title">{ticketCountTitle}</h3>
+          </div>
+          <div className="panel-body">
+            <ul className="list-group">
+              {t}
+            </ul>
+            <Pagination
+              pagination={this.props.pagination}
+              currentPage={this.props.currentPage}
+              pageResults={this.pageResults}
+              displayDescription={true}
+              />
+          </div>
+        </div>
       )
+    }else{
+      return(null);
     }
-    ticketCountTitle = null
-    if (this.ticketCount()){
-      ticketCountTitle = this.ticketCountTitle()
-    }
-    return(
-      <div className="panel panel-default">
-        <div className="panel-heading">
-          <h3 className="panel-title">{ticketCountTitle}</h3>
-        </div>
-        <div className="panel-body">
-          <ul className="list-group">
-            {t}
-          </ul>
-          <Pagination
-            pagination={this.props.pagination}
-            currentPage={this.props.currentPage}
-            pageResults={this.pageResults}
-            displayDescription={true}
-            />
-        </div>
-      </div>
-    )
   },
   ticketCount: function(){
     if (this.props.pagination){

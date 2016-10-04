@@ -31,7 +31,7 @@ var ExpandedTicket = React.createClass({
         </div>
       )
     }else{
-      return(<div></div>)
+      return(null);
     }
   },
   ticketNotes: function(){

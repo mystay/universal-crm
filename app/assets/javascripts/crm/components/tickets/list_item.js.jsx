@@ -39,7 +39,7 @@ var TicketListItem = React.createClass({
     this.props.setCustomerId(this.props.ticket.subject_id);
   },
   selectTicketId: function(ticketId){
-    this.props.setTicketId(ticketId);
+    this.props._goTicket(ticketId);
   },    
   countComments: function(e){
     this.setState({commentCount: e});

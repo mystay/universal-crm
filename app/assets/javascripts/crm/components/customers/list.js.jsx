@@ -1,6 +1,6 @@
 var CustomerList = React.createClass({
   loadCustomer: function(e){
-    this.props.setCustomerId(e.target.id);
+    this.props._goCustomer(e.target.id);
   },
   customerList: function(){
     var rows = []
@@ -33,9 +33,7 @@ var CustomerList = React.createClass({
   },
   render: function(){
     if (this.props.customers.length==0){
-      return(
-        null
-      )
+      return(null);
     }else{
       return(
         <div className="panel panel-warning">

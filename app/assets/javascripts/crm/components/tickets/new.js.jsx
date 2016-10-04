@@ -16,8 +16,8 @@ var NewTicket = React.createClass({
     var contentField=null;
     var submitButton=null;
     var emailCheckbox=null
-    if (this.props.customer){
-      var placeholder=`New ticket for ${this.props.customer.name}...`
+    if (this.props.subject){
+      var placeholder=`New ticket for ${this.props.subject.name}...`
       titleField = <div className='form-group'>
                     <input type='text' 
                                value={this.state.title} 
@@ -56,8 +56,8 @@ var NewTicket = React.createClass({
             {submitButton}
             <p className="small text-muted">
               Or, send an email to:
-              <a href={`mailto:${this.props.customer.inbound_email_address}`} target="_blank">
-                {this.props.customer.inbound_email_address}
+              <a href={`mailto:${this.props.subject.inbound_email_address}`} target="_blank">
+                {this.props.subject.inbound_email_address}
               </a>
             </p>
           </div>
@@ -75,11 +75,11 @@ var NewTicket = React.createClass({
       method: 'POST',
       url: '/crm/tickets',
       dataType: 'JSON',
-      data:{title: this.state.title, content: this.state.content, customer_id: this.props.customerId, email: email},
+      data:{title: this.state.title, content: this.state.content, subject_id: this.props.subjectId, subject_type: this.props.subjectType, email: email},
       success: (function(_this){
         return function(data){
           _this.setState({title: '', content: ''});
-          _this.props.loadTickets(_this.props.customerId);
+          _this.props.loadTickets(_this.props.subjectId);
         }
       })(this)
     });

@@ -57,6 +57,24 @@ module UniversalCrm
           end
         end
         
+        def to_json
+          {
+            id: self.id.to_s,
+            number: self.number.to_s,
+            status: self.status, 
+            kind: self.kind.to_s,
+            subject_name: self.subject.name,
+            subject_id: self.subject_id.to_s,
+            title: self.title,
+            content: self.content,
+            updated_at: self.updated_at.strftime('%b %d, %Y, %l:%M%P'),
+            created_at: self.created_at.strftime('%b %d, %Y, %l:%M%P'),
+            comment_count: self.comments.count,
+            token: self.token,
+            flags: self.flags
+          }
+        end
+        
       end
       
       module ClassMethods
