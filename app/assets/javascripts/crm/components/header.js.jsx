@@ -1,10 +1,18 @@
 var Header = React.createClass({
-  
+  componentDidMount: function(){
+    
+  },
+  systemName: function(){
+    console.log(this.props.gs)
+    if (this.props.gs && this.props.gs.config){
+      return(this.props.gs.config.system_name);
+    }
+  },
   render: function(){
     return(
       
       <header id="header">
-        <BrandLogo system_name={this.props.system_name} />
+        <BrandLogo system_name={this.systemName()} />
         <ul className="nav navbar-nav navbar-left">
           <li className="toggle-navigation toggle-left">
             <button className="sidebar-toggle" id="toggle-left">
@@ -12,7 +20,7 @@ var Header = React.createClass({
             </button>
           </li>
           <li className="hidden-xs hidden-sm">
-            <CustomerSearch _goCustomerList={this.props._goCustomerList} />
+            <CustomerSearch gs={this.props.gs} sgs={this.props.sgs} _goCustomerList={this.props._goCustomerList} />
           </li>
         </ul>
         <ul className="nav navbar-nav navbar-right">

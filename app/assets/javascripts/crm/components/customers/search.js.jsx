@@ -12,7 +12,8 @@ var CustomerSearch = React.createClass({
     }
   },
   handleSearchWord: function(e){
-    this.setState({searchWord: e.target.value});    
+    this.setState({searchWord: e.target.value});
+    this.props.sgs('searchWord', e.target.value);
   },
   loadSearch: function(){
     this.props._goCustomerList(this.state.searchWord);

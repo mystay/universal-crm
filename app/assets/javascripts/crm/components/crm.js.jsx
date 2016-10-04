@@ -1,8 +1,7 @@
 var CRM = React.createClass({
   getInitialState: function(){
     return {
-      config: null,
-      //customerId: null,
+      gs: {},
       customer: null,
       searchWord: '',
       searchTimer: null,
@@ -21,7 +20,7 @@ var CRM = React.createClass({
       url: `/crm/config.json`,
       success: (function(data){
         console.log('config loaded')
-        _this.setState({config: data});
+        _this.setGlobalState('config', data);
         _this.init(_this);
       })
     });
@@ -44,13 +43,16 @@ var CRM = React.createClass({
     return (
       <section id="main-wrapper" className="theme-blue">
         <Header
+          gs={this.state.gs}
+          sgs={this.setGlobalState}
           username={this.props.username}
-          system_name={this.state.config ? this.state.config.system_name : null}
           loadCustomers={this.loadCustomers}
           handleSearch={this.handleSearch}
           _goCustomerList={this._goCustomerList}
           />
         <Aside
+          gs={this.state.gs}
+          sgs={this.setGlobalState}
           _goHome={this._goHome}
           _goCompany={this._goCompany}
           _goTicketList={this._goTicketList}
@@ -61,6 +63,7 @@ var CRM = React.createClass({
             _goHome={this._goHome}
             />
           <section id="main-content" className="animated fadeInUp">
+            <pre>{JSON.stringify(this.state.gs)}</pre>
             {this.state.subComponent}
             {this.state.mainComponent}
           </section>
@@ -85,30 +88,36 @@ var CRM = React.createClass({
     window.history.replaceState({"pageTitle":title},'', url);
     this.setState({pageTitle: title})
   },
-  
+  setGlobalState: function(key, value){
+    console.log(key)
+    console.log(value)
+    var globalState = this.state.gs;
+    globalState[key] = value;
+    this.setState({gs: globalState});
+  },
   //Faux Routing
   _setMainComponent: function(comp){
     this.setState({mainComponent: comp});
   },
   _goHome: function(){
-    //this.setState({pageTitle: null, mainComponent: <Home config={this.state.config} />});
+    //this.setState({pageTitle: null, mainComponent: <Home gs={this.state.globalState} sgs={this.setGlobalState} />});
     this._goTicketList('active');
     this.handlePageHistory('Home', '/crm');
   },
   _goTicketList: function(status){
-    this.setState({mainComponent: <TicketList _goTicket={this._goTicket} config={this.state.config} status={status} _goCustomer={this._goCustomer} />});
+    this.setState({mainComponent: <TicketList _goTicket={this._goTicket} gs={this.state.globalState} sgs={this.setGlobalState} status={status} _goCustomer={this._goCustomer} />});
     this.setState({status: status, pageTitle: `${status.charAt(0).toUpperCase() + status.slice(1)} Tickets`});
   },
   _goTicket: function(ticketId){
-    this.setState({mainComponent: <TicketShowContainer ticketId={ticketId} config={this.state.config} handlePageHistory={this.handlePageHistory} _goCustomer={this._goCustomer} />});
+    this.setState({mainComponent: <TicketShowContainer ticketId={ticketId} gs={this.state.globalState} sgs={this.setGlobalState} handlePageHistory={this.handlePageHistory} _goCustomer={this._goCustomer} />});
   },
   _goCompany: function(companyId){
-    this.setState({mainComponent: <CompanyShowContainer companyId={companyId} config={this.state.config} handlePageHistory={this.handlePageHistory} _goTicket={this._goTicket} _goCompany={this._goCompany} />})
+    this.setState({mainComponent: <CompanyShowContainer companyId={companyId} gs={this.state.globalState} sgs={this.setGlobalState} handlePageHistory={this.handlePageHistory} _goTicket={this._goTicket} _goCompany={this._goCompany} />})
   },
   _goCustomer: function(customerId){
-    this.setState({mainComponent: <CustomerShowContainer customerId={customerId} config={this.state.config} handlePageHistory={this.handlePageHistory} _goTicket={this._goTicket} _goCustomer={this._goCustomer} />})
+    this.setState({mainComponent: <CustomerShowContainer customerId={customerId} gs={this.state.globalState} sgs={this.setGlobalState} handlePageHistory={this.handlePageHistory} _goTicket={this._goTicket} _goCustomer={this._goCustomer} />})
   },
   _goCustomerList: function(searchWord){
-    this.setState({mainComponent: <CustomerList _goCustomer={this._goCustomer} searchWord={searchWord} />});
+    this.setState({mainComponent: <CustomerList _goCustomer={this._goCustomer} gs={this.state.globalState} sgs={this.setGlobalState} searchWord={searchWord} />});
   },
 });
