@@ -14,6 +14,8 @@ module UniversalCrm
         include Universal::Concerns::Scoped
         include Universal::Concerns::Polymorphic
         include Universal::Concerns::Commentable
+        include Universal::Concerns::Employer
+        include Universal::Concerns::Tokened
         
         store_in session: UniversalCrm::Configuration.mongoid_session_name, collection: 'crm_companies'
 
@@ -22,11 +24,45 @@ module UniversalCrm
         field :p, as: :phone
         
         has_many :tickets, as: :subject, class_name: 'UniversalCrm::Ticket'
-        has_many :crm_customers, class_name: 'UniversalCrm::Customer'
         
         search_in :n, :e
+#         numbered_prefix 'CP'
         
         default_scope ->(){order_by(created_at: :desc)}
+        
+        def inbound_email_address(config)
+          "cp-#{self.token}@#{config.inbound_domain}"
+        end
+        
+        def to_json(config)
+          return {
+            id: self.id.to_s,
+            number: self.number.to_s, 
+            name: self.name,
+            email: self.email, 
+            phone: self.phone,
+            tags: self.tags,
+            ticket_count: self.tickets.count, 
+            token: self.token,
+            inbound_email_address: self.inbound_email_address(config),
+            closed_ticket_count: self.tickets.unscoped.closed.count,
+            employee_ids: self.employee_ids,
+            employees: self.employees_json
+            }
+        end
+        
+        def employees_json
+          a=[]
+          self.employees.each do |e|
+            a.push({
+              id: e.id.to_s,
+              name: e.name,
+              email: e.email,
+              type: e.class.to_s
+              })
+          end
+          return a
+        end
         
       end
     end

@@ -16,6 +16,7 @@ module UniversalCrm
         include Universal::Concerns::Commentable
         include Universal::Concerns::Tokened
         include Universal::Concerns::HasAttachments
+        include Universal::Concerns::Employee
         
         store_in session: UniversalCrm::Configuration.mongoid_session_name, collection: 'crm_customers'
 
@@ -26,8 +27,8 @@ module UniversalCrm
         field :pm, as: :phone_mobile
         
         has_many :tickets, as: :subject, class_name: 'UniversalCrm::Ticket'
-        belongs_to :crm_company, class_name: 'UniversalCrm::Company'
-        
+        employed_by [{companies: 'UniversalCrm::Company'}]
+
         search_in :n, :e
         
         default_scope ->(){order_by(created_at: :desc)}
