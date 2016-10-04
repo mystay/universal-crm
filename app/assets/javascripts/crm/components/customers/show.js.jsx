@@ -24,6 +24,7 @@ var CustomerShow = React.createClass({
               subject={this.props.customer}
               loadTickets={this.props.loadTickets}
               config={this.props.config}
+              _goTicket={this.props._goTicket}
               />
 
           </div>
@@ -56,6 +57,9 @@ var CustomerShow = React.createClass({
                 </div>
               </div>
             </div>
+          </div>
+          <div className="col-sm-12">
+            <TicketList _goTicket={this.props._goTicket} _goCustomer={this.props._goCustomer} subjectId={this.props.customer.id} subjectType='UniversalCrm::Customer' config={this.props.config} />
           </div>
         </div>
       );

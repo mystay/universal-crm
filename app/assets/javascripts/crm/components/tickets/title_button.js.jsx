@@ -5,21 +5,16 @@ var TicketTitleButton = React.createClass({
   render: function(){
     if (this.props.ticket){
       return(
-        <div
-          onClick={this.selectTicket}
-          style={{cursor: 'pointer', fontWeight: 'bold'}}>
+        <div onClick={this.selectTicket} style={{cursor: 'pointer', fontWeight: 'bold'}}>
           <div className='pull-right small hidden-xs'>Ticket: #{this.props.ticket.number}</div>
           {this.props.closedLabel()}
           {this.emailIcon()}
           {this.props.ticket.title}
-          <Flags
-            flags={this.props.ticket.flags}
-            config={this.props.config}
-            />
+          <Flags flags={this.props.ticket.flags} config={this.props.config} />
         </div>  
       )
     }else{
-      return(<div></div>)   
+      return(null)   
     }
   },
   emailIcon: function(){

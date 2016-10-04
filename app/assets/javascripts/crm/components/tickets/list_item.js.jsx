@@ -28,15 +28,21 @@ var TicketListItem = React.createClass({
           ticket={this.props.ticket} 
           commentCount={this.state.commentCount}
           />
-        <TicketCustomerName 
-          setCustomerId={this.setCustomerId}
-          name={this.props.ticket.subject_name}
-          />
+        {this.customerName()}
       </div>
     )
   },
-  setCustomerId: function(){
-    this.props.setCustomerId(this.props.ticket.subject_id);
+  customerName: function(){
+    if (this.props._goCustomer){
+      return(
+          <TicketCustomerName
+            _goCustomer={this.props._goCustomer}
+            name={this.props.ticket.subject_name}
+            id={this.props.ticket.subject_id}
+            />);
+    }else{
+      return(<div>&nbsp;</div>);
+    }
   },
   selectTicketId: function(ticketId){
     this.props._goTicket(ticketId);

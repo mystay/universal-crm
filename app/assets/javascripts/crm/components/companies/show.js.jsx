@@ -62,6 +62,7 @@ var CompanyShow = React.createClass({
               subject={this.props.company}
               loadTickets={this.props.loadTickets}
               config={this.props.config}
+              _goTicket={this.props._goTicket}
               />
           </div>
           <div className="col-sm-6">

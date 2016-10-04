@@ -64,13 +64,22 @@ var TicketShowContainer = React.createClass({
       })(this)
     });
   },
+  setCustomerId: function(){
+    if (this.props._goCustomer){
+      this.props._goCustomer(this.state.ticket.subject_id);
+    }
+  },
   render: function(){
     if (this.state.ticket){
       return (
         <div className="panel panel-info">
           <div className="panel-heading">
             <h3 className="panel-title">
-              Customer: {this.state.ticket.subject_name}
+              <TicketCustomerName 
+                name={this.state.ticket.subject_name}
+                id={this.state.ticket.subject_id}
+                _goCustomer={this.props._goCustomer}
+                />
             </h3>
           </div>
           <div className="panel-body">

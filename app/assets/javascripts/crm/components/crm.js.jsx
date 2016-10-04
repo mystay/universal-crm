@@ -2,9 +2,7 @@ var CRM = React.createClass({
   getInitialState: function(){
     return {
       config: null,
-      tickets: [],
-      customers: [],
-      customerId: null,
+      //customerId: null,
       customer: null,
       searchWord: '',
       searchTimer: null,
@@ -12,8 +10,6 @@ var CRM = React.createClass({
       ticketPage: 1,
       customerPage: 1,
       pageTitle: null,
-      pageSection: null,
-      status: 'active',
       mainComponent: null,
       subComponent: null
     };
@@ -52,87 +48,37 @@ var CRM = React.createClass({
           system_name={this.state.config ? this.state.config.system_name : null}
           loadCustomers={this.loadCustomers}
           handleSearch={this.handleSearch}
+          _goCustomerList={this._goCustomerList}
           />
         <Aside
-          setCustomerId={this.setCustomerId}
           _goHome={this._goHome}
           _goCompany={this._goCompany}
           _goTicketList={this._goTicketList}
           />
         <section className="main-content-wrapper">
           <PageHeader
-            pageSection={this.state.pageSection}
             pageTitle={this.state.pageTitle}
             _goHome={this._goHome}
             />
           <section id="main-content" className="animated fadeInUp">
             {this.state.subComponent}
             {this.state.mainComponent}
-            <CustomerList 
-              ref="customer_list"
-              key="customers"
-              customerId={this.state.customerId}
-              _goCustomer={this._goCustomer} 
-              customers={this.state.customers}
-              customer={this.state.customer}
-              loadCustomers={this.loadCustomers}
-              handleSearch={this.handleSearch}
-              searchWord={this.state.searchWord}
-              pagination={this.state.customerPagination}
-              currentPage={this.state.customerPage}
-              hideCustomerList={this.hideCustomerList}
-            />
           </section>
         </section>
       </section>
     );
   },
-  hideCustomerList: function(){
-    $(ReactDOM.findDOMNode(this.refs.customer_list)).effect('blind');
-  },
-  showCustomerList: function(){
-    $(ReactDOM.findDOMNode(this.refs.customer_list)).show();
-  },
-  loadCustomers: function(page){
-    if (page==undefined){page=1;}
-    if(this.state.searchWord==''){
-      this.setState({customers: [], searchTimer: null});
-      this.hideCustomerList();
-    }else{
-      return $.ajax({
-        method: 'GET',
-        url: `/crm/customers?q=${this.state.searchWord}&page=${page}`,
-        success: (function(_this){
-          return function(data){
-            _this.showCustomerList();
-            return _this.setState({
-              customers: data.customers,
-              searchTimer: null,
-              customerPagination: data.pagination,
-              customerPage: page
-            });
-          }
-        })(this)
-      });
-    }
-  },
-  setCustomerId: function(id){
+  /*setCustomerId: function(id){
     if (id==null){
       $("#customer_list").show();
       this.setState({pageTitle: null, customer: null});
     }
     this.setState({customerId: id});
     this.loadTickets(id, 'all');
-  },
+  },*/
   customerDidLoad: function(customer){
     this.setState({pageTitle: customer.name});
     this.handlePageHistory(customer.name, `/crm/customer/${customer.id}`);
-  },
-  handleSearch: function(e){
-    this.setState({searchWord: e.target.value});
-    if (this.state.searchTimer == null){
-      this.setState({searchTimer: setTimeout(this.loadCustomers, 800)});
-    }
   },
   handlePageHistory: function(title, url){
     document.title = title;
@@ -141,23 +87,28 @@ var CRM = React.createClass({
   },
   
   //Faux Routing
+  _setMainComponent: function(comp){
+    this.setState({mainComponent: comp});
+  },
   _goHome: function(){
     //this.setState({pageTitle: null, mainComponent: <Home config={this.state.config} />});
     this._goTicketList('active');
     this.handlePageHistory('Home', '/crm');
   },
   _goTicketList: function(status){
-    console.log('go ticket list - ' + status)
-    this.setState({mainComponent: <TicketList _goTicket={this._goTicket} config={this.state.config} status={status} />});
+    this.setState({mainComponent: <TicketList _goTicket={this._goTicket} config={this.state.config} status={status} _goCustomer={this._goCustomer} />});
     this.setState({status: status, pageTitle: `${status.charAt(0).toUpperCase() + status.slice(1)} Tickets`});
   },
   _goTicket: function(ticketId){
-    this.setState({subComponent: <TicketShowContainer ticketId={ticketId} config={this.state.config} handlePageHistory={this.handlePageHistory} />});
+    this.setState({mainComponent: <TicketShowContainer ticketId={ticketId} config={this.state.config} handlePageHistory={this.handlePageHistory} _goCustomer={this._goCustomer} />});
   },
   _goCompany: function(companyId){
-    this.setState({mainComponent: <CompanyShowContainer companyId={companyId} config={this.state.config} handlePageHistory={this.handlePageHistory} _goTicket={this._goTicket} />})
+    this.setState({mainComponent: <CompanyShowContainer companyId={companyId} config={this.state.config} handlePageHistory={this.handlePageHistory} _goTicket={this._goTicket} _goCompany={this._goCompany} />})
   },
   _goCustomer: function(customerId){
-    this.setState({mainComponent: <CustomerShowContainer customerId={customerId} config={this.state.config} handlePageHistory={this.handlePageHistory} _goTicket={this._goTicket} />})
-  }
+    this.setState({mainComponent: <CustomerShowContainer customerId={customerId} config={this.state.config} handlePageHistory={this.handlePageHistory} _goTicket={this._goTicket} _goCustomer={this._goCustomer} />})
+  },
+  _goCustomerList: function(searchWord){
+    this.setState({mainComponent: <CustomerList _goCustomer={this._goCustomer} searchWord={searchWord} />});
+  },
 });

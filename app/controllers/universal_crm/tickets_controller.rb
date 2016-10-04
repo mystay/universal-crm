@@ -68,8 +68,10 @@ module UniversalCrm
           #Send the contact form to the customer for their reference
           UniversalCrm::Mailer.new_ticket(universal_crm_config, subject, ticket, sent_from_crm).deliver_now
         end
+        render json: {ticket: ticket.to_json}
+      else
+        render json: {}
       end
-      render json: {}
     end
     
     def update_status

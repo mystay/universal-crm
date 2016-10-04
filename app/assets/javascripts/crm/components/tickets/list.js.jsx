@@ -23,9 +23,7 @@ var TicketList = React.createClass({
     }
   },
   loadTickets: function(status, page){
-    console.log('loading')
     if (!this.state.loading){
-      console.log('loading tickets')
       this.setState({loading: true});
       scrollTo('body');
       if (status==null || status==undefined){status=this.state.status;}
@@ -52,8 +50,10 @@ var TicketList = React.createClass({
       for (var i=0;i<this.state.tickets.length;i++){
         t.push(
           <li key={i} className="list-group-item">
-            <TicketListItem ticket={this.state.tickets[i]}
+            <TicketListItem
+              ticket={this.state.tickets[i]}
               _goTicket={this.props._goTicket}
+              _goCustomer={this.props._goCustomer}
               setCustomerId={this.props.setCustomerId}
               config={this.props.config}
               />

@@ -79,7 +79,7 @@ var NewTicket = React.createClass({
       success: (function(_this){
         return function(data){
           _this.setState({title: '', content: ''});
-          _this.props.loadTickets(_this.props.subjectId);
+          _this.props._goTicket(data.ticket.id);
         }
       })(this)
     });

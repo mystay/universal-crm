@@ -1,11 +1,56 @@
 var CustomerList = React.createClass({
-  loadCustomer: function(e){
+  getInitialState: function(){
+    return({
+      searchWord: null,
+      customers: null,
+      loading: false,
+      customerPagination: null,
+      customerPage: null
+    });
+  },
+  componentDidMount: function(){
+    this.loadCustomers();
+  },
+  componentDidUpdate: function(){
+    if (this.props.searchWord != null && this.props.searchWord != this.state.searchWord && !this.state.loading){
+      this.loadCustomers(this.props.searchWord);
+    }
+  },
+  clickCustomer: function(e){
     this.props._goCustomer(e.target.id);
+  },  
+  loadCustomers: function(searchWord, page){
+    if (!this.state.loading){
+      this.setState({loading: true, searchWord: searchWord});
+      if (page==undefined){page=1;}
+      if(searchWord==''){
+        this.setState({customers: []});
+        this.hideCustomerList();
+      }else{
+        var _this=this;
+        return $.ajax({
+          method: 'GET',
+          url: `/crm/customers?q=${searchWord}&page=${page}`,
+          success: function(data){
+            console.log(data);
+            return _this.setState({
+              loading: false,
+              customers: data.customers,
+              customerPagination: data.pagination,
+              customerPage: page
+            });
+          }
+        });
+      }
+    }
+  },
+  hideCustomerList: function(){
+    
   },
   customerList: function(){
     var rows = []
-    for (var i=0;i<this.props.customers.length;i++){
-      var customer = this.props.customers[i];
+    for (var i=0;i<this.state.customers.length;i++){
+      var customer = this.state.customers[i];
       var badgeCount;
       if (customer.ticket_count>0){
         badgeCount = <span className="badge badge-warning" style={{fontSize: '12px', backgroundColor: '#ffab40'}}>{customer.ticket_count}</span>
@@ -18,7 +63,7 @@ var CustomerList = React.createClass({
             <div className="panel-body">
               <div className="pull-right">{badgeCount}</div>
               <div className="pull-left"><i className="fa fa-user fa-fw fa-2x text-muted" /></div>
-              <h4 id={customer.id} onClick={this.loadCustomer} style={{cursor: 'pointer'}}>{customer.name}</h4>
+              <h4 id={customer.id} onClick={this.clickCustomer} style={{cursor: 'pointer'}}>{customer.name}</h4>
               <p className="text-info" style={{overflow: 'hidden', width:'80%', fontSize: '0.7em'}}>{customer.email}</p>
             </div>
           </div>
@@ -32,9 +77,7 @@ var CustomerList = React.createClass({
     this.setState({currentPage: page})
   },
   render: function(){
-    if (this.props.customers.length==0){
-      return(null);
-    }else{
+    if (this.state.customers && this.state.customers.length>0){
       return(
         <div className="panel panel-warning">
           <div className="panel-heading">
@@ -53,6 +96,8 @@ var CustomerList = React.createClass({
           </div>
         </div>
       )
+    }else{
+      return(null);
     }
   }
   

@@ -12,11 +12,7 @@ var Header = React.createClass({
             </button>
           </li>
           <li className="hidden-xs hidden-sm">
-            <CustomerSearch
-              key="customer_search"
-              loadCustomers={this.props.loadCustomers}
-              handleSearch={this.props.handleSearch}
-              />
+            <CustomerSearch _goCustomerList={this.props._goCustomerList} />
           </li>
         </ul>
         <ul className="nav navbar-nav navbar-right">

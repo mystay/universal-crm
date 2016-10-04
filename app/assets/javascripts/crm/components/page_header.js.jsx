@@ -10,7 +10,7 @@ var PageHeader = React.createClass({
     }
   },
   breadcrumb: function(){
-    if (this.props.pageTitle!=null){
+    if (this.props.pageTitle!=null && this.props.pageTitle!='Home'){
       return (
         <div className="pull-left hidden-xs">
           <ol className="breadcrumb">

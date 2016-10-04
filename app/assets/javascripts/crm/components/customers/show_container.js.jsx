@@ -49,7 +49,10 @@ var CustomerShowContainer = React.createClass({
           handleEdit={this.handleEdit}
           loadTickets={this.props.loadTickets}
           setCustomer={this.setCustomer}
-          config={this.props.config} />
+          _goTicket={this.props._goTicket}
+          _goCustomer={this.props._goCustomer}
+          config={this.props.config}
+          />
       );
     }else{
       return(null);
