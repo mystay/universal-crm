@@ -97,6 +97,7 @@ var Config = React.createClass({
         config: {
           system_name: ReactDOM.findDOMNode(refs.system_name).value,
           inbound_domain: ReactDOM.findDOMNode(refs.inbound_domain).value,
+          inbound_email_addresses: ReactDOM.findDOMNode(refs.inbound_email_addresses).value,
           transaction_email_address: ReactDOM.findDOMNode(refs.transaction_email_address).value,
           transaction_email_from: ReactDOM.findDOMNode(refs.transaction_email_from).value,
           new_ticket_header: ReactDOM.findDOMNode(refs.new_ticket_header).value,

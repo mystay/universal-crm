@@ -11,8 +11,9 @@ module UniversalCrm
     end
     
     def update
-      p = params.require(:config).permit(:system_name, :inbound_domain, :transaction_email_address, :transaction_email_from, :new_ticket_header, :new_reply_header, :email_footer, :ticket_flags)
+      p = params.require(:config).permit(:system_name, :inbound_domain, :inbound_email_addresses, :transaction_email_address, :transaction_email_from, :new_ticket_header, :new_reply_header, :email_footer, :ticket_flags)
       p[:ticket_flags] = p[:ticket_flags].to_s.gsub('\r','').split("\n").map{|p| {label: p.split('|')[0], color: p.split('|')[1]}}
+      p[:inbound_email_addresses] = p[:inbound_email_addresses].downcase.gsub(' ','').split(',')
       puts p
       universal_crm_config.update(p)
       render json: universal_crm_config.to_json

@@ -20,6 +20,11 @@ var ConfigForm = React.createClass({
           <label htmlFor="inbound_domain">Inbound Domain</label>
           <input type="text" className="form-control" defaultValue={this.props.config.inbound_domain} id="inbound_domain" ref="inbound_domain" onChange={this.changeInboundDomain} />
         </div>
+        <div className="form-group">
+          <label htmlFor="inbound_email_addresses">Inbound Email Address</label>
+          <input type="text" className="form-control" defaultValue={this.props.config.inbound_email_addresses.join(', ')} id="inbound_email_addresses" ref="inbound_email_addresses" />
+          <p className="small">Separate with a comma. These addresses will catch all incoming emails and save them as tickets.</p>
+        </div>
         {this.supportEmailsTo()}
         <div className="form-group">
           <label htmlFor="transaction_email_from">Transactional Email From Name</label>
