@@ -14,6 +14,7 @@ module UniversalCrm
         field :system_name
         field :hp, as: :hashed_password
         field :ibd, as: :inbound_domain
+        field :iea, as: :inbound_email_address
         field :tef, as: :transaction_email_from
         field :sea, as: :transaction_email_address
         field :nth, as: :new_ticket_header
@@ -27,6 +28,7 @@ module UniversalCrm
             ticket_flags: self.ticket_flags,
             hashed_password: self.hashed_password,
             inbound_domain: inbound_domain,
+            inbound_email_address: inbound_email_address,
             transaction_email_address: transaction_email_address,
             transaction_email_from: transaction_email_from,
             token: self.token,

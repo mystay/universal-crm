@@ -20,6 +20,10 @@ var ConfigForm = React.createClass({
           <label htmlFor="inbound_domain">Inbound Domain</label>
           <input type="text" className="form-control" defaultValue={this.props.config.inbound_domain} id="inbound_domain" ref="inbound_domain" onChange={this.changeInboundDomain} />
         </div>
+        <div className="form-group">
+          <label htmlFor="inbound_email_address">Inbound Email Address</label>
+          <input type="text" className="form-control" defaultValue={this.props.config.inbound_email_address} id="inbound_email_address" ref="inbound_email_address" />
+        </div>
         {this.supportEmailsTo()}
         <div className="form-group">
           <label htmlFor="transaction_email_from">Transactional Email From Name</label>
