@@ -13,7 +13,7 @@ module UniversalCrm
         #we don't have universal scope here, so need to establish it from the to address or sender
         def inbound
           logger.warn "#### Inbound CRM mail received from #{params['From']}"
-          logger.warn params
+          logger.info params
           #find the email address we're sending to
           to = params['ToFull'][0]['Email'] if !params['ToFull'].blank?
           cc = params['CcFull'][0]['Email'] if !params['CcFull'].blank?
@@ -36,7 +36,7 @@ module UniversalCrm
             if config.nil?
               #check if we're sending to a particular config/scope
               possible_token = to[0, to.index('@')]
-              logger.warn "possible_token: #{possible_token}"
+              logger.info "possible_token: #{possible_token}"
               config = UniversalCrm::Config.find_by(token: possible_token)
             end
             if !config.nil?#we are sending to our general scope
@@ -53,8 +53,7 @@ module UniversalCrm
                                       scope: config.scope
 
               #Send this ticket to the customer now, so they can reply to it
-              ticket = UniversalCrm::Mailer.new_ticket(config, customer, ticket).deliver_now
-              logger.warn ticket.errors.to_json
+              ticket = UniversalCrm::Mailer.new_ticket(config, customer, ticket, false).deliver_now
             else
               #find email addresses that match our config domains
               inbound_domains = UniversalCrm::Config.all.map{|c| c.inbound_domain}
