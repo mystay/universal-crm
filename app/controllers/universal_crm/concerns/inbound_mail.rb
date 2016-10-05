@@ -22,6 +22,7 @@ module UniversalCrm
           #parse the email, and create a ticket where necessary:
           if !to.blank? and !params['From'].blank?
             logger.warn "To: #{to}"
+            ticket=nil
             #find the senders first, there could be multiple across different scope, if the user config is scoped
             if !Universal::Configuration.class_name_user.blank?
               if UniversalCrm::Configuration.user_scoped
@@ -101,6 +102,17 @@ module UniversalCrm
                   logger.warn ticket.errors.to_json
                 end
               end
+            end
+            #check for attachments
+            if !ticket.nil? and !params['Attachments'].blank? and !params['Attachments'].empty?
+              params['Attachments'].each do |email_attachment|
+                filename = email_attachment['Name']
+                body = params['Content']
+                path = "#{Rails.root}/tmp/attachments/#{filename}"
+                File.open(path, 'wb'){|f| f.write(body)}
+                ticket.attachments.create file: File.open(path)
+                File.delete(path)
+              end              
             end
           else
             logger.warn "To not received"
