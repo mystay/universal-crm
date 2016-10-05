@@ -10,7 +10,6 @@ var CustomerEdit = React.createClass({
       },
       success: (function(_this){
         return function(data){
-          console.log(data)
           _this.props.setCustomer(data.customer);
         }
       })(this)

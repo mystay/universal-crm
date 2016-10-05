@@ -83,7 +83,6 @@ var ConfigForm = React.createClass({
   },
   parseFlags: function(flags){
     f = [];
-    console.log(flags);
     for(var i=0;i<flags.length;i++){
       flag = flags[i];
       f.push(flag['label'] + '|' + flag['color']);

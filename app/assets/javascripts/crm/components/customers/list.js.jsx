@@ -33,7 +33,6 @@ var CustomerList = React.createClass({
           method: 'GET',
           url: `/crm/customers?q=${searchWord}&page=${page}`,
           success: function(data){
-            console.log(data);
             return _this.setState({
               loading: false,
               customers: data.customers,

@@ -37,7 +37,6 @@ var ExpandedTicket = React.createClass({
   },
   ticketNotes: function(){
     if (this.props.ticket.content){
-      console.log(this.props.ticket.content)
       return(
         <blockquote>
           <div dangerouslySetInnerHTML={{__html: this.props.ticket.content.replace(/(?:\r\n|\r|\n)/g, '<br />')}} />
