@@ -2,7 +2,7 @@
   = simple_format @config.new_reply_header
   %p= '------------------------------------------------------'
 %h3 Ticket: ##{@ticket.numbered_title}
-= simple_format @comment.content
+= simple_format auto_link(@comment.content)
 - if !@config.email_footer.blank?
   %p= '------------------------------------------------------'
-  = simple_format @config.email_footer
+  = simple_format auto_link(@config.email_footer)

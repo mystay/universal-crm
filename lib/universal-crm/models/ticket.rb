@@ -70,7 +70,8 @@ module UniversalCrm
             content: self.content,
             updated_at: self.updated_at.strftime('%b %d, %Y, %l:%M%P'),
             created_at: self.created_at.strftime('%b %d, %Y, %l:%M%P'),
-            comment_count: self.comments.count,
+            comment_count: self.comments.system_generated.count,
+            reply_count: self.comments.not_system_generated.count,
             token: self.token,
             flags: self.flags,
             attachments: self.attachments.map{|a| {name: a.name, url: a.file.url, filename: a.file_filename}}

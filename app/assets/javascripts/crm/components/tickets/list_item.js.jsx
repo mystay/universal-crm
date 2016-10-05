@@ -1,7 +1,6 @@
 var TicketListItem = React.createClass({
   getInitialState: function(){
     return ({
-      commentCount: this.props.ticket.comment_count,
       status: this.props.ticket.status,
       flags: this.props.ticket.flags
     })
@@ -26,7 +25,6 @@ var TicketListItem = React.createClass({
       <div className="list-group-item-text">
         <TicketCommentsCreated 
           ticket={this.props.ticket} 
-          commentCount={this.state.commentCount}
           />
         {this.customerName()}
       </div>
