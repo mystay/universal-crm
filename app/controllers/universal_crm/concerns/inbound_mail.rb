@@ -108,9 +108,11 @@ module UniversalCrm
               params['Attachments'].each do |email_attachment|
                 filename = email_attachment['Name']
                 body = params['Content']
+                logger.warn body
                 path = "#{Rails.root}/tmp/attachments/#{filename}"
                 File.open(path, 'wb'){|f| f.write(body)}
-                att = ticket.attachments.create file: File.open(path)
+                att = ticket.attachments.new file: File.open(path)
+                att.save
                 logger.warn att.errors.to_json
                 File.delete(path)
               end              
