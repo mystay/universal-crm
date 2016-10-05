@@ -17,6 +17,7 @@ module Universal
       if @comment.save
         if @model.class == UniversalCrm::Ticket and @model.email?
           UniversalCrm::Mailer.ticket_reply(universal_crm_config, @model.subject, @model, @comment).deliver_now
+          @model.actioned! #If reply, set it as actioned
         end
         @model.touch
       else
