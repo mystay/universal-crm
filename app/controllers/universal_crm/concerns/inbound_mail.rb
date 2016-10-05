@@ -107,7 +107,7 @@ module UniversalCrm
             if !ticket.nil? and !params['Attachments'].blank? and !params['Attachments'].empty?
               params['Attachments'].each do |email_attachment|
                 filename = email_attachment['Name']
-                body = params['Content']
+                body = email_attachment['Content']
                 logger.warn body
                 path = "#{Rails.root}/tmp/attachments/#{filename}"
                 File.open(path, 'wb'){|f| f.write(body)}
