@@ -6,7 +6,9 @@ var TicketList = React.createClass({
       tickets: null,
       selectedTicketId: null,
       status: null,
-      loading: false
+      loading: false,
+      pagination: null,
+      pageNum: null
     })
   },
   componentDidMount: function(){
@@ -38,8 +40,8 @@ var TicketList = React.createClass({
             loading: false,
             subjectId: _this.props.subjectId,
             tickets: data.tickets,
-            ticketPagination: data.pagination,
-            ticketPage: page});
+            pagination: data.pagination,
+            pageNum: page});
         }
       });
     }
@@ -55,7 +57,8 @@ var TicketList = React.createClass({
               _goTicket={this.props._goTicket}
               _goCustomer={this.props._goCustomer}
               setCustomerId={this.props.setCustomerId}
-              config={this.props.config}
+              gs={this.props.gs}
+              sgs={this.props.sgs}
               />
           </li>
         )
@@ -74,8 +77,8 @@ var TicketList = React.createClass({
               {t}
             </ul>
             <Pagination
-              pagination={this.props.pagination}
-              currentPage={this.props.currentPage}
+              pagination={this.state.pagination}
+              currentPage={this.state.pageNum}
               pageResults={this.pageResults}
               displayDescription={true}
               />
@@ -87,8 +90,8 @@ var TicketList = React.createClass({
     }
   },
   ticketCount: function(){
-    if (this.props.pagination){
-      return this.props.pagination.total_count;
+    if (this.state.pagination){
+      return this.state.pagination.total_count;
     }else{
       return null;
     }
@@ -101,7 +104,7 @@ var TicketList = React.createClass({
     }
   },
   pageResults: function(page){
-    this.props.loadTickets(this.props.customerId, null, page)
+    this.loadTickets(this.state.status, page)
     this.setState({currentPage: page});
   }
 })

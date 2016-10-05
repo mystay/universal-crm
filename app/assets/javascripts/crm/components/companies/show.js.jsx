@@ -34,7 +34,13 @@ var CompanyShowContainer = React.createClass({
   },
   render: function(){
     if (this.state.company){
-      return(<CompanyShow company={this.state.company} _goTicket={this.props._goTicket} config={this.props.config} loadTickets={this.props.loadTickets} />);
+      return(<CompanyShow
+               company={this.state.company}
+               _goTicket={this.props._goTicket}
+               gs={this.props.gs}
+               sgs={this.props.sgs}
+               loadTickets={this.props.loadTickets}
+               />);
     }else{
       return(null);
     }
@@ -61,7 +67,7 @@ var CompanyShow = React.createClass({
               subjectType='UniversalCrm::Company'
               subject={this.props.company}
               loadTickets={this.props.loadTickets}
-              config={this.props.config}
+              gs={this.props.gs}
               _goTicket={this.props._goTicket}
               />
           </div>
@@ -98,7 +104,12 @@ var CompanyShow = React.createClass({
         </div>
         <div className="row">
           <div className="col-sm-12">
-            <TicketList _goTicket={this.props._goTicket} config={this.props.config} subjectId={this.props.company.id} subjectType='UniversalCrm::Company' />
+            <TicketList
+              _goTicket={this.props._goTicket}
+              gs={this.props.gs}
+              sgs={this.props.sgs}
+              subjectId={this.props.company.id}
+              subjectType='UniversalCrm::Company' />
           </div>
         </div>
       </div>

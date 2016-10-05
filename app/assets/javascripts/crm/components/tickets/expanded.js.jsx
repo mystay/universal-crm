@@ -18,6 +18,7 @@ var ExpandedTicket = React.createClass({
               />
           </div>
           {this.ticketNotes()}
+          <Attachments subjectId={this.props.ticket.id} subjectType='UniversalCrm::Ticket' new={false} />
           <Comments 
             subject_type='UniversalCrm::Ticket'
             subject_id={this.props.ticket.id}
@@ -36,9 +37,10 @@ var ExpandedTicket = React.createClass({
   },
   ticketNotes: function(){
     if (this.props.ticket.content){
+      console.log(this.props.ticket.content)
       return(
         <blockquote>
-          {nl2br(this.props.ticket.content)}
+          <div dangerouslySetInnerHTML={{__html: this.props.ticket.content.replace(/(?:\r\n|\r|\n)/g, '<br />')}} />
         </blockquote>
       )
     }

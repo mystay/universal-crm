@@ -45,7 +45,6 @@ var Attachments = React.createClass({
     return(
       <div>
         {this.list()}
-        <hr />
         {this.newAttachment()}
         <div id="new_attachment_form" style={{display: 'none'}}>
           <div className="form-group">
@@ -60,15 +59,20 @@ var Attachments = React.createClass({
   },
   list: function(){
     var attachments = [];
-    if (this.state.attachments.length==0){
+    if (this.state.attachments.length==0 && (this.props.new==undefined || this.props.new==true)){
       return(<div className="alert alert-info alert-sm">There are no attachments to list</div>);
-    }else{
+    }else if (this.state.attachments.length>0){
       this.state.attachments.forEach(function(attachment){
         attachments.push(
           <li key={attachment.id}><a href={attachment.url} target="_blank">{attachment.file}</a></li>
         )
       });
-      return(<ol>{attachments}</ol>)
+      return(
+        <div>
+          <hr />
+          <ol>{attachments}</ol>
+        </div>
+      );
     }
   },
   loadAttachments: function(){
@@ -92,7 +96,7 @@ var Attachments = React.createClass({
     $('#new_attachment_form').show();
   },
   newAttachment: function(){
-    if(!this.state.newAttachment){
+    if(!this.state.newAttachment && (this.props.new==undefined || this.props.new==true)){
       return(
         <button className="btn btn-primary btn-sm" onClick={this.toggleNew}><i className="fa fa-plus" /> New</button>
       )

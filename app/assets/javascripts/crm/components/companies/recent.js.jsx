@@ -15,7 +15,7 @@ var RecentCompanies = React.createClass({
     });
   },
   render: function(){
-    if (this.state.companies){
+    if (this.state.companies && this.state.companies.length>0){
       return(
         <div>
           <h5 className="sidebar-header">Recent Companies</h5>

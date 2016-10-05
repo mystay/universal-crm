@@ -14,7 +14,7 @@ var TicketListItem = React.createClass({
             ticket={this.props.ticket}
             closedLabel={this.closedLabel}
             selectTicketId={this.selectTicketId}
-            config={this.props.config}
+            gs={this.props.gs}
             />
         </h4>
         {this.listItemDetails()}

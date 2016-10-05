@@ -13,12 +13,12 @@ var Flags = React.createClass({
     }
   },
   labelColor: function(label){
-    if (this.props.config){
+    if (this.props.gs && this.props.gs.config){
       return `#${this.flagColor(label)}`;
     }
   },
   flagColor: function(flag_label){
-    var obj = findObjectByKeyValue(this.props.config.ticket_flags, 'label', flag_label);
+    var obj = findObjectByKeyValue(this.props.gs.config.ticket_flags, 'label', flag_label);
     if (obj){
       return obj['color'];
     }else{

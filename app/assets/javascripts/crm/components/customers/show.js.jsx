@@ -23,7 +23,8 @@ var CustomerShow = React.createClass({
               subjectType='UniversalCrm::Customer'
               subject={this.props.customer}
               loadTickets={this.props.loadTickets}
-              config={this.props.config}
+              gs={this.props.gs}
+              sgs={this.props.sgs}
               _goTicket={this.props._goTicket}
               />
 
@@ -59,7 +60,14 @@ var CustomerShow = React.createClass({
             </div>
           </div>
           <div className="col-sm-12">
-            <TicketList _goTicket={this.props._goTicket} _goCustomer={this.props._goCustomer} subjectId={this.props.customer.id} subjectType='UniversalCrm::Customer' config={this.props.config} />
+            <TicketList
+              _goTicket={this.props._goTicket}
+              _goCustomer={this.props._goCustomer}
+              subjectId={this.props.customer.id}
+              subjectType='UniversalCrm::Customer'
+              gs={this.props.gs}
+              sgs={this.props.sgs}
+              />
           </div>
         </div>
       );
@@ -83,13 +91,13 @@ var CustomerShow = React.createClass({
           <div className="col-sm-8">
             <dl className="dl-horizontal">
               <dt> Email:</dt>
-              <dd>{this.props.customer.email}</dd>
+              <dd className="small">{this.props.customer.email}</dd>
               <dt>Phone (Home):</dt>
-              <dd>{this.props.customer.phone_home}</dd>
+              <dd className="small">{this.props.customer.phone_home}</dd>
               <dt>Phone (Work):</dt>
-              <dd>{this.props.customer.phone_work}</dd>
+              <dd className="small">{this.props.customer.phone_work}</dd>
               <dt>Phone (Mobile):</dt>
-              <dd>{this.props.customer.phone_mobile}</dd>
+              <dd className="small">{this.props.customer.phone_mobile}</dd>
             </dl>
             <Tags subjectType="UniversalCrm::Customer" subjectId={this.props.customer.id} tags={this.props.customer.tags} />
           </div>

@@ -37,7 +37,7 @@ var NewTicket = React.createClass({
               <i className='fa fa-check' /> Save
             </button>
           </div>
-        if (this.props.config.transaction_email_address){
+        if (this.props.gs.config && this.props.gs.config.transaction_email_address){
           emailCheckbox = (
             <div className="form-group">
               <label>

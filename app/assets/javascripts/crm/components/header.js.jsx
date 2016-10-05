@@ -3,7 +3,6 @@ var Header = React.createClass({
     
   },
   systemName: function(){
-    console.log(this.props.gs)
     if (this.props.gs && this.props.gs.config){
       return(this.props.gs.config.system_name);
     }

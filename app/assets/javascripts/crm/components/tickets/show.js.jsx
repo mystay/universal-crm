@@ -91,7 +91,7 @@ var TicketShowContainer = React.createClass({
               changeTicketStatusActive={this.changeTicketStatusActive}
               changeTicketStatusClosed={this.changeTicketStatusClosed}
               countComments={this.countComments}
-              ticketFlags={this.props.config.ticket_flags}
+              ticketFlags={this.props.gs.config.ticket_flags}
               />
           </div>
         </div>

@@ -51,6 +51,7 @@ module UniversalCrm
               ticket = customer.tickets.create  kind: :email,
                                       title: params['Subject'],
                                       content: params['TextBody'].hideQuotedLines,
+                                      html_body: params['HtmlBody'].hideQuotedLines,
                                       scope: config.scope
 
               #Send this ticket to the customer now, so they can reply to it
@@ -75,6 +76,7 @@ module UniversalCrm
                   ticket = subject.tickets.create  kind: :email,
                                           title: params['Subject'],
                                           content: params['TextBody'].hideQuotedLines,
+                                          html_body: params['HtmlBody'].hideQuotedLines,
                                           scope: subject.scope,
                                           responsible: sender
                   logger.warn ticket.errors.to_json
@@ -87,6 +89,7 @@ module UniversalCrm
                 if !ticket.nil?
                   ticket.open!(user)
                   comment = ticket.comments.create content: params['TextBody'].hideQuotedLines,
+                                          html_body: params['HtmlBody'].hideQuotedLines,
                                           user: user,
                                           kind: :email,
                                           when: Time.now.utc,

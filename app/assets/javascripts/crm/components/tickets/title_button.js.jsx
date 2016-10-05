@@ -10,7 +10,7 @@ var TicketTitleButton = React.createClass({
           {this.props.closedLabel()}
           {this.emailIcon()}
           {this.props.ticket.title}
-          <Flags flags={this.props.ticket.flags} config={this.props.config} />
+          <Flags flags={this.props.ticket.flags} gs={this.props.gs} />
         </div>  
       )
     }else{

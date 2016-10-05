@@ -3,14 +3,16 @@ var PageHeader = React.createClass({
     this.props._goHome();
   },
   pageTitle: function(){
-    if (this.props.pageTitle==null){
-      return(<h1>Home</h1>);
-    }else{
-      return(<h1>{this.props.pageTitle}</h1>);
+    if (this.props.gs!=null){
+      if (this.props.gs.pageTitle==null){
+        return(<h1>Home</h1>);
+      }else{
+        return(<h1>{this.props.gs.pageTitle}</h1>);
+      }
     }
   },
   breadcrumb: function(){
-    if (this.props.pageTitle!=null && this.props.pageTitle!='Home'){
+    if (this.props.gs!=null && this.props.gs.pageTitle!=null && this.props.gs.pageTitle!='Home'){
       return (
         <div className="pull-left hidden-xs">
           <ol className="breadcrumb">

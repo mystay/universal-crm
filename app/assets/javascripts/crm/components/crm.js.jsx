@@ -3,13 +3,11 @@ var CRM = React.createClass({
     return {
       gs: {},
       customer: null,
-      searchWord: '',
       searchTimer: null,
       customerPagination: null,
       ticketPage: 1,
       customerPage: 1,
-      pageTitle: null,
-      mainComponent: null,
+      mainComponent: 'Loading...',
       subComponent: null
     };
   },
@@ -28,15 +26,13 @@ var CRM = React.createClass({
   init: function(_this){
     console.log('initializing')
     if (_this.props.customerId){
-      _this._goCustomer(_this.props.customerId);
-    }else 
-    if (_this.props.companyId){
-      _this._goCustomer(_this.props.companyId);
-    }
-    if (_this.props.ticketId){
-      _this._goTicket(_this.props.ticketId);
+      window.setTimeout(function(){_this._goCustomer(_this.props.customerId);}, 1000);
+    }else if (_this.props.companyId){
+      window.setTimeout(function(){_this._goCustomer(_this.props.companyId);}, 1000);
+    }else if (_this.props.ticketId){
+      window.setTimeout(function(){_this._goTicket(_this.props.ticketId);}, 1000);
     }else{
-      _this._goTicketList('active')
+      window.setTimeout(function(){_this._goTicketList('active');}, 1000);
     }
   },
   render: function() {
@@ -59,11 +55,10 @@ var CRM = React.createClass({
           />
         <section className="main-content-wrapper">
           <PageHeader
-            pageTitle={this.state.pageTitle}
+            gs={this.state.gs}
             _goHome={this._goHome}
             />
           <section id="main-content" className="animated fadeInUp">
-            <pre>{JSON.stringify(this.state.gs)}</pre>
             {this.state.subComponent}
             {this.state.mainComponent}
           </section>
@@ -71,26 +66,17 @@ var CRM = React.createClass({
       </section>
     );
   },
-  /*setCustomerId: function(id){
-    if (id==null){
-      $("#customer_list").show();
-      this.setState({pageTitle: null, customer: null});
-    }
-    this.setState({customerId: id});
-    this.loadTickets(id, 'all');
-  },*/
   customerDidLoad: function(customer){
-    this.setState({pageTitle: customer.name});
+    this.setGlobalState('pageTitle', customer.name);
     this.handlePageHistory(customer.name, `/crm/customer/${customer.id}`);
   },
   handlePageHistory: function(title, url){
     document.title = title;
     window.history.replaceState({"pageTitle":title},'', url);
-    this.setState({pageTitle: title})
+    this.setGlobalState('pageTitle', title);
   },
   setGlobalState: function(key, value){
-    console.log(key)
-    console.log(value)
+    console.log(key + ': ' + JSON.stringify(value));
     var globalState = this.state.gs;
     globalState[key] = value;
     this.setState({gs: globalState});
@@ -100,24 +86,23 @@ var CRM = React.createClass({
     this.setState({mainComponent: comp});
   },
   _goHome: function(){
-    //this.setState({pageTitle: null, mainComponent: <Home gs={this.state.globalState} sgs={this.setGlobalState} />});
+    //this.setState({pageTitle: null, mainComponent: <Home gs={this.state.gs} sgs={this.setGlobalState} />});
     this._goTicketList('active');
     this.handlePageHistory('Home', '/crm');
   },
   _goTicketList: function(status){
-    this.setState({mainComponent: <TicketList _goTicket={this._goTicket} gs={this.state.globalState} sgs={this.setGlobalState} status={status} _goCustomer={this._goCustomer} />});
-    this.setState({status: status, pageTitle: `${status.charAt(0).toUpperCase() + status.slice(1)} Tickets`});
+    this.setState({mainComponent: <TicketList _goTicket={this._goTicket} gs={this.state.gs} sgs={this.setGlobalState} status={status} _goCustomer={this._goCustomer} />});
+    this.setGlobalState('ticketStatus', status);
+    this.setGlobalState('pageTitle', `${status.charAt(0).toUpperCase() + status.slice(1)} Tickets`);
   },
   _goTicket: function(ticketId){
-    this.setState({mainComponent: <TicketShowContainer ticketId={ticketId} gs={this.state.globalState} sgs={this.setGlobalState} handlePageHistory={this.handlePageHistory} _goCustomer={this._goCustomer} />});
+    this.setState({mainComponent: <TicketShowContainer ticketId={ticketId} gs={this.state.gs} sgs={this.setGlobalState} handlePageHistory={this.handlePageHistory} _goCustomer={this._goCustomer} />});
   },
   _goCompany: function(companyId){
-    this.setState({mainComponent: <CompanyShowContainer companyId={companyId} gs={this.state.globalState} sgs={this.setGlobalState} handlePageHistory={this.handlePageHistory} _goTicket={this._goTicket} _goCompany={this._goCompany} />})
+    this.setState({mainComponent: <CompanyShowContainer companyId={companyId} gs={this.state.gs} sgs={this.setGlobalState} handlePageHistory={this.handlePageHistory} _goTicket={this._goTicket} _goCompany={this._goCompany} />})
   },
   _goCustomer: function(customerId){
-    this.setState({mainComponent: <CustomerShowContainer customerId={customerId} gs={this.state.globalState} sgs={this.setGlobalState} handlePageHistory={this.handlePageHistory} _goTicket={this._goTicket} _goCustomer={this._goCustomer} />})
-  },
-  _goCustomerList: function(searchWord){
-    this.setState({mainComponent: <CustomerList _goCustomer={this._goCustomer} gs={this.state.globalState} sgs={this.setGlobalState} searchWord={searchWord} />});
+    console.log('_goCustomer')
+    this.setState({mainComponent: <CustomerShowContainer customerId={customerId} gs={this.state.gs} sgs={this.setGlobalState} handlePageHistory={this.handlePageHistory} _goTicket={this._goTicket} _goCustomer={this._goCustomer} />})
   },
 });

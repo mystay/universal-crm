@@ -22,6 +22,7 @@ module UniversalCrm
 
         field :t, as: :title
         field :c, as: :content
+        field :hb, as: :html_body
 
         statuses %w(active closed), default: :active
         kinds %w(normal email), :normal
@@ -71,7 +72,8 @@ module UniversalCrm
             created_at: self.created_at.strftime('%b %d, %Y, %l:%M%P'),
             comment_count: self.comments.count,
             token: self.token,
-            flags: self.flags
+            flags: self.flags,
+            attachments: self.attachments.map{|a| {name: a.name, url: a.file.url, filename: a.file_filename}}
           }
         end
         
