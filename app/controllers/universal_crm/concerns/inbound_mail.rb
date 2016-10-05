@@ -12,6 +12,8 @@ module UniversalCrm
 
         #we don't have universal scope here, so need to establish it from the to address or sender
         def inbound
+          logger.warn "#### Inbound CRM mail received from #{params['From']}"
+          logger.warn params
           #find the email address we're sending to
           to = params['ToFull'][0]['Email'] if !params['ToFull'].blank?
           cc = params['CcFull'][0]['Email'] if !params['CcFull'].blank?
@@ -86,6 +88,8 @@ module UniversalCrm
                 end
               end
             end
+          else
+            logger.warn "To not received"
           end
           render json: {}
         end
