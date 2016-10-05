@@ -23,6 +23,7 @@ var ConfigForm = React.createClass({
         <div className="form-group">
           <label htmlFor="inbound_email_address">Inbound Email Address</label>
           <input type="text" className="form-control" defaultValue={this.props.config.inbound_email_address} id="inbound_email_address" ref="inbound_email_address" />
+          <p className="small">Separate with a comma. These addresses will catch all incoming emails and save them as tickets.</p>
         </div>
         {this.supportEmailsTo()}
         <div className="form-group">

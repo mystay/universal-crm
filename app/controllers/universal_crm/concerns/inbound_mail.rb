@@ -32,7 +32,7 @@ module UniversalCrm
             end
 
             #check if we're sending to an inbound email address
-            config = UniversalCrm::Config.find_by(inbound_email_address: to.downcase)
+            config = UniversalCrm::Config.find_by(inbound_email_addresses: to.downcase)
             if config.nil?
               #check if we're sending to a particular config/scope
               possible_token = to[0, to.index('@')]
