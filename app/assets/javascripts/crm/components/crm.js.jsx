@@ -105,4 +105,7 @@ var CRM = React.createClass({
     console.log('_goCustomer')
     this.setState({mainComponent: <CustomerShowContainer customerId={customerId} gs={this.state.gs} sgs={this.setGlobalState} handlePageHistory={this.handlePageHistory} _goTicket={this._goTicket} _goCustomer={this._goCustomer} />})
   },
+  _goCustomerList: function(searchWord){
+    this.setState({mainComponent: <CustomerList _goCustomer={this._goCustomer} gs={this.state.gs} sgs={this.setGlobalState} />});
+  },
 });

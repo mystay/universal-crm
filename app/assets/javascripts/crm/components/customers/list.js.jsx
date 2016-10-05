@@ -12,8 +12,9 @@ var CustomerList = React.createClass({
     this.loadCustomers();
   },
   componentDidUpdate: function(){
-    if (this.props.searchWord != null && this.props.searchWord != this.state.searchWord && !this.state.loading){
-      this.loadCustomers(this.props.searchWord);
+    if (this.props.gs != null && this.props.gs.searchWord != null && this.props.gs.searchWord != this.state.searchWord && !this.state.loading){
+      
+      this.loadCustomers(this.props.gs.searchWord);
     }
   },
   clickCustomer: function(e){
