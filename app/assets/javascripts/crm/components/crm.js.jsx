@@ -17,14 +17,12 @@ var CRM = React.createClass({
       method: 'GET',
       url: `/crm/config.json`,
       success: (function(data){
-        console.log('config loaded')
         _this.setGlobalState('config', data);
         _this.init(_this);
       })
     });
   },
   init: function(_this){
-    console.log('initializing')
     if (_this.props.customerId){
       window.setTimeout(function(){_this._goCustomer(_this.props.customerId);}, 1000);
     }else if (_this.props.companyId){
@@ -76,7 +74,6 @@ var CRM = React.createClass({
     this.setGlobalState('pageTitle', title);
   },
   setGlobalState: function(key, value){
-    console.log(key + ': ' + JSON.stringify(value));
     var globalState = this.state.gs;
     globalState[key] = value;
     this.setState({gs: globalState});
@@ -102,7 +99,6 @@ var CRM = React.createClass({
     this.setState({mainComponent: <CompanyShowContainer companyId={companyId} gs={this.state.gs} sgs={this.setGlobalState} handlePageHistory={this.handlePageHistory} _goTicket={this._goTicket} _goCompany={this._goCompany} />})
   },
   _goCustomer: function(customerId){
-    console.log('_goCustomer')
     this.setState({mainComponent: <CustomerShowContainer customerId={customerId} gs={this.state.gs} sgs={this.setGlobalState} handlePageHistory={this.handlePageHistory} _goTicket={this._goTicket} _goCustomer={this._goCustomer} />})
   },
   _goCustomerList: function(searchWord){
