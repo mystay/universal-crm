@@ -54,7 +54,7 @@ module UniversalCrm
                                       scope: config.scope
 
               #Send this ticket to the customer now, so they can reply to it
-              ticket = UniversalCrm::Mailer.new_ticket(config, customer, ticket, false).deliver_now
+              UniversalCrm::Mailer.new_ticket(config, customer, ticket, false).deliver_now
             else
               #find email addresses that match our config domains
               inbound_domains = UniversalCrm::Config.all.map{|c| c.inbound_domain}
@@ -108,11 +108,9 @@ module UniversalCrm
               params['Attachments'].each do |email_attachment|
                 filename = email_attachment['Name']
                 body = email_attachment['Content']
-                logger.warn body
                 path = "#{Rails.root}/tmp/attachments/#{filename}"
                 File.open(path, 'wb'){|f| f.write(body)}
-                att = ticket.attachments.new file: File.open(path)
-                att.save
+                att = ticket.attachments.create file: File.open(path)
                 logger.warn att.errors.to_json
                 File.delete(path)
               end              
