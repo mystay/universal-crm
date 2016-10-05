@@ -9,7 +9,7 @@ small{font-size:0.7em;}
   h4{font-size:0.8em;}
 }
 .alert-sm{font-size:0.8em;padding:8px;}
-blockquote, .post>p{font-size:10pt!important;}
+blockquote, .post>p{font-size:10pt;margin-bottom:0}
 .chat-widget span {
     font-size: 0.85em;
 }

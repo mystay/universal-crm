@@ -24,7 +24,7 @@ module UniversalCrm
         field :c, as: :content
         field :hb, as: :html_body
 
-        statuses %w(active closed), default: :active
+        statuses %w(active actioned closed), default: :active
         kinds %w(normal email), :normal
 
         flags %w(priority)
