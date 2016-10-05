@@ -54,7 +54,7 @@ var ExpandedTicket = React.createClass({
     if (this.email() && this.ticketOpen()){
       return(
         <div className="alert alert-warning alert-sm">
-          <i className="fa fa-exclamation-triangle" /> <strong>Note:</strong> This reply will be emailed to the customer
+          <i className="fa fa-exclamation-triangle" /> <strong>Note:</strong> This reply will be emailed to: {this.props.ticket.from_email}
         </div>
       )
     }else{

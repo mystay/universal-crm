@@ -2,7 +2,7 @@ var TicketCustomerName = React.createClass({
   render: function(){
     if (this.props.name){
       return (
-        <div onClick={this.setCustomerId} style={{textDecoration: 'underline', cursor: 'pointer'}}>
+        <div onClick={this.setCustomerId} style={{textDecoration: 'underline', cursor: 'pointer', display: 'inline'}}>
           {this.props.name}
         </div>
       )

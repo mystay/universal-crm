@@ -122,7 +122,7 @@ module UniversalCrm
                 filename = email_attachment['Name']
                 body = email_attachment['Content']
                 path = "#{Rails.root}/tmp/attachments/#{Time.now.to_i}-#{filename}"
-                File.open(path, 'wb'){|f| f.write(body)}
+                File.open(path, 'w'){|f| f.write(body)}
                 att = ticket.attachments.create file: File.open(path), name: filename
                 logger.warn att.errors.to_json
                 File.delete(path)
