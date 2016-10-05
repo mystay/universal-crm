@@ -52,7 +52,9 @@ module UniversalCrm
                                       title: params['Subject'],
                                       content: params['TextBody'].hideQuotedLines,
                                       html_body: params['HtmlBody'].hideQuotedLines,
-                                      scope: config.scope
+                                      scope: config.scope,
+                                      to_email: to,
+                                      from_email: params['From']
 
               #Send this ticket to the customer now, so they can reply to it
               UniversalCrm::Mailer.new_ticket(config, customer, ticket, false).deliver_now
@@ -78,7 +80,9 @@ module UniversalCrm
                                           content: params['TextBody'].hideQuotedLines,
                                           html_body: params['HtmlBody'].hideQuotedLines,
                                           scope: subject.scope,
-                                          responsible: sender
+                                          responsible: sender,
+                                          to_email: to,
+                                          from_email: params['From']
                   logger.warn ticket.errors.to_json
                 end
               elsif to[0,3] == 'tk-'
@@ -101,7 +105,13 @@ module UniversalCrm
                 logger.warn "Direct to customer's address - at our inbound domain"
                 subject = UniversalCrm::Customer.find_by(email: to)
                 if !subject.nil?
-                  ticket = subject.tickets.create kind: :email, title: params['Subject'], content: params['TextBody'], scope: subject.scope
+                  ticket = subject.tickets.create kind: :email,
+                                                  title: params['Subject'],
+                                                  content: params['TextBody'],
+                                                  html_body: params['HtmlBody'],
+                                                  scope: subject.scope,
+                                                  to_email: to,
+                                                  from_email: params['From']
                   logger.warn ticket.errors.to_json
                 end
               end

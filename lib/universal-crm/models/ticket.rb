@@ -23,6 +23,8 @@ module UniversalCrm
         field :t, as: :title
         field :c, as: :content
         field :hb, as: :html_body
+        field :te, as: :to_email
+        field :fe, as: :from_email
 
         statuses %w(active actioned closed), default: :active
         kinds %w(normal email), :normal
@@ -34,7 +36,7 @@ module UniversalCrm
 
         default_scope ->(){order_by(status: :asc, updated_at: :desc)}
         
-        search_in :t
+        search_in :t, :c, :te, :fe
         
         def numbered_title
           [self.number, self.title].join(' - ')
