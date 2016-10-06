@@ -67,6 +67,14 @@ var TicketFunctions = React.createClass({
           </button>
         </div>
       )
+    }else if (this.props.status == 'actioned'){
+      return (
+        <div>
+          <button className="btn no-margin btn-danger btn-xs" onClick={this.props.changeTicketStatusClosed}>
+            <i className="fa fa-ban" /> Close Ticket
+          </button>
+        </div>
+      )
     }
   }
 });
