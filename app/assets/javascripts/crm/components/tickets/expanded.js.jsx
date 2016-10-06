@@ -18,6 +18,7 @@ var ExpandedTicket = React.createClass({
               ticketFlags={this.props.ticketFlags}
               />
           </div>
+          {this.actionedStatus()}
           {this.ticketNotes()}
           <Attachments subjectId={this.props.ticket.id} subjectType='UniversalCrm::Ticket' new={false} />
           <Comments 
@@ -53,7 +54,7 @@ var ExpandedTicket = React.createClass({
     }
   },
   ticketOpen: function(){
-    return (this.props.ticket.status == 'active' || this.props.ticket.status == 'actioned');
+    return (this.props.ticket.status == 'active' || this.actioned());
   },
   email: function(){
     return this.props.ticket.kind.toString() == 'email';
@@ -74,6 +75,18 @@ var ExpandedTicket = React.createClass({
       return 'Reply...';
     }else{
       return 'New comment...';
+    }
+  },
+  actioned: function(){
+    return(this.props.ticket.status == 'actioned');
+  },
+  actionedStatus: function(){
+    if (this.actioned()){
+      return(
+        <div className="alert alert-success alert-sm text-center">
+          <i className="fa fa-check" /> Actioned
+        </div>
+      );
     }
   }
 });
