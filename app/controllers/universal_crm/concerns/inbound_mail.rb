@@ -47,19 +47,21 @@ module UniversalCrm
                 customer = UniversalCrm::Customer.find_by(subject: sender)
               end
               customer ||= UniversalCrm::Customer.find_or_create_by(scope: config.scope, email: params['From'])
-              customer.update(name: params['FromName']) if customer.name.blank?
-              ticket = customer.tickets.create  kind: :email,
-                                      title: params['Subject'],
-                                      content: params['TextBody'].hideQuotedLines,
-                                      html_body: params['HtmlBody'].hideQuotedLines,
-                                      scope: config.scope,
-                                      to_email: to,
-                                      from_email: params['From']
+              if customer.active?
+                customer.update(name: params['FromName']) if customer.name.blank?
+                ticket = customer.tickets.create  kind: :email,
+                                        title: params['Subject'],
+                                        content: params['TextBody'].hideQuotedLines,
+                                        html_body: params['HtmlBody'].hideQuotedLines,
+                                        scope: config.scope,
+                                        to_email: to,
+                                        from_email: params['From']
 
-              #Send this ticket to the customer now, so they can reply to it
-              #If it WASN'T sent to one of our inboud addresses that is:
-              if !config.inbound_email_addresses.include?(to)
-                UniversalCrm::Mailer.new_ticket(config, customer, ticket, false).deliver_now
+                #Send this ticket to the customer now, so they can reply to it
+                #If it WASN'T sent to one of our inboud addresses that is:
+                if !config.inbound_email_addresses.include?(to)
+                  UniversalCrm::Mailer.new_ticket(config, customer, ticket, false).deliver_now
+                end
               end
             else
               #find email addresses that match our config domains
@@ -76,7 +78,7 @@ module UniversalCrm
               puts token
               if to[0,3]=='cr-'
                 logger.warn "Direct to customer"
-                subject = UniversalCrm::Customer.find_by(token: token)
+                subject = UniversalCrm::Customer.active.find_by(token: token)
                 if !subject.nil?
                   ticket = subject.tickets.create  kind: :email,
                                           title: params['Subject'],

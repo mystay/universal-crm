@@ -2,6 +2,7 @@ require_dependency "universal_crm/application_controller"
 
 module UniversalCrm
   class CustomersController < ApplicationController
+    before_filter :find_customer, only: %w(show update update_status)
     
     def index
       params[:page] = 1 if params[:page].blank?
@@ -39,7 +40,6 @@ module UniversalCrm
     end
     
     def show
-      @customer = UniversalCrm::Customer.find(params[:id])
       if @customer.nil?
         render json: {customer: nil}
       else
@@ -66,10 +66,22 @@ module UniversalCrm
     end
     
     def update
-      @customer = UniversalCrm::Customer.find(params[:id])
       @customer.update(params.require(:customer).permit(:name, :email, :phone_home, :phone_work, :phone_mobile))
       render json: {customer: @customer.to_json(universal_crm_config)}
     end
     
+    def update_status
+      if params[:status] == 'blocked'
+        @customer.block!(universal_user)
+      elsif params[:status] == 'active'
+        @customer.unblock!(universal_user)
+      end
+      render json: {customer: @customer.to_json(universal_crm_config)}
+    end
+    
+    private
+    def find_customer
+      @customer = UniversalCrm::Customer.find(params[:id])
+    end
   end
 end

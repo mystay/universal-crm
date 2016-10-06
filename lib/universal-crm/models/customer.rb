@@ -29,6 +29,8 @@ module UniversalCrm
         has_many :tickets, as: :subject, class_name: 'UniversalCrm::Ticket'
         employed_by [{companies: 'UniversalCrm::Company'}]
 
+        statuses %w(active blocked), default: :active
+        
         search_in :n, :e
         
         default_scope ->(){order_by(created_at: :desc)}
@@ -53,6 +55,7 @@ module UniversalCrm
         def to_json(config)
           return {
             id: self.id.to_s,
+            status: self.status,
             number: self.number.to_s, 
             name: self.name,
             email: self.email, 
@@ -65,6 +68,16 @@ module UniversalCrm
             inbound_email_address: self.inbound_email_address(config),
             closed_ticket_count: self.tickets.unscoped.closed.count
             }
+        end
+        
+        def block!(user)
+          self.comments.create content: 'Customer blocked', author: user.name, when: Time.now.utc
+          self.blocked!
+        end
+        
+        def unblock!(user)
+          self.comments.create content: 'Customer unblocked', author: user.name, when: Time.now.utc
+          self.active!
         end
         
       end

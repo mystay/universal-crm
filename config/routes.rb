@@ -21,6 +21,9 @@ UniversalCrm::Engine.routes.draw do
     collection do
       get :autocomplete
     end
+    member do
+      patch :update_status
+    end
   end
   resources :companies do
     collection do

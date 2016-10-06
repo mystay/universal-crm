@@ -121,6 +121,6 @@ var Comments = React.createClass({
     }
   },
   openComments: function(){
-    return (this.props.openComments);
+    return (this.props.openComments==undefined || this.props.openComments==true);
   }
 });

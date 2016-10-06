@@ -1,6 +1,18 @@
 var CustomerShow = React.createClass({
   render: function(){
     if (this.props.customer.id && this.props.customer){
+      newTicket = null
+      if (this.props.customer.status=='active'){
+        newTicket = <NewTicket key="new_ticket"
+              subjectId={this.props.customer.id}
+              subjectType='UniversalCrm::Customer'
+              subject={this.props.customer}
+              loadTickets={this.props.loadTickets}
+              gs={this.props.gs}
+              sgs={this.props.sgs}
+              _goTicket={this.props._goTicket}
+              />
+      }
       return(
         <div className="row">
           <div className="col-sm-6">
@@ -18,15 +30,7 @@ var CustomerShow = React.createClass({
                 </button>
               </div>
             </div>
-            <NewTicket key="new_ticket"
-              subjectId={this.props.customer.id}
-              subjectType='UniversalCrm::Customer'
-              subject={this.props.customer}
-              loadTickets={this.props.loadTickets}
-              gs={this.props.gs}
-              sgs={this.props.sgs}
-              _goTicket={this.props._goTicket}
-              />
+            {newTicket}
 
           </div>
           <div className="col-sm-6">
@@ -39,6 +43,7 @@ var CustomerShow = React.createClass({
                   <ul className="nav nav-tabs">
                     <li className="active"><a data-toggle="tab" href="#tab-notes">Notes</a></li>
                     <li><a data-toggle="tab" href="#tab-attachments">Attachments</a></li>
+                    <li><a data-toggle="tab" href="#tab-settings">Settings</a></li>
                   </ul>
                   <div className="tab-content">
                     <div className="tab-pane active" id="tab-notes">
@@ -53,6 +58,9 @@ var CustomerShow = React.createClass({
                     </div>
                     <div className="tab-pane" id="tab-attachments">
                       <Attachments subjectId={this.props.customer.id} subjectType='UniversalCrm::Customer' />
+                    </div>
+                    <div className="tab-pane" id="tab-settings">
+                      <CustomerSettings customer={this.props.customer} />
                     </div>
                   </div>
                 </div>
