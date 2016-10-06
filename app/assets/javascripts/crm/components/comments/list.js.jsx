@@ -123,6 +123,6 @@ var Comments = React.createClass({
     }
   },
   openComments: function(){
-    return (this.props.status == 'active');
+    return (this.props.openComments);
   }
 });

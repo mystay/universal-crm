@@ -72,6 +72,13 @@ var TicketShowContainer = React.createClass({
       this.props._goCustomer(this.state.ticket.subject_id);
     }
   },
+  fromTo: function(){
+    if (this.state.ticket.incoming){
+      return 'From:'
+    }else{
+      return 'To:'
+    }
+  },
   render: function(){
     if (this.state.ticket){
       return (
@@ -79,7 +86,7 @@ var TicketShowContainer = React.createClass({
           <div className="panel-heading">
             <h3 className="panel-title">
               <div className="pull-right text-muted">{this.state.ticket.from_email}</div>
-              From: <TicketCustomerName 
+              {this.fromTo()} <TicketCustomerName 
                 name={this.state.ticket.subject_name}
                 id={this.state.ticket.subject_id}
                 _goCustomer={this.props._goCustomer}

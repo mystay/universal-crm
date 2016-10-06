@@ -1,19 +1,45 @@
 var Comment = React.createClass({
   
   render: function(){
-    return(
-      <div className="row wrapper animated fadeInRight">
-        <div className={this.column(2)}>
-          {this.author()}
-        </div>
-        <div className={this.column(10)}>
-          <div className="post default">
-            {this.arrow()}
-            <p>{nl2br(this.props.comment.content)}</p>
+    var commentClass;
+    if (this.props.comment.system_generated){
+      commentClass = 'post system_generated'
+    } else if (this.props.comment.incoming){
+      commentClass = 'post primary'
+    }else{
+      commentClass = 'post default';
+    }
+    if (this.props.comment.incoming){
+      return(
+        <div className="row wrapper animated fadeInRight">
+          <div className={this.column(10)}>
+            <div className={commentClass}>
+              <div className="pull-right small">{this.props.comment.when_formatted}</div>
+              {this.arrow()}
+              <p>{nl2br(this.props.comment.content)}</p>
+            </div>
+          </div>
+          <div className={this.column(2)}>
+            {this.author()}
           </div>
         </div>
-      </div>
-    )
+      )
+    }else{
+      return(
+        <div className="row wrapper animated fadeInRight">
+          <div className={this.column(2)}>
+            {this.author()}
+          </div>
+          <div className={this.column(10)}>
+            <div className={commentClass}>
+              <div className="pull-right small">{this.props.comment.when_formatted}</div>
+              {this.arrow()}
+              <p>{nl2br(this.props.comment.content)}</p>
+            </div>
+          </div>
+        </div>
+      )
+    }
   },
   column: function(span){
     if (this.props.fullWidth){
@@ -23,8 +49,12 @@ var Comment = React.createClass({
     }
   },
   arrow: function(){
-    if (!this.props.fullWidth){
-      return(<span className="arrow left"></span>);
+    if (!this.props.fullWidth && !this.props.comment.system_generated){
+      if (this.props.comment.incoming){
+        return(<span className="arrow right"></span>);
+      }else{
+        return(<span className="arrow left"></span>);
+      }
     }else{
       return(null);
     }

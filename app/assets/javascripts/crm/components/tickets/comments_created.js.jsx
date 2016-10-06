@@ -18,7 +18,11 @@ var TicketCommentsCreated = React.createClass({
     }else if (this.props.ticket.reply_count>1){
       html.push(`${this.props.ticket.reply_count} replies`);
     }
-    return `(${html.join('/')})`;
+    if (this.props.ticket.comment_count>0 || this.props.ticket.reply_count>0){
+      return `(${html.join('/')})`;
+    }else{
+      return(null);
+    }
   }
   
 });

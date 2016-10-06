@@ -67,6 +67,11 @@ module UniversalCrm
           end
         end
         
+        #ticket sent from an external source to the CRM
+        def incoming?
+          !self.from_email.blank?
+        end
+        
         def to_json
           {
             id: self.id.to_s,
@@ -75,6 +80,7 @@ module UniversalCrm
             kind: self.kind.to_s,
             subject_name: self.subject.name,
             subject_id: self.subject_id.to_s,
+            subject_email: self.subject.email,
             title: self.title,
             content: self.content,
             html_body: self.html_body,
@@ -86,7 +92,8 @@ module UniversalCrm
             reply_count: self.comments.not_system_generated.count,
             token: self.token,
             flags: self.flags,
-            attachments: self.attachments.map{|a| {name: a.name, url: a.file.url, filename: a.file_filename}}
+            attachments: self.attachments.map{|a| {name: a.name, url: a.file.url, filename: a.file_filename}},
+            incoming: self.incoming?
           }
         end
         

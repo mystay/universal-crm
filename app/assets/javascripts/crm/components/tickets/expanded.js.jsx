@@ -25,7 +25,7 @@ var ExpandedTicket = React.createClass({
             subject_id={this.props.ticket.id}
             countComments={this.props.countComments}
             newCommentPosition='bottom'
-            status={this.props.status}
+            openComments={this.ticketOpen()}
             newCommentPlaceholder={this.newCommentPlaceholder()}
             fullWidth={false}
             />
@@ -46,7 +46,7 @@ var ExpandedTicket = React.createClass({
     }
   },
   ticketOpen: function(){
-    return (this.props.ticket.status == 'active');
+    return (this.props.ticket.status == 'active' || this.props.ticket.status == 'actioned');
   },
   email: function(){
     return this.props.ticket.kind.toString() == 'email';
@@ -55,7 +55,7 @@ var ExpandedTicket = React.createClass({
     if (this.email() && this.ticketOpen()){
       return(
         <div className="alert alert-warning alert-sm">
-          <i className="fa fa-exclamation-triangle" /> <strong>Note:</strong> This reply will be emailed to: {this.props.ticket.from_email}
+          <i className="fa fa-exclamation-triangle" /> <strong>Note:</strong> This reply will be emailed to: {this.props.ticket.subject_email}
         </div>
       )
     }else{

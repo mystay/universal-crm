@@ -100,7 +100,8 @@ module UniversalCrm
                                           user: user,
                                           kind: :email,
                                           when: Time.now.utc,
-                                          author: (customer.nil? ? 'Unknown' : customer.name)
+                                          author: (customer.nil? ? 'Unknown' : customer.name),
+                                          incoming: true
                   
                   logger.warn comment.errors.to_json
                 end
