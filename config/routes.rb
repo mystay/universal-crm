@@ -9,6 +9,10 @@ UniversalCrm::Engine.routes.draw do
   get '/inbound', to: 'home#inbound'
   post '/config/set_password', to: 'config#set_password'
   post '/config/signin', to: 'config#signin'
+  get '/inbox', to: 'home#index'
+  get '/actioned', to: 'home#index'
+  get '/active', to: 'home#index'
+  get '/closed', to: 'home#index'
   
   resource :config, controller: :config
   

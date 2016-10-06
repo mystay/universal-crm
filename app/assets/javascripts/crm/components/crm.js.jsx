@@ -89,8 +89,10 @@ var CRM = React.createClass({
   },
   _goTicketList: function(status){
     this.setState({mainComponent: <TicketList _goTicket={this._goTicket} gs={this.state.gs} sgs={this.setGlobalState} status={status} _goCustomer={this._goCustomer} />});
+    var title = `${status.charAt(0).toUpperCase() + status.slice(1)} Tickets`;
     this.setGlobalState('ticketStatus', status);
-    this.setGlobalState('pageTitle', `${status.charAt(0).toUpperCase() + status.slice(1)} Tickets`);
+    this.setGlobalState('pageTitle', title);
+    this.handlePageHistory(title, `/crm/${status}`);
   },
   _goTicket: function(ticketId){
     this.setState({mainComponent: <TicketShowContainer ticketId={ticketId} gs={this.state.gs} sgs={this.setGlobalState} handlePageHistory={this.handlePageHistory} _goCustomer={this._goCustomer} />});
