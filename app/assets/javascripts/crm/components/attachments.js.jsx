@@ -63,14 +63,18 @@ var Attachments = React.createClass({
       return(<div className="alert alert-info alert-sm">There are no attachments to list</div>);
     }else if (this.state.attachments.length>0){
       this.state.attachments.forEach(function(attachment){
+        if (attachment.name){
+          var filename = attachment.name;
+        }else{
+          var filename = attachment.file;
+        }
         attachments.push(
-          <li key={attachment.id}><a href={attachment.url} target="_blank">{attachment.file}</a></li>
+          <li key={attachment.id}><a href={attachment.url} target="_blank">{filename}</a></li>
         )
       });
       return(
-        <div>
-          <hr />
-          <ol>{attachments}</ol>
+        <div className="well well-sm">
+          <ol style={{marginBottom: 0}}>{attachments}</ol>
         </div>
       );
     }
