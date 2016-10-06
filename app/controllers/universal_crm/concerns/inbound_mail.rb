@@ -57,7 +57,10 @@ module UniversalCrm
                                       from_email: params['From']
 
               #Send this ticket to the customer now, so they can reply to it
-              UniversalCrm::Mailer.new_ticket(config, customer, ticket, false).deliver_now
+              #If it WASN'T sent to one of our inboud addresses that is:
+              if !config.inbound_email_addresses.include?(to)
+                UniversalCrm::Mailer.new_ticket(config, customer, ticket, false).deliver_now
+              end
             else
               #find email addresses that match our config domains
               inbound_domains = UniversalCrm::Config.all.map{|c| c.inbound_domain}
