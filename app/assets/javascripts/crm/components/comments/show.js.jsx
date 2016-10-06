@@ -82,7 +82,7 @@ var Comment = React.createClass({
   },
   content: function(){
     if (this.props.comment.html_body){
-      return(<div dangerouslySetInnerHTML={{__html: this.props.comment.html_body}} />)
+      return(<p>{nl2br(this.props.comment.content)}</p>);
     }else{
       return(<p>{nl2br(this.props.comment.content)}</p>);
     }      

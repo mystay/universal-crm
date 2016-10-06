@@ -30,7 +30,7 @@ var CRM = React.createClass({
     }else if (_this.props.ticketId){
       window.setTimeout(function(){_this._goTicket(_this.props.ticketId);}, 1000);
     }else{
-      window.setTimeout(function(){_this._goTicketList('active');}, 1000);
+      window.setTimeout(function(){_this._goTicketList('email');}, 1000);
     }
   },
   render: function() {

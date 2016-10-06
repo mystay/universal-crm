@@ -26,6 +26,7 @@ var Comments = React.createClass({
     this.setState({content: e.target.value});
   },
   handleSubmit: function(e){
+    var _this=this;
     e.preventDefault();
     $.ajax({
       method: 'POST',
@@ -34,14 +35,11 @@ var Comments = React.createClass({
       data:{
         subject_type: this.props.subject_type, subject_id: this.props.subject_id, content: this.state.content
       },
-      success: (function(_this){
-        return function(data){
-          _this.replaceState({comments: data, content: '', focused: false});
-          ReactDOM.findDOMNode(_this.refs.content).value='';
-          //_this.props.countComments(data.length);
-          showSuccess("Comments saved");
-        }
-      })(this)
+      success: function(data){
+        _this.replaceState({comments: data, content: '', focused: false});
+        ReactDOM.findDOMNode(_this.refs.content).value='';
+        showSuccess("Comments saved");
+      }
     });
   },
   render: function(){

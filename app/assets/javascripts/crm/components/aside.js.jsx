@@ -1,10 +1,10 @@
 var Aside = React.createClass({
   
   home: function(){
-    this.props._goHome();
+    this.props._goTicketList('email');
   },
-  loadPriorityTickets: function(){
-    this.props._goTicketList('priority');
+  loadEmailTickets: function(){
+    this.props._goTicketList('email');
   },
   loadActiveTickets: function(){
     this.props._goTicketList('active');
@@ -21,16 +21,16 @@ var Aside = React.createClass({
         <nav>
           <h5 className="sidebar-header">Tickets</h5>
           <ul className="nav nav-pills nav-stacked">
-            <li>
+            <li className="hidden">
               <a style={{cursor: 'pointer'}} onClick={this.home}>
                 <i className="fa fa-home fa-fw" />
                 Home
               </a>
             </li>
             <li>
-              <a style={{cursor: 'pointer'}} onClick={this.loadPriorityTickets}>
-                <i className="fa fa-flag fa-fw" />
-                Priority
+              <a style={{cursor: 'pointer'}} onClick={this.loadEmailTickets}>
+                <i className="fa fa-envelope fa-fw" />
+                Inbox
               </a>
             </li>
             <li>

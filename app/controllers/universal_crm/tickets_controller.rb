@@ -9,6 +9,8 @@ module UniversalCrm
       @tickets = @tickets.scoped_to(universal_scope) if !universal_scope.nil?
       if !params[:subject_id].blank? and params[:subject_id].to_s!='undefined' and !params[:subject_type].blank? and params[:subject_type].to_s!='undefined'
         @tickets = @tickets.where(subject_id: params[:subject_id], subject_type: params[:subject_type])
+      elsif params[:status] == 'email'
+        @tickets = @tickets.email.active
       elsif !params[:status].blank? and params[:status] != 'priority' and params[:status] != 'all' and params[:status] != 'null'
         @tickets = @tickets.for_status(params[:status])
       elsif params[:status] == 'priority'
