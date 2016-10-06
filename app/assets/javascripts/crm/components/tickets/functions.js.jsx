@@ -53,14 +53,19 @@ var TicketFunctions = React.createClass({
     if (this.props.status == 'closed'){
       return (
           <button className="btn no-margin btn-info btn-xs" onClick={this.props.changeTicketStatusActive}>
-            <i className="fa fa-check" /> Reopen
+            <i className="fa fa-folder-open" /> Reopen
           </button>
       )
-    }else{
+    }else if (this.props.status == 'active'){
       return (
-          <button className="btn no-margin btn-success btn-xs" onClick={this.props.changeTicketStatusClosed}>
-            <i className="fa fa-check" /> Close Ticket
+        <div>
+          <button className="btn no-margin btn-success btn-xs" onClick={this.props.changeTicketStatusActioned} style={{marginRight: '5px'}}>
+            <i className="fa fa-check" /> Actioned
           </button>
+          <button className="btn no-margin btn-danger btn-xs" onClick={this.props.changeTicketStatusClosed}>
+            <i className="fa fa-ban" /> Close Ticket
+          </button>
+        </div>
       )
     }
   }

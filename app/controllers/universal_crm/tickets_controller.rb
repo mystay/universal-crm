@@ -78,6 +78,8 @@ module UniversalCrm
       @ticket = UniversalCrm::Ticket.find(params[:id])
       if params[:status]=='closed'
         @ticket.close!(universal_user)
+      elsif params[:status]=='actioned'
+        @ticket.action!(universal_user)
       else
         @ticket.open!(universal_user)
       end

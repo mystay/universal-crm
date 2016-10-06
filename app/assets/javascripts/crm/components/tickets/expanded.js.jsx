@@ -14,6 +14,7 @@ var ExpandedTicket = React.createClass({
               changeTicketFlag={this.props.changeTicketFlag}
               changeTicketStatusActive={this.props.changeTicketStatusActive}
               changeTicketStatusClosed={this.props.changeTicketStatusClosed}
+              changeTicketStatusActioned={this.props.changeTicketStatusActioned}
               ticketFlags={this.props.ticketFlags}
               />
           </div>

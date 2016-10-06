@@ -9,6 +9,9 @@ var Aside = React.createClass({
   loadActiveTickets: function(){
     this.props._goTicketList('active');
   },
+  loadActionedTickets: function(){
+    this.props._goTicketList('actioned');
+  },
   loadClosedTickets: function(){
     this.props._goTicketList('closed');
   },
@@ -37,8 +40,14 @@ var Aside = React.createClass({
               </a>
             </li>
             <li>
-              <a style={{cursor: 'pointer'}} onClick={this.loadClosedTickets}>
+              <a style={{cursor: 'pointer'}} onClick={this.loadActionedTickets}>
                 <i className="fa fa-check fa-fw" />
+                Actioned
+              </a>
+            </li>
+            <li>
+              <a style={{cursor: 'pointer'}} onClick={this.loadClosedTickets}>
+                <i className="fa fa-ban fa-fw" />
                 Closed
               </a>
             </li>

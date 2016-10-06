@@ -20,10 +20,12 @@ module UniversalCrm
         @ticket = ticket
         @comment = comment
         @config = config
-        mail  to: @customer.email,
-              from: "#{config.transaction_email_from} <#{config.transaction_email_address}>",
-              reply_to: ticket.inbound_email_address(config),
-              subject: "#{ticket.title}"
+        if !@customer.nil?
+          mail  to: @customer.email,
+                from: "#{config.transaction_email_from} <#{config.transaction_email_address}>",
+                reply_to: ticket.inbound_email_address(config),
+                subject: "#{ticket.title}"
+        end
       end
     end
   end

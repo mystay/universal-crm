@@ -52,6 +52,9 @@ var TicketShowContainer = React.createClass({
   },    
   changeTicketStatusClosed: function(){
     this.changeTicketStatus('closed')
+  },  
+  changeTicketStatusActioned: function(){
+    this.changeTicketStatus('actioned')
   },
   changeTicketStatus: function(s, add){
     $.ajax({
@@ -91,6 +94,7 @@ var TicketShowContainer = React.createClass({
               changeTicketFlag={this.changeTicketFlag}
               changeTicketStatusActive={this.changeTicketStatusActive}
               changeTicketStatusClosed={this.changeTicketStatusClosed}
+              changeTicketStatusActioned={this.changeTicketStatusActioned}
               countComments={this.countComments}
               ticketFlags={this.props.gs.config.ticket_flags}
               />

@@ -60,6 +60,34 @@ module UniversalCrm
           end
         end
         
+        def action!(user=nil)
+          if self.active?
+            self.save_comment!("Ticket Actioned", user)
+            self.actioned!
+          end
+        end
+        
+        def open!(user=nil)
+          if self.closed?
+            self.save_comment!("Ticket Opened", user)
+            self.active!
+          end
+        end
+        
+        def open!(user=nil)
+          if self.closed?
+            self.save_comment!("Ticket Opened", user)
+            self.active!
+          end
+        end
+        
+        def open!(user=nil)
+          if self.closed?
+            self.save_comment!("Ticket Opened", user)
+            self.active!
+          end
+        end
+        
         def to_json
           {
             id: self.id.to_s,
