@@ -16,7 +16,7 @@ var Comment = React.createClass({
             <div className={commentClass}>
               <div className="pull-right small">{this.props.comment.when_formatted}</div>
               {this.arrow()}
-              <p>{nl2br(this.props.comment.content)}</p>
+              {this.content()}
             </div>
           </div>
           <div className={this.column(2)}>
@@ -79,5 +79,12 @@ var Comment = React.createClass({
         </div>
       )
     }
+  },
+  content: function(){
+    if (this.props.comment.html_body){
+      return(<div dangerouslySetInnerHTML={{__html: this.props.comment.html_body}} />)
+    }else{
+      return(<p>{nl2br(this.props.comment.content)}</p>);
+    }      
   }
 });

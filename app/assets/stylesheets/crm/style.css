@@ -14,3 +14,4 @@ blockquote, .post>p{font-size:10pt;}
 .chat-widget span {font-size: 0.8em;}
 .btn-xs{margin-bottom:0;}
 .chat-widget .post.system_generated{background-color: #f6f6f6;border: 1px dashed #ccc;color:#777;}
+.chat-widget .post>div>blockquote{display:none;}
