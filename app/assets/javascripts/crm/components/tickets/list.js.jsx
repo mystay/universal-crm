@@ -6,37 +6,40 @@ var TicketList = React.createClass({
       tickets: null,
       selectedTicketId: null,
       status: null,
+      flag: null,
       loading: false,
       pagination: null,
       pageNum: null
     })
   },
   componentDidMount: function(){
-    this.setState({status: this.props.status, subjectId: this.props.subjectId, subjectType: this.props.subjectType});
-    this.loadTickets(this.props.status);
+    this.setState({status: this.props.status, flag: this.props.flag, subjectId: this.props.subjectId, subjectType: this.props.subjectType});
+    this.loadTickets(this.props.status, this.props.flag);
   },
   componentDidUpdate: function(){
     if (this.props.status != null && this.props.status != this.state.status && !this.state.loading){
-      this.loadTickets(this.props.status);
+      this.loadTickets(this.props.status, null);
+    }else if (this.props.flag != null && this.props.flag != this.state.flag && !this.state.loading){
+      this.loadTickets(null, this.props.flag);
     }else if (this.props.subjectId != null && this.props.subjectId != this.state.subjectId && !this.state.loading){
       this.loadTickets();
-    }else if (this.props.status==null && this.state.status!=null){
+    }else if (this.props.status==null && this.state.status!=null && this.props.flag != undefined){
       this.setState({tickets: null, status: null})
     }
   },
-  loadTickets: function(status, page){
+  loadTickets: function(status, flag, page){
     if (!this.state.loading){
       this.setState({loading: true});
       scrollTo('body');
-      if (status==null || status==undefined){status=this.state.status;}
       if (page==undefined){page=1;}
       var _this = this;
       $.ajax({
         method: 'GET',
-        url: `/crm/tickets?status=${status}&subject_id=${this.props.subjectId}&subject_type=${this.props.subjectType}&page=${page}`,
+        url: `/crm/tickets?status=${this.props.gs.ticketStatus}&subject_id=${this.props.subjectId}&subject_type=${this.props.subjectType}&flag=${this.props.gs.ticketFlag}&page=${page}`,
         success: function(data){
           _this.setState({
             status: status,
+            flag: flag,
             loading: false,
             subjectId: _this.props.subjectId,
             tickets: data.tickets,
@@ -104,7 +107,7 @@ var TicketList = React.createClass({
     }
   },
   pageResults: function(page){
-    this.loadTickets(this.state.status, page)
+    this.loadTickets(this.state.status, this.state.flag, page)
     this.setState({currentPage: page});
   }
 })

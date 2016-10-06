@@ -11,7 +11,6 @@ var TicketListItem = React.createClass({
         <h4 className="list-group-item-heading">
           <TicketTitleButton 
             ticket={this.props.ticket}
-            closedLabel={this.closedLabel}
             selectTicketId={this.selectTicketId}
             gs={this.props.gs}
             />
@@ -51,11 +50,6 @@ var TicketListItem = React.createClass({
   ticketTitleClass: function(e){
     if (this.props.ticketId == e){
       return 'text-success'
-    }
-  },
-  closedLabel: function(){
-    if (this.props.ticket && this.props.ticket.status == 'closed'){
-      return <span className='label label-default' style={{marginRight: '5px'}}>Closed</span>
     }
   }
 });
