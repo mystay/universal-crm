@@ -43,7 +43,7 @@ module UniversalCrm
         # and if so, assign them as the subject of this customer
         def assign_user_subject!(scope=nil)
           if !Universal::Configuration.class_name_user.blank? and self.subject.nil?
-            if UniversalCrm::Configuration.user_scoped
+            if Universal::Configuration.user_scoped
               user = Universal::Configuration.class_name_user.classify.constantize.find_by(scope: scope, email: self.email)
             else
               user = Universal::Configuration.class_name_user.classify.constantize.find_by(email: self.email)

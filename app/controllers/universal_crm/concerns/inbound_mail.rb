@@ -25,7 +25,7 @@ module UniversalCrm
             ticket=nil
             #find the senders first, there could be multiple across different scope, if the user config is scoped
             if !Universal::Configuration.class_name_user.blank?
-              if UniversalCrm::Configuration.user_scoped
+              if Universal::Configuration.user_scoped
                 senders = Universal::Configuration.class_name_user.classify.constantize.where(email: params['From'])
               else #user is not scoped - easy
                 sender = Universal::Configuration.class_name_user.classify.constantize.find_by(email: params['From'])

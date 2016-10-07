@@ -1,7 +1,5 @@
 = Crm
 
-This project rocks and uses MIT-LICENSE.
-
 == Installation
 === Gemfile
     gem 'universal-crm', github: 'bthree/universal-crm'
