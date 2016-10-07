@@ -18,7 +18,12 @@ var TicketCommentsCreated = React.createClass({
     }else if (this.props.ticket.reply_count>1){
       html.push(`${this.props.ticket.reply_count} replies`);
     }
-    if (this.props.ticket.comment_count>0 || this.props.ticket.reply_count>0){
+    if (this.props.ticket.attachments.length==1){
+      html.push(`1 attachment`);
+    }else if (this.props.ticket.attachments.length>1){
+      html.push(`${this.props.ticket.attachments.length} attachments`);
+    }
+    if (this.props.ticket.comment_count>0 || this.props.ticket.reply_count>0 || this.props.ticket.attachments.length>0){
       return `(${html.join('/')})`;
     }else{
       return(null);
