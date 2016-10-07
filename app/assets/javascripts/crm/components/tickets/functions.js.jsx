@@ -55,6 +55,7 @@ var TicketFunctions = React.createClass({
     if (this.props.status == 'closed'){
       b.push(<li key='reopen'>{this.reopenButton()}</li>);
     }else if (this.props.status == 'active'){
+      b.push(<li key='assign'>{this.assignUserButton()}</li>);
       b.push(<li key='change'>{this.customerChangeButton()}</li>);
       b.push(<li key='actioned'>{this.actionedButton()}</li>);
       b.push(<li key='close'>{this.closeButton()}</li>);
@@ -70,6 +71,9 @@ var TicketFunctions = React.createClass({
         <i className="fa fa-folder-open" /> Reopen
       </button>
     );
+  },
+  assignUserButton: function(){
+    return(<AssignUserButton ticket={this.props.ticket} gs={this.props.gs} />);
   },
   customerChangeButton: function(){
     return(<ChangeCustomerButton ticket={this.props.ticket} />);

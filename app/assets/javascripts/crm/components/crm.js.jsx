@@ -21,6 +21,13 @@ var CRM = React.createClass({
         _this.init(_this);
       })
     });
+    $.ajax({
+      method: 'GET',
+      url: `/universal_access/users.json?code=crm_user`, //probably shouldn't hardcode this here
+      success: (function(data){
+        _this.setGlobalState('users', data);
+      })
+    });
   },
   init: function(_this){
     if (_this.props.customerId){

@@ -6,6 +6,7 @@ var ExpandedTicket = React.createClass({
         <div>
           <div className="">
             <TicketFunctions
+              gs={this.props.gs}
               ticket={this.props.ticket}
               status={this.props.status}
               flags={this.props.ticket.flags}

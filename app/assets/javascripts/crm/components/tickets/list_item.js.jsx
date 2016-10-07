@@ -27,6 +27,7 @@ var TicketListItem = React.createClass({
           gs={this.props.gs} sgs={this.props.sgs}
         />
         {this.customerName()}
+        {this.assignedTo()}
       </div>
     )
   },
@@ -52,6 +53,15 @@ var TicketListItem = React.createClass({
   ticketTitleClass: function(e){
     if (this.props.ticketId == e){
       return 'text-success'
+    }
+  },
+  assignedTo: function(){
+    if (this.props.ticket.responsible_name){
+      return(
+        <span className="text-info" style={{marginLeft: '10px'}}>
+          <i className="fa fa-chevron-right" /> {this.props.ticket.responsible_name}
+        </span>
+      );
     }
   }
 });

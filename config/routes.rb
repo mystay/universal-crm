@@ -32,7 +32,7 @@ UniversalCrm::Engine.routes.draw do
   end
   resources :tickets do
     member do
-      patch :update_status, :flag, :update_customer
+      patch :update_status, :flag, :update_customer, :assign_user
     end
   end
   resources :comments

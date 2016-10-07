@@ -94,7 +94,9 @@ module UniversalCrm
             token: self.token,
             flags: self.flags,
             attachments: self.attachments.map{|a| {name: a.name, url: a.file.url, filename: a.file_filename}},
-            incoming: self.incoming?
+            incoming: self.incoming?,
+            responsible_id: self.responsible_id,
+            responsible_name: (self.responsible.nil? ? nil : self.responsible.name)
           }
         end
         
