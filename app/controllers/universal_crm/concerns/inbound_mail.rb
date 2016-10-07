@@ -109,7 +109,7 @@ module UniversalCrm
                 end
               else #we may be sending directly to an inbound adress of an existing customer:
                 logger.warn "Direct to customer's address - at our inbound domain"
-                subject = UniversalCrm::Customer.find_by(email: to)
+                subject = UniversalCrm::Customer.find_or_create_by(email: to)
                 if !subject.nil?
                   ticket = subject.tickets.create kind: :email,
                                                   title: params['Subject'],
