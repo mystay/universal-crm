@@ -2,7 +2,8 @@ var NewTicket = React.createClass({
   getInitialState: function(){
     return({
       title: '',
-      data: ''
+      data: '',
+      loading: false
     })
   },
   handleContentChange: function(e){
@@ -28,13 +29,13 @@ var NewTicket = React.createClass({
       if (this.state.title){
         contentField = <div className="form-group">
             <textarea className="form-control" 
-              placeholder="Details..."
+              placeholder="Content..."
               onChange={this.handleContentChange}
-              style={{height: '100px'}}>{this.state.content}</textarea>
+              style={{height: '250px'}}>{this.state.content}</textarea>
           </div>
         submitButton = <div className="form-group m-0">
             <button className='btn btn-primary btn-sm' onClick={this.handleSubmit}>
-              <i className='fa fa-check' /> Save
+              <i className={this.loadingIcon()} /> Save
             </button>
           </div>
         if (this.props.gs.config && this.props.gs.config.transaction_email_address){
@@ -69,19 +70,28 @@ var NewTicket = React.createClass({
   },
   handleSubmit: function(e){
     e.preventDefault();
-    var email = ReactDOM.findDOMNode(this.refs.email);
-    email = (email!=undefined ? email.checked : false)
-    $.ajax({
-      method: 'POST',
-      url: '/crm/tickets',
-      dataType: 'JSON',
-      data:{title: this.state.title, content: this.state.content, subject_id: this.props.subjectId, subject_type: this.props.subjectType, email: email},
-      success: (function(_this){
-        return function(data){
-          _this.setState({title: '', content: ''});
+    var _this=this;
+    if (!this.state.loading){
+      this.setState({loading: true});
+      var email = ReactDOM.findDOMNode(this.refs.email);
+      email = (email!=undefined ? email.checked : false)
+      $.ajax({
+        method: 'POST',
+        url: '/crm/tickets',
+        dataType: 'JSON',
+        data:{title: this.state.title, content: this.state.content, subject_id: this.props.subjectId, subject_type: this.props.subjectType, email: email},
+        success: function(data){
+          _this.setState({title: '', content: '', loading: false});
           _this.props._goTicket(data.ticket.id);
         }
-      })(this)
-    });
+      });
+    }
+  },
+  loadingIcon: function(){
+    if (this.state.loading){
+      return('fa fa-refresh fa-spin');
+    }else{
+      return('fa fa-check');
+    }
   }
 });

@@ -12,8 +12,8 @@ var TicketListItem = React.createClass({
           <TicketTitleButton 
             ticket={this.props.ticket}
             selectTicketId={this.selectTicketId}
-            gs={this.props.gs}
-            />
+            gs={this.props.gs} sgs={this.props.sgs}
+          />
         </h4>
         {this.listItemDetails()}
       </div>
@@ -23,8 +23,9 @@ var TicketListItem = React.createClass({
     return(
       <div className="list-group-item-text">
         <TicketCommentsCreated 
-          ticket={this.props.ticket} 
-          />
+          ticket={this.props.ticket}
+          gs={this.props.gs} sgs={this.props.sgs}
+        />
         {this.customerName()}
       </div>
     )
@@ -32,11 +33,12 @@ var TicketListItem = React.createClass({
   customerName: function(){
     if (this.props._goCustomer){
       return(
-          <TicketCustomerName
-            _goCustomer={this.props._goCustomer}
-            name={this.props.ticket.subject_name}
-            id={this.props.ticket.subject_id}
-            />);
+        <TicketCustomerName
+          _goCustomer={this.props._goCustomer}
+          name={this.props.ticket.subject_name}
+          id={this.props.ticket.subject_id}
+        />
+      );
     }else{
       return(<div>&nbsp;</div>);
     }

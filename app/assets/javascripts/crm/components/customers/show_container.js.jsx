@@ -4,30 +4,31 @@ var CustomerShowContainer = React.createClass({
       edit: false,
       customer: null,
       customerId: null,
-      loading: false
+      loading: false,
+      pastProps: null
     };
   },
-  componentDidMount: function(){
+  init: function(){
     this.loadCustomer(this.props.customerId);
   },
+  componentDidMount: function(){
+    this.init();
+  },
   componentDidUpdate: function(){
-    if (this.props.customerId != null && this.props.customerId != this.state.customerId && !this.state.loading){
-      this.loadCustomer(this.props.customerId);
-    }else if (this.props.customerId==null && this.state.customerId!=null){
-      this.setState({customer: null, customerId: null})
+    if (this.state.pastProps != this.props && !this.state.loading){
+      this.init();
     }
   },
   loadCustomer: function(id){
     var _this=this;
     if (id!=undefined&& id != ''&&!this.state.loading){
-      this.setState({loading: true});
+      this.setState({loading: true, pastProps: this.props});
       $.ajax({
         method: 'GET',
         url: `/crm/customers/${id}.json`,
         success: function(data){
           if (data.customer){
             _this.setCustomer(data.customer);
-            _this.props.handlePageHistory(`${data.customer.name}`, `/crm/customer/${id}`);
           }
         }
       });
@@ -35,7 +36,7 @@ var CustomerShowContainer = React.createClass({
   },
   setCustomer: function(customer){
     this.setState({customer: customer, customerId: customer.id, edit: false, loading: false});
-    if (this.props.customerDidLoad){this.props.customerDidLoad(customer)}
+    this.props.handlePageHistory(`${customer.name}`, `/crm/customer/${customer.id}`);
   },
   handleEdit: function(){
     this.setState({edit: !this.state.edit})
@@ -51,9 +52,8 @@ var CustomerShowContainer = React.createClass({
           setCustomer={this.setCustomer}
           _goTicket={this.props._goTicket}
           _goCustomer={this.props._goCustomer}
-          gs={this.props.gs}
-          sgs={this.props.sgs}
-          />
+          gs={this.props.gs} sgs={this.props.sgs}
+        />
       );
     }else{
       return(null);

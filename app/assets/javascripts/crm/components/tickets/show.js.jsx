@@ -4,23 +4,25 @@ var TicketShowContainer = React.createClass({
       commentCount: 0,
       ticketId: null,
       ticket: null,
-      loading: null
+      loading: null,
+      pastProps: null
     })
   },
-  componentDidMount: function(){
+  init: function(){
     this.loadTicket(this.props.ticketId);
   },
+  componentDidMount: function(){
+    this.init();
+  },
   componentDidUpdate: function(){
-    if (this.props.ticketId != null && this.props.ticketId != this.state.ticketId && !this.state.loading){
-      this.loadTicket(this.props.ticketId);
-    }else if (this.props.ticketId==null && this.state.ticketId!=null){
-      this.setState({ticket: null, ticketId: null})
+    if (this.state.pastProps != this.props && !this.state.loading){
+      this.init();
     }
   },
   loadTicket: function(id){
     var _this=this;
     if (id!=undefined&& id != ''&&!this.state.loading){
-      this.setState({loading: true});
+      this.setState({loading: true, pastProps: this.props});
       $.ajax({
         method: 'GET',
         url: `/crm/tickets/${id}.json`,
@@ -90,7 +92,7 @@ var TicketShowContainer = React.createClass({
                 name={this.state.ticket.subject_name}
                 id={this.state.ticket.subject_id}
                 _goCustomer={this.props._goCustomer}
-                      /> 
+              /> - <span className="text-muted">{this.state.ticket.created_at}</span>
             </h3>
           </div>
           <div className="panel-body">

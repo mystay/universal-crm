@@ -6,6 +6,7 @@ var TicketFunctions = React.createClass({
           {this.buttons()}
         </div>
         {this.ticketFlags()}
+        &nbsp;
       </div>
     )
   },
@@ -50,37 +51,41 @@ var TicketFunctions = React.createClass({
     return this.props.flags.indexOf(flag_label.toString())>-1;
   },
   buttons: function(){
+    var b = []
     if (this.props.status == 'closed'){
-      return (
-          <button className="btn no-margin btn-info btn-xs" onClick={this.props.changeTicketStatusActive}>
-            <i className="fa fa-folder-open" /> Reopen
-          </button>
-      )
+      b.push(<li key='reopen'>{this.reopenButton()}</li>);
     }else if (this.props.status == 'active'){
-      return (
-        <ul className="list-inline">
-          <li><ChangeCustomerButton ticket={this.props.ticket} /></li>
-          <li>
-            <button className="btn no-margin btn-success btn-xs" onClick={this.props.changeTicketStatusActioned}>
-              <i className="fa fa-check" /> Actioned
-            </button>
-          </li>
-          <li>
-            <button className="btn no-margin btn-danger btn-xs" onClick={this.props.changeTicketStatusClosed}>
-              <i className="fa fa-ban" /> Close Ticket
-            </button>
-          </li>
-        </ul>
-      )
+      b.push(<li key='change'>{this.customerChangeButton()}</li>);
+      b.push(<li key='actioned'>{this.actionedButton()}</li>);
+      b.push(<li key='close'>{this.closeButton()}</li>);
     }else if (this.props.status == 'actioned'){
-      return (
-        <ul className="list-inline">
-          <li><ChangeCustomerButton ticket={this.props.ticket} /></li>
-          <button className="btn no-margin btn-danger btn-xs" onClick={this.props.changeTicketStatusClosed}>
-            <i className="fa fa-ban" /> Close Ticket
-          </button>
-        </ul>
-      )
+      b.push(<li key='change'>{this.customerChangeButton()}</li>);
+      b.push(<li key='close'>{this.closeButton()}</li>);
     }
+    return(<ul className="list-inline">{b}</ul>)
+  },
+  reopenButton: function(){
+    return(
+      <button className="btn no-margin btn-info btn-xs" onClick={this.props.changeTicketStatusActive}>
+        <i className="fa fa-folder-open" /> Reopen
+      </button>
+    );
+  },
+  customerChangeButton: function(){
+    return(<ChangeCustomerButton ticket={this.props.ticket} />);
+  },
+  actionedButton: function(){
+    return(
+      <button className="btn no-margin btn-success btn-xs" onClick={this.props.changeTicketStatusActioned}>
+        <i className="fa fa-check" /> Actioned
+      </button>
+    );
+  },
+  closeButton: function(){
+    return(
+      <button className="btn no-margin btn-danger btn-xs" onClick={this.props.changeTicketStatusClosed}>
+        <i className="fa fa-ban" /> Close Ticket
+      </button>
+    );
   }
 });

@@ -4,10 +4,7 @@ var ExpandedTicket = React.createClass({
     if (this.props.ticketId == this.props.ticket.id){
       return(
         <div>
-          <p className='small'>
-            Opened: {this.props.ticket.created_at}
-          </p>
-          <div className="well well-sm">
+          <div className="">
             <TicketFunctions
               ticket={this.props.ticket}
               status={this.props.status}
@@ -18,6 +15,7 @@ var ExpandedTicket = React.createClass({
               changeTicketStatusActioned={this.props.changeTicketStatusActioned}
               ticketFlags={this.props.ticketFlags}
               />
+            <hr />
           </div>
           {this.actionedStatus()}
           {this.ticketNotes()}

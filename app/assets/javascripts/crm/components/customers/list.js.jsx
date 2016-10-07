@@ -1,20 +1,22 @@
 var CustomerList = React.createClass({
   getInitialState: function(){
     return({
-      searchWord: null,
       customers: null,
       loading: false,
       customerPagination: null,
-      customerPage: null
+      customerPage: null,
+      pastProps: null
     });
   },
+  init: function(){
+    this.loadCustomers(this.props.gs.searchWord);
+  },
   componentDidMount: function(){
-    this.loadCustomers();
+    this.init();
   },
   componentDidUpdate: function(){
-    if (this.props.gs != null && this.props.gs.searchWord != null && this.props.gs.searchWord != this.state.searchWord && !this.state.loading){
-      
-      this.loadCustomers(this.props.gs.searchWord);
+    if (this.state.pastProps != this.props && !this.state.loading){
+      this.init();
     }
   },
   clickCustomer: function(e){
@@ -22,7 +24,7 @@ var CustomerList = React.createClass({
   },  
   loadCustomers: function(searchWord, page){
     if (!this.state.loading){
-      this.setState({loading: true, searchWord: searchWord});
+      this.setState({loading: true, pastProps: this.props});
       if (page==undefined){page=1;}
       if(searchWord==''){
         this.setState({customers: []});
@@ -33,12 +35,13 @@ var CustomerList = React.createClass({
           method: 'GET',
           url: `/crm/customers?q=${searchWord}&page=${page}`,
           success: function(data){
-            return _this.setState({
+            _this.setState({
               loading: false,
               customers: data.customers,
               customerPagination: data.pagination,
               customerPage: page
             });
+            _this.props.sgs('searching', false);
           }
         });
       }

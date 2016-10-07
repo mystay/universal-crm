@@ -9,27 +9,25 @@ var TicketList = React.createClass({
       flag: null,
       loading: false,
       pagination: null,
-      pageNum: null
+      pageNum: null,
+      pastProps: null
     })
   },
-  componentDidMount: function(){
+  init: function(){
     this.setState({status: this.props.status, flag: this.props.flag, subjectId: this.props.subjectId, subjectType: this.props.subjectType});
-    this.loadTickets(this.props.status, this.props.flag);
+    this.loadTickets(this.props.status, this.props.flag);    
+  },
+  componentDidMount: function(){
+    this.init();
   },
   componentDidUpdate: function(){
-    if (this.props.status != null && this.props.status != this.state.status && !this.state.loading){
-      this.loadTickets(this.props.status, null);
-    }else if (this.props.flag != null && this.props.flag != this.state.flag && !this.state.loading){
-      this.loadTickets(null, this.props.flag);
-    }else if (this.props.subjectId != null && this.props.subjectId != this.state.subjectId && !this.state.loading){
-      this.loadTickets();
-    }else if (this.props.status==null && this.state.status!=null && this.props.flag != undefined){
-      this.setState({tickets: null, status: null})
+    if (this.state.pastProps != this.props && !this.state.loading){
+      this.init();
     }
   },
   loadTickets: function(status, flag, page){
     if (!this.state.loading){
-      this.setState({loading: true});
+      this.setState({loading: true, pastProps: this.props});
       scrollTo('body');
       if (page==undefined){page=1;}
       var _this = this;
@@ -38,10 +36,7 @@ var TicketList = React.createClass({
         url: `/crm/tickets?status=${this.props.gs.ticketStatus}&subject_id=${this.props.subjectId}&subject_type=${this.props.subjectType}&flag=${this.props.gs.ticketFlag}&page=${page}`,
         success: function(data){
           _this.setState({
-            status: status,
-            flag: flag,
             loading: false,
-            subjectId: _this.props.subjectId,
             tickets: data.tickets,
             pagination: data.pagination,
             pageNum: page});
@@ -60,8 +55,7 @@ var TicketList = React.createClass({
               _goTicket={this.props._goTicket}
               _goCustomer={this.props._goCustomer}
               setCustomerId={this.props.setCustomerId}
-              gs={this.props.gs}
-              sgs={this.props.sgs}
+              gs={this.props.gs} sgs={this.props.sgs}
               />
           </li>
         )

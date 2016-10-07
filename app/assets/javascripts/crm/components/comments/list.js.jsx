@@ -7,16 +7,20 @@ var Comments = React.createClass({
         comments: [],
         content: '',
         focused: false,
-        loading: false
+        loading: false,
+        pastProps: null
       }
     )
   },
-  componentDidMount: function(){
+  init: function(){
     this.loadComments();
   },
+  componentDidMount: function(){
+    this.init();
+  },
   componentDidUpdate: function(){
-    if (this.props.subject_id != null && this.props.subject_id != this.state.subject_id && !this.state.loading){
-      this.loadComments();
+    if (this.state.pastProps != this.props && !this.state.loading){
+      this.init();
     }
   },
   valid: function(){
@@ -28,19 +32,22 @@ var Comments = React.createClass({
   handleSubmit: function(e){
     var _this=this;
     e.preventDefault();
-    $.ajax({
-      method: 'POST',
-      url: '/universal/comments',
-      dataType: 'JSON',
-      data:{
-        subject_type: this.props.subject_type, subject_id: this.props.subject_id, content: this.state.content
-      },
-      success: function(data){
-        _this.replaceState({comments: data, content: '', focused: false});
-        ReactDOM.findDOMNode(_this.refs.content).value='';
-        showSuccess("Comments saved");
-      }
-    });
+    if (!this.state.loading){
+      this.setState({loading: true});
+      $.ajax({
+        method: 'POST',
+        url: '/universal/comments',
+        dataType: 'JSON',
+        data:{
+          subject_type: this.props.subject_type, subject_id: this.props.subject_id, content: this.state.content
+        },
+        success: function(data){
+          _this.replaceState({comments: data, content: '', focused: false, loading: false});
+          ReactDOM.findDOMNode(_this.refs.content).value='';
+          showSuccess("Comments saved");
+        }
+      });
+    }
   },
   render: function(){
     if (this.props.newCommentPosition == 'bottom'){
@@ -64,7 +71,12 @@ var Comments = React.createClass({
       return(
         <form onSubmit={this.handleSubmit}>
           <div className="form-group">
-            <textarea className="form-control" ref='content' placeholder={this.props.newCommentPlaceholder} onChange={this.handleChange} style={{minHeight: '80px'}} />
+            <textarea 
+              className="form-control" 
+              ref='content' 
+              placeholder={this.props.newCommentPlaceholder} 
+              onChange={this.handleChange} 
+              style={this.textareaStyle()} />
           </div>
           <div className="form-group">
             {this.submitButton()}
@@ -79,7 +91,7 @@ var Comments = React.createClass({
     if (this.valid()){
       return(
         <button className="btn btn-primary btn-sm">
-          <i className="fa fa-check" /> Save
+          <i className={this.loadingIcon()} /> Save
         </button>
       )
     }else{
@@ -103,8 +115,9 @@ var Comments = React.createClass({
     }
   },
   loadComments: function(){
+    var _this=this;
     if (!this.state.loading){
-      this.setState({loading: true});
+      this.setState({loading: true, pastProps: this.props});
       $.ajax({
         method: 'GET',
         url: `/universal/comments?subject_type=${this.props.subject_type}&subject_id=${this.props.subject_id}`,
@@ -112,15 +125,27 @@ var Comments = React.createClass({
         data:{
           subject_type: this.props.subject_type, subject_id: this.props.subject_id, content: this.state.content
         },
-        success: (function(_this){
-          return function(data){
-            _this.setState({comments: data, subject_id: _this.props.subject_id, loading: false});
-          }
-        })(this)
+        success: function(data){
+          _this.setState({comments: data, subject_id: _this.props.subject_id, loading: false});
+        }
       });
     }
   },
   openComments: function(){
     return (this.props.openComments==undefined || this.props.openComments==true);
+  },
+  loadingIcon: function(){
+    if (this.state.loading){
+      return('fa fa-refresh fa-spin');
+    }else{
+      return('fa fa-check');
+    }
+  },
+  textareaStyle: function(){
+    if (this.state.content){
+      return {minHeight: '200px'}
+    }else{
+      return {height: '40px', backgroundColor: '#fafafa'}
+    }
   }
 });

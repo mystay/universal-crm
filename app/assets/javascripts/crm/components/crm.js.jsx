@@ -37,23 +37,21 @@ var CRM = React.createClass({
     return (
       <section id="main-wrapper" className="theme-blue">
         <Header
-          gs={this.state.gs}
-          sgs={this.setGlobalState}
+          gs={this.state.gs} sgs={this.setGlobalState}
           username={this.props.username}
           loadCustomers={this.loadCustomers}
           handleSearch={this.handleSearch}
           _goCustomerList={this._goCustomerList}
           />
         <Aside
-          gs={this.state.gs}
-          sgs={this.setGlobalState}
+          gs={this.state.gs} sgs={this.setGlobalState}
           _goHome={this._goHome}
           _goCompany={this._goCompany}
           _goTicketList={this._goTicketList}
           />
         <section className="main-content-wrapper">
           <PageHeader
-            gs={this.state.gs}
+            gs={this.state.gs} sgs={this.setGlobalState}
             _goHome={this._goHome}
             />
           <section id="main-content">
@@ -63,10 +61,6 @@ var CRM = React.createClass({
         </section>
       </section>
     );
-  },
-  customerDidLoad: function(customer){
-    this.setGlobalState('pageTitle', customer.name);
-    this.handlePageHistory(customer.name, `/crm/customer/${customer.id}`);
   },
   handlePageHistory: function(title, url){
     document.title = title;
@@ -83,8 +77,7 @@ var CRM = React.createClass({
     this.setState({mainComponent: comp});
   },
   _goHome: function(){
-    //this.setState({pageTitle: null, mainComponent: <Home gs={this.state.gs} sgs={this.setGlobalState} />});
-    this._goTicketList('active');
+    this._goTicketList('email');
     this.handlePageHistory('Home', '/crm');
   },
   _goTicketList: function(status, flag){
