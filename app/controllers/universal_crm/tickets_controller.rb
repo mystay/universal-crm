@@ -106,7 +106,7 @@ module UniversalCrm
     
     def update_customer
       @ticket = UniversalCrm::Ticket.find(params[:id])
-      old_customer = @ticket.customer
+      old_customer = @ticket.subject
       customer = UniversalCrm::Customer.find(params[:customer_id])
       @ticket.update(subject: customer, from_email: customer.email)
       @ticket.save_comment!("Customer changed from: '#{old_customer.name} (#{old_customer.email})'", current_user)
