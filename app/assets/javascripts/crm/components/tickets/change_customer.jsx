@@ -53,7 +53,7 @@ var ChangeCustomer = React.createClass({
   notFoundWarning: function(){
     if (!this.state.customerId){
       return(
-        <div className="alert alert-info alert-sm">If you cannot find the correct customer, close this window and add them using the button in the menu</div>
+        <div className="alert alert-info alert-sm">If you cannot find the correct customer, close this window and add them using the button in the menu.</div>
       )
     }
   },

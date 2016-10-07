@@ -105,9 +105,11 @@ module UniversalCrm
     end
     
     def update_customer
+      old_customer = @ticket.customer
       @ticket = UniversalCrm::Ticket.find(params[:id])
       customer = UniversalCrm::Customer.find(params[:customer_id])
       @ticket.update(subject: customer, from_email: customer.email)
+      @ticket.save_comment!("Customer changed from: '#{old_customer.name} (#{old_customer.email})'", current_user)
       render json: {ticket: @ticket.to_json}
     end
     
