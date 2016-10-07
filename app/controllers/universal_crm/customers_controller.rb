@@ -34,8 +34,7 @@ module UniversalCrm
       if !params[:term].blank?
         @customers = @customers.full_text_search(params[:term], match: :all)
       end
-      json = @customers.map{|c| {label: c.name, value: c.id.to_s}}
-      puts json
+      json = @customers.map{|c| {label: "#{c.name} - #{c.email}", value: c.id.to_s}}
       render json: json.to_json
     end
     
@@ -54,9 +53,9 @@ module UniversalCrm
     
     def create
       #make sure we don't have an existing customer
-      @customer = UniversalCrm::Customer.find_or_create_by(scope: universal_scope, email: params[:email])
+      @customer = UniversalCrm::Customer.find_or_create_by(scope: universal_scope, email: params[:email].strip)
       if !@customer.nil?
-        @customer.update(name: params[:name])
+        @customer.update(name: params[:name].strip)
         #Check if we need to link this to a User model
         @customer.assign_user_subject!(universal_scope)        
         render json: {name: @customer.name, email: @customer.email}

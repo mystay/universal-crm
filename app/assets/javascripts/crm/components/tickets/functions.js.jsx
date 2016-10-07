@@ -3,7 +3,7 @@ var TicketFunctions = React.createClass({
     return(
       <div>
         <div className="pull-right">
-          {this.closeButton()}
+          {this.buttons()}
         </div>
         {this.ticketFlags()}
       </div>
@@ -49,7 +49,7 @@ var TicketFunctions = React.createClass({
   flagged: function(flag_label){
     return this.props.flags.indexOf(flag_label.toString())>-1;
   },
-  closeButton: function(){
+  buttons: function(){
     if (this.props.status == 'closed'){
       return (
           <button className="btn no-margin btn-info btn-xs" onClick={this.props.changeTicketStatusActive}>
@@ -58,22 +58,28 @@ var TicketFunctions = React.createClass({
       )
     }else if (this.props.status == 'active'){
       return (
-        <div>
-          <button className="btn no-margin btn-success btn-xs" onClick={this.props.changeTicketStatusActioned} style={{marginRight: '5px'}}>
-            <i className="fa fa-check" /> Actioned
-          </button>
-          <button className="btn no-margin btn-danger btn-xs" onClick={this.props.changeTicketStatusClosed}>
-            <i className="fa fa-ban" /> Close Ticket
-          </button>
-        </div>
+        <ul className="list-inline">
+          <li><ChangeCustomerButton ticket={this.props.ticket} /></li>
+          <li>
+            <button className="btn no-margin btn-success btn-xs" onClick={this.props.changeTicketStatusActioned}>
+              <i className="fa fa-check" /> Actioned
+            </button>
+          </li>
+          <li>
+            <button className="btn no-margin btn-danger btn-xs" onClick={this.props.changeTicketStatusClosed}>
+              <i className="fa fa-ban" /> Close Ticket
+            </button>
+          </li>
+        </ul>
       )
     }else if (this.props.status == 'actioned'){
       return (
-        <div>
+        <ul className="list-inline">
+          <li><ChangeCustomerButton ticket={this.props.ticket} /></li>
           <button className="btn no-margin btn-danger btn-xs" onClick={this.props.changeTicketStatusClosed}>
             <i className="fa fa-ban" /> Close Ticket
           </button>
-        </div>
+        </ul>
       )
     }
   }

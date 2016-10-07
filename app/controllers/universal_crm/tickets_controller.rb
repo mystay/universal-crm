@@ -104,5 +104,12 @@ module UniversalCrm
       render json: {ticket: @ticket.to_json}
     end
     
+    def update_customer
+      @ticket = UniversalCrm::Ticket.find(params[:id])
+      customer = UniversalCrm::Customer.find(params[:customer_id])
+      @ticket.update(subject: customer, from_email: customer.email)
+      render json: {ticket: @ticket.to_json}
+    end
+    
   end
 end

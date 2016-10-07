@@ -76,6 +76,7 @@ module UniversalCrm
           {
             id: self.id.to_s,
             number: self.number.to_s,
+            numbered_title: self.numbered_title,
             status: self.status, 
             kind: self.kind.to_s,
             subject_name: self.subject.name,

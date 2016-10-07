@@ -56,7 +56,7 @@ var CRM = React.createClass({
             gs={this.state.gs}
             _goHome={this._goHome}
             />
-          <section id="main-content" className="animated fadeInUp">
+          <section id="main-content">
             {this.state.subComponent}
             {this.state.mainComponent}
           </section>

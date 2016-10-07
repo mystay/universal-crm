@@ -94,6 +94,7 @@ var TicketShowContainer = React.createClass({
             </h3>
           </div>
           <div className="panel-body">
+            {this.emailAddressConflict()}
             <ExpandedTicket
               ticketId={this.state.ticket.id}
               ticket={this.state.ticket}
@@ -104,12 +105,23 @@ var TicketShowContainer = React.createClass({
               changeTicketStatusActioned={this.changeTicketStatusActioned}
               countComments={this.countComments}
               ticketFlags={this.props.gs.config.ticket_flags}
+              gs={this.props.gs}
               />
           </div>
         </div>
       )
     }else{
       return(null);
+    }
+  },
+  emailAddressConflict: function(){
+    if (this.props.gs.config.inbound_email_addresses.indexOf(this.state.ticket.from_email)>=0){
+      return(
+        <div className="alert alert-danger text-center">
+          <i className="fa fa-exclamation-triangle" /> This ticket is linked to an internal email address.
+          You must change this customer to the correct person before replying.
+        </div>
+      );
     }
   }
 });

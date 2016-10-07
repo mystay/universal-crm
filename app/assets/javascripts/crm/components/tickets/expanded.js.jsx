@@ -9,6 +9,7 @@ var ExpandedTicket = React.createClass({
           </p>
           <div className="well well-sm">
             <TicketFunctions
+              ticket={this.props.ticket}
               status={this.props.status}
               flags={this.props.ticket.flags}
               changeTicketFlag={this.props.changeTicketFlag}
@@ -54,7 +55,7 @@ var ExpandedTicket = React.createClass({
     }
   },
   ticketOpen: function(){
-    return (this.props.ticket.status == 'active' || this.actioned());
+    return ((this.props.ticket.status == 'active' || this.actioned()) && (this.props.gs.config.inbound_email_addresses.indexOf(this.props.ticket.from_email)<0));
   },
   email: function(){
     return this.props.ticket.kind.toString() == 'email';
