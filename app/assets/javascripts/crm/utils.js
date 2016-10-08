@@ -26,8 +26,8 @@ function findObjectByKeyValue(object, key, value){
   return result;
 }
 function can(state, func){
-  return (state.user.functions.indexOf(func)>-1);
+  return (state.user && state.user.functions && state.user.functions.indexOf(func)>-1);
 }
 function cannot(state, func){
-  return (state.user.functions.indexOf(func)==-1);
+  return (state.user && (state.user.functions==undefined || state.user.functions.indexOf(func)==-1));
 }
