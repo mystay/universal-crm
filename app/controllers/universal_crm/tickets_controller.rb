@@ -66,8 +66,7 @@ module UniversalCrm
         ticket = subject.tickets.create kind: kind,
                                         title: params[:title],
                                         content: params[:content],
-                                        scope: universal_scope,
-                                        responsible: universal_user
+                                        scope: universal_scope
         if ticket.valid? and ticket.email?
           #Send the contact form to the customer for their reference
           UniversalCrm::Mailer.new_ticket(universal_crm_config, subject, ticket, sent_from_crm).deliver_now
@@ -116,6 +115,7 @@ module UniversalCrm
       if !@user.nil?
         @ticket = UniversalCrm::Ticket.find(params[:id])
         @ticket.update(responsible: @user)
+        @ticket.save_comment!("Ticket assigned to: #{@user.name}", universal_user)
       end
       render json: {user: {name: @user.name, email: @user.email}}
         

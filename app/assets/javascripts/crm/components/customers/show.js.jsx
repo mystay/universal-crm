@@ -60,7 +60,7 @@ var CustomerShow = React.createClass({
                       <Attachments subjectId={this.props.customer.id} subjectType='UniversalCrm::Customer' />
                     </div>
                     <div className="tab-pane" id="tab-settings">
-                      <CustomerSettings customer={this.props.customer} />
+                      <CustomerSettings customer={this.props.customer} gs={this.props.gs} />
                     </div>
                   </div>
                 </div>

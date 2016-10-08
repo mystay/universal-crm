@@ -1,6 +1,6 @@
 module UniversalCrm
   module Concerns
-    module InboundMail
+    module Home
       extend ActiveSupport::Concern
       
       included do
@@ -8,6 +8,26 @@ module UniversalCrm
         
         def index
           #list all tickets  
+        end
+        
+        def init          
+          users = Universal::Configuration.class_name_user.classify.constantize.where('_ugf.crm.0' => {'$exists' => true})
+          users = users.sort_by{|a| a.name}.map{|u| {name: u.name, 
+              email: u.email, 
+              first_name: u.name.split(' ')[0].titleize, 
+              id: u.id.to_s, 
+              functions: (u.user_group_functions.blank? ? [] : u.user_group_functions['crm'])}}
+          
+          json = {config: universal_crm_config.to_json, users: users}
+
+          if universal_user
+            json.merge!({universal_user: {
+              name: universal_user.name,
+              email: universal_user.email,
+              functions: (universal_user.user_group_functions.blank? ? [] : universal_user.user_group_functions['crm'])
+            }})
+          end
+          render json: json
         end
 
         #we don't have universal scope here, so need to establish it from the to address or sender

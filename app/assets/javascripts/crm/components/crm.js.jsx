@@ -2,11 +2,6 @@ var CRM = React.createClass({
   getInitialState: function(){
     return {
       gs: {},
-      customer: null,
-      searchTimer: null,
-      customerPagination: null,
-      ticketPage: 1,
-      customerPage: 1,
       mainComponent: 'Loading...',
       subComponent: null
     };
@@ -15,17 +10,12 @@ var CRM = React.createClass({
     var _this = this;
     $.ajax({
       method: 'GET',
-      url: `/crm/config.json`,
+      url: `/crm/init.json`,
       success: (function(data){
-        _this.setGlobalState('config', data);
+        _this.setGlobalState('config', data.config);
+        _this.setGlobalState('user', data.universal_user);
+        _this.setGlobalState('users', data.users);
         _this.init(_this);
-      })
-    });
-    $.ajax({
-      method: 'GET',
-      url: `/universal_access/users.json?code=crm_user`, //probably shouldn't hardcode this here
-      success: (function(data){
-        _this.setGlobalState('users', data);
       })
     });
   },

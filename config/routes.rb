@@ -13,6 +13,7 @@ UniversalCrm::Engine.routes.draw do
   get '/actioned', to: 'home#index'
   get '/active', to: 'home#index'
   get '/closed', to: 'home#index'
+  get '/init.json', to: 'home#init'
   
   resource :config, controller: :config
   

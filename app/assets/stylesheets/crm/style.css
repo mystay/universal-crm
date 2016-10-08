@@ -17,3 +17,4 @@ blockquote, .post>p{font-size:10pt;}
 .chat-widget .post.system_generated>p{font-size:0.75em;}
 .chat-widget .post>div>blockquote{display:none;}
 .sidebar .nav > li > .nav-sub > li > a {padding-left: 30px;}
+nav.pageheader>h1{margin:0}

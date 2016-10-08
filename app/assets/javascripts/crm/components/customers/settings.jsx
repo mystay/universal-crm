@@ -32,7 +32,25 @@ var CustomerSettings = React.createClass({
     });
   },
   render: function(){
-    if (this.state.status=='active'){
+    return(
+      <div>
+        <h3>Block customer</h3>
+        {this.noAccess()}
+        {this.active()}
+        {this.blocked()}
+      </div>
+    );
+  },
+  hasAccess: function(){
+    return can(this.props.gs, 'block_customers')
+  },
+  noAccess: function(){
+    if (!this.hasAccess()){
+      return(<p className="text-warning text-center"><i className="fa fa-lock" /> You do not have access to this function</p>);
+    }
+  },
+  active: function(){
+    if (this.hasAccess() && this.state.status=='active'){
       return(
         <div>
           <div className="alert alert-info">
@@ -43,7 +61,10 @@ var CustomerSettings = React.createClass({
           </button>
         </div>
       );
-    }else if (this.state.status=='blocked'){
+    }
+  },
+  blocked: function(){
+    if (this.hasAccess() && this.state.status=='blocked'){
       return(
         <div>
           <div className="alert alert-warning">
@@ -54,8 +75,6 @@ var CustomerSettings = React.createClass({
           </button>
         </div>
       );
-    }else{
-      return(null);
     }
   }
 });
