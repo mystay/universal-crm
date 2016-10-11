@@ -1,0 +1,8 @@
+%p Hi #{@user.given_names},
+%p A ticket has been assigned to you:
+%p= '------------------------------------------------------'
+%h3 ##{@ticket.numbered_title}
+= simple_format auto_link(@ticket.content)
+%p= '------------------------------------------------------'
+%h3 Do not reply to this email, view the ticket here:
+%p #{link_to @ticket.url(@config), @ticket.url(@config)}

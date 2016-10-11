@@ -17,6 +17,10 @@ var ConfigForm = React.createClass({
           <input type="text" className="form-control" defaultValue={this.props.config.system_name} id="system_name" ref="system_name" />
         </div>
         <div className="form-group">
+          <label htmlFor="url">URL</label>
+          <input type="text" className="form-control" defaultValue={this.props.config.url} id="url" ref="url" />
+        </div>
+        <div className="form-group">
           <label htmlFor="inbound_domain">Inbound Domain</label>
           <input type="text" className="form-control" defaultValue={this.props.config.inbound_domain} id="inbound_domain" ref="inbound_domain" onChange={this.changeInboundDomain} />
         </div>

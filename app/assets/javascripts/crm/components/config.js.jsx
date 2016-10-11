@@ -103,7 +103,8 @@ var Config = React.createClass({
           new_ticket_header: ReactDOM.findDOMNode(refs.new_ticket_header).value,
           new_reply_header: ReactDOM.findDOMNode(refs.new_reply_header).value,
           email_footer: ReactDOM.findDOMNode(refs.email_footer).value,
-          ticket_flags: ReactDOM.findDOMNode(refs.ticket_flags).value
+          ticket_flags: ReactDOM.findDOMNode(refs.ticket_flags).value,
+          url: ReactDOM.findDOMNode(refs.url).value
         }
       },
       success: (function(_this){

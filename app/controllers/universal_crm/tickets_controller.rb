@@ -116,6 +116,10 @@ module UniversalCrm
         @ticket = UniversalCrm::Ticket.find(params[:id])
         @ticket.update(responsible: @user)
         @ticket.save_comment!("Ticket assigned to: #{@user.name}", universal_user)
+        begin
+          UniversalCrm::Mailer.assign_ticket(universal_crm_config, @ticket, @user).deliver_now
+        rescue
+        end
       end
       render json: {user: {name: @user.name, email: @user.email}}
         

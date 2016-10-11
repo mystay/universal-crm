@@ -12,6 +12,7 @@ module UniversalCrm
 
         field :tf, as: :ticket_flags, type: Array, default: [{label: 'priority', color: 'e25d5d'}, {label: 'general', color: '27b6af'}]
         field :system_name
+        field :url
         field :hp, as: :hashed_password
         field :ibd, as: :inbound_domain
         field :iea, as: :inbound_email_addresses, type: Array, default: []
@@ -25,6 +26,7 @@ module UniversalCrm
           {
             scope_id: self.scope_id.to_s,
             system_name: self.system_name,
+            url: self.url,
             ticket_flags: self.ticket_flags,
             hashed_password: self.hashed_password,
             inbound_domain: inbound_domain,
