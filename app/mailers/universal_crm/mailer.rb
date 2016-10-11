@@ -36,7 +36,7 @@ module UniversalCrm
         @user = user
         mail  to: @user.email,
               from: "#{config.transaction_email_from} <#{config.transaction_email_address}>",
-              subject: "Ticket assigned: #{ticket.title}"
+              subject: "#{config.system_name} Ticket assigned: #{ticket.title}"
       end      
     end
     
