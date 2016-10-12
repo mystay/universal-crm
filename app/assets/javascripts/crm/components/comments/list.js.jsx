@@ -23,31 +23,8 @@ var Comments = React.createClass({
       this.init();
     }
   },
-  valid: function(){
-    return (this.state.content != '');
-  },
-  handleChange: function(e){
-    this.setState({content: e.target.value});
-  },
-  handleSubmit: function(e){
-    var _this=this;
-    e.preventDefault();
-    if (!this.state.loading){
-      this.setState({loading: true});
-      $.ajax({
-        method: 'POST',
-        url: '/universal/comments',
-        dataType: 'JSON',
-        data:{
-          subject_type: this.props.subject_type, subject_id: this.props.subject_id, content: this.state.content
-        },
-        success: function(data){
-          _this.replaceState({comments: data, content: '', focused: false, loading: false});
-          ReactDOM.findDOMNode(_this.refs.content).value='';
-          showSuccess("Comments saved");
-        }
-      });
-    }
+  updateCommentList: function(comments){
+    this.setState({comments: comments})
   },
   render: function(){
     if (this.props.newCommentPosition == 'bottom'){
@@ -68,34 +45,9 @@ var Comments = React.createClass({
   },
   renderCommentForm: function(){
     if (this.openComments()){
-      return(
-        <form onSubmit={this.handleSubmit}>
-          <div className="form-group">
-            <textarea 
-              className="form-control" 
-              ref='content' 
-              placeholder={this.props.newCommentPlaceholder} 
-              onChange={this.handleChange} 
-              style={this.textareaStyle()} />
-          </div>
-          <div className="form-group">
-            {this.submitButton()}
-          </div>
-        </form>
-      );
+      return(<NewComment updateCommentList={this.updateCommentList} subject_type={this.props.subject_type} subject_id={this.props.subject_id} newCommentPlaceholder={this.props.newCommentPlaceholder} allowEmail={this.props.allowEmail} />)
     }else{
       return(null);
-    }
-  },
-  submitButton: function(){
-    if (this.valid()){
-      return(
-        <button className="btn btn-primary btn-sm">
-          <i className={this.loadingIcon()} /> Save
-        </button>
-      )
-    }else{
-      return(null)
     }
   },
   renderCommentList: function(){
@@ -133,19 +85,5 @@ var Comments = React.createClass({
   },
   openComments: function(){
     return (this.props.openComments==undefined || this.props.openComments==true);
-  },
-  loadingIcon: function(){
-    if (this.state.loading){
-      return('fa fa-refresh fa-spin');
-    }else{
-      return('fa fa-check');
-    }
-  },
-  textareaStyle: function(){
-    if (this.state.content){
-      return {minHeight: '200px'}
-    }else{
-      return {height: '40px', backgroundColor: '#fafafa'}
-    }
   }
 });

@@ -29,6 +29,7 @@ var ExpandedTicket = React.createClass({
             openComments={this.ticketOpen()}
             newCommentPlaceholder={this.newCommentPlaceholder()}
             fullWidth={false}
+            allowEmail={this.props.ticket.kind == 'email'}
             />
           {this.emailWarning()}
         </div>
@@ -63,7 +64,7 @@ var ExpandedTicket = React.createClass({
     if (this.email() && this.ticketOpen()){
       return(
         <div className="alert alert-warning alert-sm">
-          <i className="fa fa-exclamation-triangle" /> <strong>Note:</strong> This reply will be emailed to: {this.props.ticket.subject_email}
+          <i className="fa fa-exclamation-triangle" /> <strong>Note:</strong> Email replies will be sent to: {this.props.ticket.subject_email}
         </div>
       )
     }else{
@@ -72,9 +73,9 @@ var ExpandedTicket = React.createClass({
   },
   newCommentPlaceholder: function(){
     if (this.email()){
-      return 'Reply...';
+      return 'Reply/new note...';
     }else{
-      return 'New comment...';
+      return 'New note...';
     }
   },
   actioned: function(){

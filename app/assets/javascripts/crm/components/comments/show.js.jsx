@@ -6,8 +6,10 @@ var Comment = React.createClass({
       commentClass = 'post system_generated'
     } else if (this.props.comment.incoming){
       commentClass = 'post primary'
+    }else if (this.props.comment.kind=='normal'){
+      commentClass = 'post system_generated';
     }else{
-      commentClass = 'post default';
+      commentClass = `post default ${this.props.comment.kind}-kind`;
     }
     if (this.props.comment.incoming){
       return(
@@ -17,6 +19,7 @@ var Comment = React.createClass({
               <div className="pull-right small">{this.props.comment.when_formatted}</div>
               {this.arrow()}
               {this.content()}
+              {this.props.comment.kind}
             </div>
           </div>
           <div className={this.column(2)}>
