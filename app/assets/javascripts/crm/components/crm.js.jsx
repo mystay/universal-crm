@@ -12,6 +12,7 @@ var CRM = React.createClass({
       method: 'GET',
       url: `/crm/init.json`,
       success: (function(data){
+        document.title = data.config.system_name;
         _this.setGlobalState('config', data.config);
         _this.setGlobalState('user', data.universal_user);
         _this.setGlobalState('users', data.users);
@@ -60,7 +61,7 @@ var CRM = React.createClass({
     );
   },
   handlePageHistory: function(title, url){
-    document.title = title;
+//     document.title = title;
     window.history.replaceState({"pageTitle":title},'', url);
     this.setGlobalState('pageTitle', title);
   },
@@ -87,7 +88,7 @@ var CRM = React.createClass({
     }else if (flag!=undefined){
       var title = `${flag}`;
     }
-    this.handlePageHistory(title, `/crm`);
+//     this.handlePageHistory(title, `/crm`);
   },
   _goTicket: function(ticketId){
     this.setState({mainComponent: <TicketShowContainer ticketId={ticketId} gs={this.state.gs} sgs={this.setGlobalState} handlePageHistory={this.handlePageHistory} _goCustomer={this._goCustomer} />});
