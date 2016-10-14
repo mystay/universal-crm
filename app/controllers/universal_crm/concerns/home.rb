@@ -117,6 +117,7 @@ module UniversalCrm
                 user = (customer.subject.class.to_s == Universal::Configuration.class_name_user.to_s ? customer.subject : nil),
                 if !ticket.nil?
                   ticket.open!(user)
+                  ticket.update(kind: :email)
                   comment = ticket.comments.create content: params['TextBody'].hideQuotedLines,
                                           html_body: params['HtmlBody'].hideQuotedLines,
                                           user: user,
