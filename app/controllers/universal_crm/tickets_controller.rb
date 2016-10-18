@@ -70,13 +70,13 @@ module UniversalCrm
         ticket = subject.tickets.create kind: kind,
                                         title: params[:title],
                                         content: params[:content],
-                                        scope: universal_scope,
+                                        scope: universal_scope
                      
         if ticket.valid?
           if !params[:flag].blank?
-            params[:flag].to_s.strip.gsub(' ','').split(',').each do |flag|
-              ticket.flag!(flag, universal_user)
-              ticket.save_comment!("Added flag: '#{flag}'", current_user)
+            params[:flag].strip.gsub(' ','').split(',').each do |flag|
+              ticket.flag!(params[:flag], universal_user)
+              ticket.save_comment!("Added flag: '#{params[:flag]}'", current_user)
             end
           end
           if ticket.email?
