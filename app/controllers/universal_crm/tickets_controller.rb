@@ -63,10 +63,15 @@ module UniversalCrm
         sent_from_crm=false
       end
       if !params[:title].blank?
+        document=nil
+        if !params[:document_id].blank? and !params[:document_type].blank?
+          document = params[:document_type].classify.constantize.find params[:document_id]
+        end
         ticket = subject.tickets.create kind: kind,
                                         title: params[:title],
                                         content: params[:content],
-                                        scope: universal_scope
+                                        scope: universal_scope,
+                                        document: document
         if ticket.valid? and ticket.email?
           #Send the contact form to the customer for their reference
           UniversalCrm::Mailer.new_ticket(universal_crm_config, subject, ticket, sent_from_crm).deliver_now

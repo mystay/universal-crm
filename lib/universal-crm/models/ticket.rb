@@ -11,7 +11,7 @@ module UniversalCrm
         include Universal::Concerns::Kind
         include Universal::Concerns::Flaggable
         include Universal::Concerns::Taggable
-        include Universal::Concerns::Polymorphic #the customer 
+        include Universal::Concerns::Polymorphic #the customer (subject)
         include Universal::Concerns::Commentable
         include Universal::Concerns::Numbered
         include Universal::Concerns::Scoped
@@ -81,7 +81,7 @@ module UniversalCrm
             kind: self.kind.to_s,
             subject_name: self.subject.name,
             subject_id: self.subject_id.to_s,
-            subject_email: self.subject.email,
+            subject_email: (self.subject.nil? ? nil : self.subject.email),
             title: self.title,
             content: self.content,
             html_body: self.html_body,
