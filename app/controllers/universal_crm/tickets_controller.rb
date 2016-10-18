@@ -71,10 +71,18 @@ module UniversalCrm
                                         title: params[:title],
                                         content: params[:content],
                                         scope: universal_scope,
-                                        document: document
-        if ticket.valid? and ticket.email?
-          #Send the contact form to the customer for their reference
-          UniversalCrm::Mailer.new_ticket(universal_crm_config, subject, ticket, sent_from_crm).deliver_now
+                     
+        if ticket.valid?
+          if !params[:flag].blank?
+            params[:flag].to_s.strip.gsub(' ','').split(',').each do |flag|
+              ticket.flag!(flag, universal_user)
+              ticket.save_comment!("Added flag: '#{flag}'", current_user)
+            end
+          end
+          if ticket.email?
+            #Send the contact form to the customer for their reference
+            UniversalCrm::Mailer.new_ticket(universal_crm_config, subject, ticket, sent_from_crm).deliver_now
+          end
         end
         render json: {ticket: ticket.to_json}
       else
