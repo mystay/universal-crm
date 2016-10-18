@@ -41,7 +41,7 @@ var AssignUser = React.createClass({
           method: 'PATCH',
           url: `/crm/tickets/${this.props.ticket.id}/assign_user?user_id=${userId}`,
           success: function(data){
-            _this.setState({lodaing: false, assignedTo: data.user});
+            _this.setState({loading: false, assignedTo: data.user});
           }
         });
       }

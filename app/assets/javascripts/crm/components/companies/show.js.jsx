@@ -91,6 +91,7 @@ var CompanyShow = React.createClass({
                         status='active'
                         newCommentPlaceholder='New note...'
                         fullWidth={true}
+                        allowEmail={false}
                         />
                     </div>
                     <div className="tab-pane" id="tab-attachments">

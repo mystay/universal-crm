@@ -28,5 +28,17 @@ module UniversalCrm
         end
       end
     end
+    
+    def assign_ticket(config, ticket, user)
+      if !config.transaction_email_address.blank?
+        @config = config
+        @ticket = ticket
+        @user = user
+        mail  to: @user.email,
+              from: "#{config.transaction_email_from} <#{config.transaction_email_address}>",
+              subject: "#{config.system_name} Ticket assigned: #{ticket.title}"
+      end      
+    end
+    
   end
 end

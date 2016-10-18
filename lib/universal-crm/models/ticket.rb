@@ -38,6 +38,10 @@ module UniversalCrm
         
         search_in :t, :c, :te, :fe
         
+        def url(config)
+          "#{config.url}/ticket/#{self.id}"
+        end
+        
         def numbered_title
           [self.number, self.title].join(' - ')
         end

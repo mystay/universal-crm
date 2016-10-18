@@ -16,7 +16,7 @@ module UniversalCrm
               email: u.email, 
               first_name: u.name.split(' ')[0].titleize, 
               id: u.id.to_s, 
-              functions: (u.user_group_functions.blank? ? [] : u.user_group_functions['crm'])}}
+              functions: (u.universal_user_group_functions.blank? ? [] : u.universal_user_group_functions['crm'])}}
           
           json = {config: universal_crm_config.to_json, users: users}
 
@@ -24,7 +24,7 @@ module UniversalCrm
             json.merge!({universal_user: {
               name: universal_user.name,
               email: universal_user.email,
-              functions: (universal_user.user_group_functions.blank? ? [] : universal_user.user_group_functions['crm'])
+              functions: (universal_user.universal_user_group_functions.blank? ? [] : universal_user.universal_user_group_functions['crm'])
             }})
           end
           render json: json
@@ -117,6 +117,7 @@ module UniversalCrm
                 user = (customer.subject.class.to_s == Universal::Configuration.class_name_user.to_s ? customer.subject : nil),
                 if !ticket.nil?
                   ticket.open!(user)
+                  ticket.update(kind: :email)
                   comment = ticket.comments.create content: params['TextBody'].hideQuotedLines,
                                           html_body: params['HtmlBody'].hideQuotedLines,
                                           user: user,
