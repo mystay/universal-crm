@@ -20,6 +20,9 @@ module UniversalCrm
       elsif params[:status] != 'all'
         @tickets = @tickets.active  
       end
+      if params[:kind] == 'email'
+        @tickets = @tickets.email
+      end
       @tickets = @tickets.page(params[:page])
       render json: {
         pagination: {
@@ -71,7 +74,8 @@ module UniversalCrm
                                         title: params[:title],
                                         content: params[:content],
                                         scope: universal_scope,
-                                        referring_url: params[:url]
+                                        referring_url: params[:url],
+                                        document: document
                      
         if ticket.valid?
           if !params[:flag].blank?

@@ -5,3 +5,8 @@
 //= require bootstrap-sprockets
 //= require ./jquery-ui.min
 //= require ./components/helpdesk
+//= require ./components/helpdesk_preview
+//= require ./utils
+//= require ./jquery.timeago
+//= require ./components/comments/list
+//= require ./components/comments/show
