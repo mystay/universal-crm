@@ -89,7 +89,7 @@ module UniversalCrm
             subject_email: (self.subject.nil? ? nil : self.subject.email),
             document_name: (self.document.nil? ? nil : self.document.crm_name),
             document_type: self.document_type,
-            document_id: self.document_id,
+            document_id: self.document_id.to_s,
             title: self.title,
             content: self.content,
             html_body: self.html_body,
@@ -103,7 +103,7 @@ module UniversalCrm
             flags: self.flags,
             attachments: self.attachments.map{|a| {name: a.name, url: a.file.url, filename: a.file_filename}},
             incoming: self.incoming?,
-            responsible_id: self.responsible_id,
+            responsible_id: self.responsible_id.to_s,
             responsible_name: (self.responsible.nil? ? nil : self.responsible.name),
             referring_url: self.referring_url
           }
