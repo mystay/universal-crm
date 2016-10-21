@@ -62,9 +62,9 @@ var Helpdesk = React.createClass({
   },
   modalTitle: function(){
     if (this.props.name){
-      return(`Submit a helpdesk ticket for: ${this.props.name}`);
+      return(`Submit a helpdesk request for: ${this.props.name}`);
     }else{
-      return('Submit a helpdesk ticket')
+      return('Submit a helpdesk request')
     }
   },
   submitButton: function(){
@@ -76,7 +76,7 @@ var Helpdesk = React.createClass({
         </div>
       );
     }else if (this.state.submitted){
-      return(<div className="alert alert-info">Your ticket has been submitted. We will respond shortly.</div>);
+      return(<div className="alert alert-info">Your request has been submitted. We will respond shortly.</div>);
     }else{
       return(null);
     }
