@@ -19,6 +19,8 @@ var ExpandedTicket = React.createClass({
             <hr />
           </div>
           {this.actionedStatus()}
+          {this.ticketDocument()}
+          {this.referringUrl()}
           {this.ticketNotes()}
           <Attachments subjectId={this.props.ticket.id} subjectType='UniversalCrm::Ticket' new={false} />
           <Comments 
@@ -36,6 +38,20 @@ var ExpandedTicket = React.createClass({
       )
     }else{
       return(null);
+    }
+  },
+  ticketDocument: function(){
+    if (this.props.ticket.document_name){
+      return(
+        <h4 className="text-info">REF: <strong>{this.props.ticket.document_name}</strong></h4>
+      );
+    }
+  },
+  referringUrl: function(){
+    if (this.props.ticket.referring_url){
+      return(
+        <h4 className="small text-info">URL: <a href={this.props.ticket.referring_url} target="_blank">{this.props.ticket.referring_url}</a></h4>
+      );
     }
   },
   ticketNotes: function(){
