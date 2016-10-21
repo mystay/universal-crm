@@ -70,7 +70,8 @@ module UniversalCrm
         ticket = subject.tickets.create kind: kind,
                                         title: params[:title],
                                         content: params[:content],
-                                        scope: universal_scope
+                                        scope: universal_scope,
+                                        referring_url: params[:url]
                      
         if ticket.valid?
           if !params[:flag].blank?

@@ -25,6 +25,7 @@ module UniversalCrm
         field :hb, as: :html_body
         field :te, as: :to_email
         field :fe, as: :from_email
+        field :url, as: :referring_url
 
         statuses %w(active actioned closed), default: :active
         kinds %w(normal email), :normal
@@ -103,7 +104,8 @@ module UniversalCrm
             attachments: self.attachments.map{|a| {name: a.name, url: a.file.url, filename: a.file_filename}},
             incoming: self.incoming?,
             responsible_id: self.responsible_id,
-            responsible_name: (self.responsible.nil? ? nil : self.responsible.name)
+            responsible_name: (self.responsible.nil? ? nil : self.responsible.name),
+            referring_url: self.referring_url
           }
         end
         

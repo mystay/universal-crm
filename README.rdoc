@@ -32,13 +32,15 @@
       include UniversalCrm::Concerns::CrmCustomer  
     end
     
-    #model must include both a 'name' and 'email' method
+    #model must include both a 'name' and 'email' method/attribute
     
 === Setup a model to have tickets created for it
     class Placement
       include UniversalCrm::Concerns::Ticketed
       
     end
+    
+    #model must include a 'crm_name' method/attribute
     
 ==== Find/Create a customer for this model
     model.crm_customer(scoped_model)
