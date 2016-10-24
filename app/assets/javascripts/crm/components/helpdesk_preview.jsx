@@ -77,6 +77,7 @@ var HelpdeskPreview = React.createClass({
             <Comments 
               subject_type='UniversalCrm::Ticket'
               subject_id={this.state.ticket.id}
+              openComments={false}
               hidePrivateComments={true}
               />
           </div>
