@@ -68,6 +68,8 @@ var HelpdeskPreview = React.createClass({
               <dd>{this.state.ticket.updated_at}</dd>
               <dt>Reference</dt>
               <dd>{this.state.ticket.document_name==undefined ? 'N/A' : this.state.ticket.document_name}</dd>
+              <dt>URL</dt>
+              <dd className="small">{this.state.ticket.referring_url==undefined ? 'N/A' : this.referringUrl()}</dd>
             </dl>
             <blockquote>
               <div dangerouslySetInnerHTML={{__html: this.state.ticket.content.replace(/(?:\r\n|\r|\n)/g, '<br />')}} />
@@ -93,5 +95,10 @@ var HelpdeskPreview = React.createClass({
     }else{
       return(null);
     }
+  },
+  referringUrl: function(){
+    if (this.state.ticket.referring_url){
+      return(<a href={this.state.ticket.referring_url}>{this.state.ticket.referring_url}</a>)
+    }  
   }
 })
