@@ -72,6 +72,11 @@ var HelpdeskPreview = React.createClass({
             <blockquote>
               <div dangerouslySetInnerHTML={{__html: this.state.ticket.content.replace(/(?:\r\n|\r|\n)/g, '<br />')}} />
             </blockquote>
+            <Comments 
+              subject_type='UniversalCrm::Ticket'
+              subject_id={this.state.ticket.id}
+              hidePrivateComments={true}
+              />
           </div>
         </div>
       );

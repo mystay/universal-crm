@@ -46,6 +46,7 @@ var Helpdesk = React.createClass({
               <div className="form-group">
                 <textarea className="form-control" placeholder="Message..." style={{height: '200px'}} ref="content" onChange={this.setContent} />
               </div>
+              {this.previewButton()}
               {this.submitButton()}
             </div>
           </div>
@@ -76,7 +77,7 @@ var Helpdesk = React.createClass({
         </div>
       );
     }else if (this.state.submitted){
-      return(<div className="alert alert-info">Your request has been submitted. We will respond shortly.</div>);
+      return(<div className="alert alert-info">Your request has been submitted. We will respond shortly via email.</div>);
     }else{
       return(null);
     }
@@ -113,6 +114,18 @@ var Helpdesk = React.createClass({
           ReactDOM.findDOMNode(_this.refs.content).value = ''
         }
       });
+    }
+  },
+  previewButton: function(){
+    if (this.props.helpdesk_preview_url){
+      return(
+        <div>
+          <div className="pull-right">
+            <a href={this.props.helpdesk_preview_url}>View Helpdesk</a>
+          </div>
+          &nbsp;
+        </div>
+      );
     }
   }
 });

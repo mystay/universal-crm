@@ -43,7 +43,11 @@ var NewComment = React.createClass({
         url: '/universal/comments',
         dataType: 'JSON',
         data:{
-          subject_type: this.props.subject_type, subject_id: this.props.subject_id, content: this.state.content, kind: emailKind
+          subject_type: this.props.subject_type,
+          subject_id: this.props.subject_id,
+          content: this.state.content,
+          kind: emailKind,
+          hide_private_comments: this.props.hidePrivateComments
         },
         success: function(data){
           _this.setState({content: '', focused: false, loading: false});

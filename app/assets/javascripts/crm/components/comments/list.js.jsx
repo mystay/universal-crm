@@ -45,7 +45,14 @@ var Comments = React.createClass({
   },
   renderCommentForm: function(){
     if (this.openComments()){
-      return(<NewComment updateCommentList={this.updateCommentList} subject_type={this.props.subject_type} subject_id={this.props.subject_id} newCommentPlaceholder={this.props.newCommentPlaceholder} allowEmail={this.props.allowEmail} />)
+      return(<NewComment 
+               updateCommentList={this.updateCommentList} 
+               subject_type={this.props.subject_type} 
+               subject_id={this.props.subject_id} 
+               newCommentPlaceholder={this.props.newCommentPlaceholder} 
+               allowEmail={this.props.allowEmail} 
+               hidePrivateComments={this.props.hidePrivateComments}
+               />)
     }else{
       return(null);
     }
@@ -72,10 +79,13 @@ var Comments = React.createClass({
       this.setState({loading: true, pastProps: this.props});
       $.ajax({
         method: 'GET',
-        url: `/universal/comments?subject_type=${this.props.subject_type}&subject_id=${this.props.subject_id}`,
+        url: `/universal/comments`,
         dataType: 'JSON',
         data:{
-          subject_type: this.props.subject_type, subject_id: this.props.subject_id, content: this.state.content
+          subject_type: this.props.subject_type,
+          subject_id: this.props.subject_id,
+          content: this.state.content,
+          hide_private_comments: this.props.hidePrivateComments
         },
         success: function(data){
           _this.setState({comments: data, subject_id: _this.props.subject_id, loading: false});

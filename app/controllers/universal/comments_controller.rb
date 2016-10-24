@@ -6,7 +6,8 @@ module Universal
 
     def index
       @model = find_model
-      render json: @model.comments.map{|c| c.to_json}
+      comments = load_comments
+      render json: comments.map{|c| c.to_json}
     end
     
     def create
@@ -22,7 +23,8 @@ module Universal
       else
         logger.debug @comment.errors.to_json
       end
-      render json: @model.comments.map{|c| c.to_json}
+      comments = load_comments
+      render json: comments.map{|c| c.to_json}
     end
 
     private
@@ -31,6 +33,14 @@ module Universal
         return params[:subject_type].classify.constantize.unscoped.find params[:subject_id]
       end
       return nil
+    end
+    
+    def load_comments
+      comments = @model.comments
+      if params[:hide_private_comments].to_s == 'true'
+        comments = comments.not_system_generated.email 
+      end
+      return comments
     end
     
   end

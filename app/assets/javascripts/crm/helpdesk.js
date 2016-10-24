@@ -10,3 +10,4 @@
 //= require ./jquery.timeago
 //= require ./components/comments/list
 //= require ./components/comments/show
+//= require ./components/comments/new
