@@ -16,6 +16,7 @@ var ExpandedTicket = React.createClass({
               changeTicketStatusActioned={this.props.changeTicketStatusActioned}
               ticketFlags={this.props.ticketFlags}
               />
+            <div style={{marginTop: '2px'}}><Tags subjectType="UniversalCrm::Ticket" subjectId={this.props.ticket.id} tags={this.props.ticket.tags} /></div>
             <hr />
           </div>
           {this.actionedStatus()}

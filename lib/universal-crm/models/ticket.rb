@@ -101,6 +101,7 @@ module UniversalCrm
             reply_count: self.comments.not_system_generated.count,
             token: self.token,
             flags: self.flags,
+            tags: self.tags,
             attachments: self.attachments.map{|a| {name: a.name, url: a.file.url, filename: a.file_filename}},
             incoming: self.incoming?,
             responsible_id: self.responsible_id.to_s,
