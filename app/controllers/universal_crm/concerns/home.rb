@@ -35,9 +35,9 @@ module UniversalCrm
           logger.warn "#### Inbound CRM mail received from #{params['From']}"
           logger.info params
           #find the email address we're sending to
-          to = params['ToFull'][0]['Email'] if !params['ToFull'].blank?
-          cc = params['CcFull'][0]['Email'] if !params['CcFull'].blank?
-          bcc = params['BccFull'][0]['Email'] if !params['BccFull'].blank?
+          to = params['ToFull'][0]['Email'].downcase if !params['ToFull'].blank?
+          cc = params['CcFull'][0]['Email'].downcase if !params['CcFull'].blank?
+          bcc = params['BccFull'][0]['Email'].downcase if !params['BccFull'].blank?
 
           #parse the email, and create a ticket where necessary:
           if !to.blank? and !params['From'].blank?
@@ -53,7 +53,7 @@ module UniversalCrm
             end
 
             #check if we're sending to an inbound email address
-            config = UniversalCrm::Config.find_by(inbound_email_addresses: to.downcase)
+            config = UniversalCrm::Config.find_by(inbound_email_addresses: to)
             if config.nil?
               #check if we're sending to a particular config/scope
               possible_token = to[0, to.index('@')]
@@ -70,12 +70,12 @@ module UniversalCrm
               if customer.active?
                 customer.update(name: params['FromName']) if customer.name.blank?
                 ticket = customer.tickets.create  kind: :email,
-                                        title: params['Subject'],
-                                        content: params['TextBody'].hideQuotedLines,
-                                        html_body: params['HtmlBody'].hideQuotedLines,
-                                        scope: config.scope,
-                                        to_email: to,
-                                        from_email: params['From']
+                                                  title: params['Subject'],
+                                                  content: params['TextBody'].hideQuotedLines,
+                                                  html_body: params['HtmlBody'].hideQuotedLines,
+                                                  scope: config.scope,
+                                                  to_email: to,
+                                                  from_email: params['From']
 
                 #Send this ticket to the customer now, so they can reply to it
                 #If it WASN'T sent to one of our inboud addresses that is:
