@@ -35,25 +35,26 @@ module UniversalCrm
           logger.warn "#### Inbound CRM mail received from #{params['From']}"
           logger.info params
           #find the email address we're sending to
-          to = params['ToFull'][0]['Email'] if !params['ToFull'].blank?
-          cc = params['CcFull'][0]['Email'] if !params['CcFull'].blank?
-          bcc = params['BccFull'][0]['Email'] if !params['BccFull'].blank?
+          to = params['ToFull'][0]['Email'].downcase if !params['ToFull'].blank?
+          cc = params['CcFull'][0]['Email'].downcase if !params['CcFull'].blank?
+          bcc = params['BccFull'][0]['Email'].downcase if !params['BccFull'].blank?
+          from = params['From'].downcase
 
           #parse the email, and create a ticket where necessary:
-          if !to.blank? and !params['From'].blank?
+          if !to.blank? and !from.blank?
             logger.warn "To: #{to}"
             ticket=nil
             #find the senders first, there could be multiple across different scope, if the user config is scoped
             if !Universal::Configuration.class_name_user.blank?
               if Universal::Configuration.user_scoped
-                senders = Universal::Configuration.class_name_user.classify.constantize.where(email: params['From'])
+                senders = Universal::Configuration.class_name_user.classify.constantize.where(email: /^#{from}$/i)
               else #user is not scoped - easy
-                sender = Universal::Configuration.class_name_user.classify.constantize.find_by(email: params['From'])
+                sender = Universal::Configuration.class_name_user.classify.constantize.find_by(email: /^#{from}$/i)
               end
             end
 
             #check if we're sending to an inbound email address
-            config = UniversalCrm::Config.find_by(inbound_email_addresses: to.downcase)
+            config = UniversalCrm::Config.find_by(inbound_email_addresses: to)
             if config.nil?
               #check if we're sending to a particular config/scope
               possible_token = to[0, to.index('@')]
@@ -66,16 +67,17 @@ module UniversalCrm
               if !sender.nil?
                 customer = UniversalCrm::Customer.find_by(subject: sender)
               end
-              customer ||= UniversalCrm::Customer.find_or_create_by(scope: config.scope, email: params['From'])
+              customer ||= UniversalCrm::Customer.find(scope: config.scope, email: /^#{from}$/i)
+              customer ||= UniversalCrm::Customer.create(scope: config.scope, email: from)
               if customer.active?
                 customer.update(name: params['FromName']) if customer.name.blank?
                 ticket = customer.tickets.create  kind: :email,
-                                        title: params['Subject'],
-                                        content: params['TextBody'].hideQuotedLines,
-                                        html_body: params['HtmlBody'].hideQuotedLines,
-                                        scope: config.scope,
-                                        to_email: to,
-                                        from_email: params['From']
+                                                  title: params['Subject'],
+                                                  content: params['TextBody'].hideQuotedLines,
+                                                  html_body: params['HtmlBody'].hideQuotedLines,
+                                                  scope: config.scope,
+                                                  to_email: to,
+                                                  from_email: from
 
                 #Send this ticket to the customer now, so they can reply to it
                 #If it WASN'T sent to one of our inboud addresses that is:
@@ -98,7 +100,7 @@ module UniversalCrm
               puts token
               if to[0,3]=='cr-'
                 logger.warn "Direct to customer"
-                subject = UniversalCrm::Customer.active.find_by(token: token)
+                subject = UniversalCrm::Customer.active.find_by(token: /^#{token}$/i)
                 if !subject.nil?
                   ticket = subject.tickets.create  kind: :email,
                                           title: params['Subject'],
@@ -107,12 +109,12 @@ module UniversalCrm
                                           scope: subject.scope,
                                           responsible: sender,
                                           to_email: to,
-                                          from_email: params['From']
+                                          from_email: from
                   logger.warn ticket.errors.to_json
                 end
               elsif to[0,3] == 'tk-'
                 logger.warn "Direct to ticket"
-                ticket = UniversalCrm::Ticket.find_by(token: token)
+                ticket = UniversalCrm::Ticket.find_by(token: /^#{token}$/i)
                 customer = ticket.subject
                 user = (customer.subject.class.to_s == Universal::Configuration.class_name_user.to_s ? customer.subject : nil),
                 if !ticket.nil?
@@ -138,7 +140,7 @@ module UniversalCrm
                                                   html_body: params['HtmlBody'],
                                                   scope: subject.scope,
                                                   to_email: to,
-                                                  from_email: params['From']
+                                                  from_email: from
                   logger.warn ticket.errors.to_json
                 end
               end
