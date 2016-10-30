@@ -1,6 +1,6 @@
-//= require react
-//= require react_ujs
-//= require bootstrap-sprockets
+//* require react
+//* require react_ujs
+//* require bootstrap-sprockets
 //= require ./components/helpdesk
 //= require ./components/helpdesk_preview
 //= require ./utils
