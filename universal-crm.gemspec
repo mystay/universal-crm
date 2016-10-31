@@ -9,9 +9,9 @@ Gem::Specification.new do |s|
   s.version     = UniversalCrm::VERSION
   s.authors     = ["Ben Petro"]
   s.email       = ["ben@bthree.com.au"]
-  s.homepage    = "TODO"
-  s.summary     = "TODO: Summary of Crm."
-  s.description = "TODO: Description of Crm."
+  s.homepage    = ""
+  s.summary     = "Summary of Crm."
+  s.description = "Description of Crm."
   s.license     = "MIT"
 
   s.files = Dir["{app,config,db,lib}/**/*", "MIT-LICENSE", "Rakefile", "README.rdoc"]
