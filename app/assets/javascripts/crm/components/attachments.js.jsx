@@ -72,7 +72,7 @@ var Attachments = React.createClass({
         attachments.push(
           <li key={attachment.id}>
             <a href={attachment.url} target="_blank">{filename}</a>
-            {shortenUrlButton(attachment.id)}
+            {shortenUrlButton(attachment.id, attachment.url, attachment.shortened_url)}
           </li>
         )
       });
@@ -110,27 +110,11 @@ var Attachments = React.createClass({
       )
     }
   },
-  shortenUrlButton: function(id){
+  shortenUrlButton: function(id, url, shortUrl){
     if (this.props.gs.config.google_api_key){
       return(
-        <span>    
-          &nbsp;
-          <i className="fa fa-download" onClick={this.shortenUrl} data-id={id} />
-        </span>
+        <ShortenUrl url={url} attachmentId={id} subjectId={this.props.subjectId} subjectType={this.props.subjectType} shortUrl={shortUrl} gs={this.props.gs} />
       );
     }
-  },
-  shortenUrl: function(e){
-    console.log('here')
-    var _this=this;
-    var id = $(e.target).attr('data-id');
-    $.ajax({
-      type: 'GET',
-      url: `/crm/attachments/${id}/shorten_url?subject_id=${this.props.subjectId}&subject_type=${this.props.subjectType}`,
-      data: {google_api_key: this.props.gs.config.google_api_key},
-      success: function(data){
-        console.log(data);
-      }
-    })
   }
 });

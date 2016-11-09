@@ -26,17 +26,26 @@ module UniversalCrm
     
     def shorten_url
       @attachment = @subject.attachments.find(params[:id])
-      if !params[:google_api_key].blank?
-        uri = URI.parse("https://www.googleapis.com/urlshortener/v1/url")
-        r = HTTParty.post(uri,
-            query: {key: params[:google_api_key]},
-            body: {longUrl: @attachment.file.url},
-            headers: { 'Content-Type' => 'application/json' })
-        puts r
-        render json: r.body
+      if @attachment.shortened_url.blank?
+        if !params[:google_api_key].blank?
+          r = HTTParty.post("https://www.googleapis.com/urlshortener/v1/url",
+              query: {key: params[:google_api_key]},
+              body: {longUrl: @attachment.file.url}.to_json,
+              headers: {'Content-Type' => 'application/json'})
+          json = JSON.parse(r.body)
+          puts json
+          if !json['id'].blank?
+            @attachment.update(shortened_url: json['id'])
+            render json: {url: json['id']}
+          else
+            render json: {}
+          end
+        else
+          render json: {}
+        end
       else
-        render json: {}
-      end      
+        render json: {url: @attachment.shortened_url}
+      end
     end
    
     private
