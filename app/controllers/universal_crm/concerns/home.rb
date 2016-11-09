@@ -67,7 +67,7 @@ module UniversalCrm
               if !sender.nil?
                 customer = UniversalCrm::Customer.find_by(subject: sender)
               end
-              customer ||= UniversalCrm::Customer.find(scope: config.scope, email: /^#{from}$/i)
+              customer ||= UniversalCrm::Customer.find_by(scope: config.scope, email: /^#{from}$/i)
               customer ||= UniversalCrm::Customer.create(scope: config.scope, email: from)
               if customer.active?
                 customer.update(name: params['FromName']) if customer.name.blank?
