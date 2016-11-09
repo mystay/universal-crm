@@ -24,7 +24,7 @@ var ExpandedTicket = React.createClass({
           {this.referringUrl()}
           {this.ticketNotes()}
           <div className="panel"><div className="panel-body">
-            <Attachments subjectId={this.props.ticket.id} subjectType='UniversalCrm::Ticket' />
+            <Attachments subjectId={this.props.ticket.id} subjectType='UniversalCrm::Ticket' gs={this.props.gs} />
           </div></div>
           <Comments 
             subject_type='UniversalCrm::Ticket'

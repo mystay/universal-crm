@@ -104,7 +104,8 @@ var Config = React.createClass({
           new_reply_header: ReactDOM.findDOMNode(refs.new_reply_header).value,
           email_footer: ReactDOM.findDOMNode(refs.email_footer).value,
           ticket_flags: ReactDOM.findDOMNode(refs.ticket_flags).value,
-          url: ReactDOM.findDOMNode(refs.url).value
+          url: ReactDOM.findDOMNode(refs.url).value,
+          google_api_key: ReactDOM.findDOMNode(refs.google_api_key).value
         }
       },
       success: (function(_this){

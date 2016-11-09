@@ -17,7 +17,11 @@ UniversalCrm::Engine.routes.draw do
   
   resource :config, controller: :config
   
-  resources :attachments
+  resources :attachments do
+    member do
+      get :shorten_url
+    end
+  end
   resources :customers do
     collection do
       get :autocomplete

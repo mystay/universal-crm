@@ -62,6 +62,7 @@ var Attachments = React.createClass({
     if (this.state.attachments.length==0 && (this.props.new==undefined || this.props.new==true)){
       //return(<div className="alert alert-info alert-sm">There are no attachments to list</div>);
     }else if (this.state.attachments.length>0){
+      var shortenUrlButton = this.shortenUrlButton
       this.state.attachments.forEach(function(attachment){
         if (attachment.name){
           var filename = attachment.name;
@@ -69,7 +70,10 @@ var Attachments = React.createClass({
           var filename = attachment.file;
         }
         attachments.push(
-          <li key={attachment.id}><a href={attachment.url} target="_blank">{filename}</a></li>
+          <li key={attachment.id}>
+            <a href={attachment.url} target="_blank">{filename}</a>
+            {shortenUrlButton(attachment.id)}
+          </li>
         )
       });
       return(
@@ -105,5 +109,28 @@ var Attachments = React.createClass({
         <button className="btn btn-primary btn-sm" onClick={this.toggleNew}><i className="fa fa-upload" /> New attachment</button>
       )
     }
+  },
+  shortenUrlButton: function(id){
+    if (this.props.gs.config.google_api_key){
+      return(
+        <span>    
+          &nbsp;
+          <i className="fa fa-download" onClick={this.shortenUrl} data-id={id} />
+        </span>
+      );
+    }
+  },
+  shortenUrl: function(e){
+    console.log('here')
+    var _this=this;
+    var id = $(e.target).attr('data-id');
+    $.ajax({
+      type: 'GET',
+      url: `/crm/attachments/${id}/shorten_url?subject_id=${this.props.subjectId}&subject_type=${this.props.subjectType}`,
+      data: {google_api_key: this.props.gs.config.google_api_key},
+      success: function(data){
+        console.log(data);
+      }
+    })
   }
 });

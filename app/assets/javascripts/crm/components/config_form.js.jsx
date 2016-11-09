@@ -57,6 +57,10 @@ var ConfigForm = React.createClass({
           <textarea className="form-control small" defaultValue={this.parseFlags(this.props.config.ticket_flags)} id="ticket_flags" ref="ticket_flags" style={{height: '100px'}}></textarea>
         </div>
         <div className="form-group">
+          <label htmlFor="google_api_key">Google API Key (optional)</label>
+          <input type="text" className="form-control" defaultValue={this.props.config.google_api_key} id="google_api_key" ref="google_api_key" />
+        </div>
+        <div className="form-group">
           <label htmlFor="token">Token</label>
           <input type="text" className="form-control" defaultValue={this.props.config.token} id="token" disabled="disabled"/>
         </div>

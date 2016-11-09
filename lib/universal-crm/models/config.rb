@@ -21,6 +21,7 @@ module UniversalCrm
         field :nth, as: :new_ticket_header
         field :nrh, as: :new_reply_header
         field :ef, as: :email_footer
+        field :gak, as: :google_api_key
         
         def to_json
           {
@@ -36,7 +37,8 @@ module UniversalCrm
             token: self.token,
             new_ticket_header: self.new_ticket_header,
             new_reply_header: self.new_reply_header,
-            email_footer: self.email_footer
+            email_footer: self.email_footer,
+            google_api_key: self.google_api_key
           }
         end
         
