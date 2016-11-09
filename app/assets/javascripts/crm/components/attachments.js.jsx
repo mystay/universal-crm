@@ -60,7 +60,7 @@ var Attachments = React.createClass({
   list: function(){
     var attachments = [];
     if (this.state.attachments.length==0 && (this.props.new==undefined || this.props.new==true)){
-      return(<div className="alert alert-info alert-sm">There are no attachments to list</div>);
+      //return(<div className="alert alert-info alert-sm">There are no attachments to list</div>);
     }else if (this.state.attachments.length>0){
       this.state.attachments.forEach(function(attachment){
         if (attachment.name){
@@ -102,7 +102,7 @@ var Attachments = React.createClass({
   newAttachment: function(){
     if(!this.state.newAttachment && (this.props.new==undefined || this.props.new==true)){
       return(
-        <button className="btn btn-primary btn-sm" onClick={this.toggleNew}><i className="fa fa-plus" /> New</button>
+        <button className="btn btn-primary btn-sm" onClick={this.toggleNew}><i className="fa fa-upload" /> New attachment</button>
       )
     }
   }

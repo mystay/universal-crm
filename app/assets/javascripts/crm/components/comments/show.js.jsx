@@ -19,7 +19,6 @@ var Comment = React.createClass({
               <div className="pull-right small">{this.props.comment.when_formatted}</div>
               {this.arrow()}
               {this.content()}
-              {this.props.comment.kind}
             </div>
           </div>
           <div className={this.column(2)}>

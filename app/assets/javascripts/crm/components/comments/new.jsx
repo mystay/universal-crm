@@ -3,6 +3,7 @@ var NewComment = React.createClass({
     return({
       loading: false,
       content: '',
+      allowEmail: false,
       allowEmail: false
     })
   },

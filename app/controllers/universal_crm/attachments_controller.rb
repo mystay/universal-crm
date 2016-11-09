@@ -20,9 +20,7 @@ module UniversalCrm
         params[:files].each do |file|
           attachments.push(@subject.attachments.create file: file)
         end
-        render json: {customer: @subject, attachments: attachments}
-      else
-        render json: {customer: nil}  
+        render json: {attachments: @subject.attachments.map{|a| a.to_json}}
       end
     end
    
