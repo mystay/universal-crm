@@ -35,7 +35,7 @@ module UniversalCrm
           logger.warn "#### Inbound CRM mail received from #{params['From']}"
           logger.info params
           #find the email address we're sending to
-          to = params['ToFull'][0]['Email'].downcase if !params['ToFull'].blank?
+          to = params['ToFull'][0]['Email'].downcase if !params['ToFull'].blank? and !params['ToFull']['Email'].blank? and params['ToFull']['Email'].include?('@')
           cc = params['CcFull'][0]['Email'].downcase if !params['CcFull'].blank?
           bcc = params['BccFull'][0]['Email'].downcase if !params['BccFull'].blank?
           from = params['From'].downcase
