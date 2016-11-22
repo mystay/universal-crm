@@ -35,10 +35,15 @@ module UniversalCrm
           logger.warn "#### Inbound CRM mail received from #{params['From']}"
           logger.info params
           #find the email address we're sending to
-          to = params['ToFull'][0]['Email'].downcase if !params['ToFull'].blank? and !params['ToFull']['Email'].blank? and params['ToFull']['Email'].include?('@')
-          cc = params['CcFull'][0]['Email'].downcase if !params['CcFull'].blank?
-          bcc = params['BccFull'][0]['Email'].downcase if !params['BccFull'].blank?
+          to = params['ToFull'][0]['Email'].downcase if !params['ToFull'].blank? and !params['ToFull'][0].blank? and !params['ToFull'][0]['Email'].blank? and params['ToFull'][0]['Email'].include?('@')
+          cc = params['CcFull'][0]['Email'].downcase if !params['CcFull'].blank? and !params['CcFull'][0].blank? and !params['CcFull'][0]['Email'].blank? and params['CcFull'][0]['Email'].include?('@')
+          bcc = params['BccFull'][0]['Email'].downcase if !params['BccFull'].blank? and !params['BccFull'][0].blank? and !params['BccFull'][0]['Email'].blank? and params['BccFull'][0]['Email'].include?('@')
           from = params['From'].downcase
+          if to.blank? and !cc.blank?
+            to = cc
+          elsif to.blank? and !bcc.blank?
+            to = bcc
+          end
 
           #parse the email, and create a ticket where necessary:
           if !to.blank? and !from.blank?
