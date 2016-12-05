@@ -46,7 +46,14 @@ var ExpandedTicket = React.createClass({
   ticketDocument: function(){
     if (this.props.ticket.document_name){
       return(
-        <h4 className="text-info">REF: <strong>{this.props.ticket.document_name}</strong></h4>
+        <h4 className="text-info">REF: <strong>{this.props.ticket.document_name}</strong>{this.ticketSecondaryScope()}</h4>
+      );
+    }
+  },
+  ticketSecondaryScope: function(){
+    if (this.props.ticket.secondary_scope_name){
+      return(
+        <span> ({this.props.ticket.secondary_scope_name})</span>
       );
     }
   },

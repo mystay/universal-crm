@@ -34,14 +34,24 @@ var TicketListItem = React.createClass({
   customerName: function(){
     if (this.props._goCustomer){
       return(
-        <TicketCustomerName
-          _goCustomer={this.props._goCustomer}
-          name={this.props.ticket.subject_name}
-          id={this.props.ticket.subject_id}
-        />
+        <div>
+          <TicketCustomerName
+            _goCustomer={this.props._goCustomer}
+            name={this.props.ticket.subject_name}
+            id={this.props.ticket.subject_id}
+          />
+          {this.ticketSecondaryScope()}
+        </div>
       );
     }else{
       return(<div>&nbsp;</div>);
+    }
+  },
+  ticketSecondaryScope: function(){
+    if (this.props.ticket.secondary_scope_name){
+      return(
+        <span> ({this.props.ticket.secondary_scope_name})</span>
+      );
     }
   },
   selectTicketId: function(ticketId){

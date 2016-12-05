@@ -2,6 +2,11 @@
   = simple_format @config.new_ticket_header
   %p= '------------------------------------------------------'
 %h3 Ticket: ##{@ticket.numbered_title}
+- if !@ticket.document_name.blank?
+  - if !@ticket.referring_url.blank?
+    %h4 For: #{link_to @ticket.document_name, @ticket.referring_url}
+  - else
+    %h4 For: #{@ticket.document_name}
 = simple_format auto_link(@ticket.content)
 - if !@config.email_footer.blank?
   %p= '------------------------------------------------------'

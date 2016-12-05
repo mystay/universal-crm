@@ -70,14 +70,18 @@ module UniversalCrm
         if !params[:document_id].blank? and !params[:document_type].blank?
           document = params[:document_type].classify.constantize.find params[:document_id]
         end
-        ticket = subject.tickets.create kind: kind,
+        ticket = subject.tickets.new kind: kind,
                                         title: params[:title],
                                         content: params[:content],
                                         scope: universal_scope,
                                         referring_url: params[:url],
                                         document: document
+                                        
+        if !document.nil? and !UniversalCrm::Configuration.secondary_scope_class.blank?
+          ticket.secondary_scope = document.crm_secondary_scope
+        end
                      
-        if ticket.valid?
+        if ticket.save
           if !params[:flag].blank?
             params[:flag].strip.gsub(' ','').split(',').each do |flag|
               ticket.flag!(params[:flag], universal_user)

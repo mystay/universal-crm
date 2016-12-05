@@ -34,6 +34,10 @@ module UniversalCrm
 
         belongs_to :document, polymorphic: true #the related document that this ticket should link to.
         belongs_to :responsible, class_name: Universal::Configuration.class_name_user, foreign_key: :responsible_id
+        
+        if !UniversalCrm::Configuration.secondary_scope_class.blank?
+          belongs_to :secondary_scope, polymorphic: true
+        end
 
         default_scope ->(){order_by(status: :asc, updated_at: :desc)}
         
@@ -77,6 +81,21 @@ module UniversalCrm
           !self.from_email.blank?
         end
         
+        def document_name
+          (self.document.nil? ? nil : self.document.crm_name)
+        end
+        
+        def secondary_scope_name
+          puts 'UniversalCrm::Configuration.secondary_scope_class'
+          puts UniversalCrm::Configuration.secondary_scope_class
+          puts self.secondary_scope_id
+          puts self.secondary_scope_type
+          puts self.secondary_scope
+          if !UniversalCrm::Configuration.secondary_scope_class.blank? and !self.secondary_scope_id.blank? and !self.secondary_scope.nil?
+            return self.secondary_scope.name
+          end
+        end
+        
         def to_json
           {
             id: self.id.to_s,
@@ -87,9 +106,10 @@ module UniversalCrm
             subject_name: self.subject.name,
             subject_id: self.subject_id.to_s,
             subject_email: (self.subject.nil? ? nil : self.subject.email),
-            document_name: (self.document.nil? ? nil : self.document.crm_name),
+            document_name: self.document_name,
             document_type: self.document_type,
             document_id: self.document_id.to_s,
+            secondary_scope_name: self.secondary_scope_name,
             title: self.title,
             content: self.content,
             html_body: self.html_body,
