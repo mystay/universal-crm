@@ -87,7 +87,7 @@ module UniversalCrm
         
         def secondary_scope_name
           if !UniversalCrm::Configuration.secondary_scope_class.blank? and !self.secondary_scope_id.blank? and !self.secondary_scope.nil?
-            return self.secondary_scope.name
+            return self.secondary_scope.crm_name
           end
         end
         
