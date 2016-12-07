@@ -17,7 +17,7 @@ module UniversalCrm
         def crm_secondary_scope
           #find the document that we want to secondarily scope this ticket to:
           if !UniversalCrm::Configuration.secondary_scope_class.blank?
-            klass = UniversalCrm::Configuration.secondary_scope_class.classify.constantize.to_s.demodulize.downcase
+            klass = UniversalCrm::Configuration.secondary_scope_class.classify.constantize
             foreign_key = "#{klass.to_s.demodulize.downcase}_id"
             return klass.find_by(id: self[foreign_key])
           end
