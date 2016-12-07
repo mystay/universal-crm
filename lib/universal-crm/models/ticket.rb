@@ -86,11 +86,6 @@ module UniversalCrm
         end
         
         def secondary_scope_name
-          puts 'UniversalCrm::Configuration.secondary_scope_class'
-          puts UniversalCrm::Configuration.secondary_scope_class
-          puts self.secondary_scope_id
-          puts self.secondary_scope_type
-          puts self.secondary_scope
           if !UniversalCrm::Configuration.secondary_scope_class.blank? and !self.secondary_scope_id.blank? and !self.secondary_scope.nil?
             return self.secondary_scope.name
           end
