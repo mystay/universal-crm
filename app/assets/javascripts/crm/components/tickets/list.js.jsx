@@ -1,3 +1,5 @@
+/*global React*/
+/*global $*/
 var TicketList = React.createClass({
   getInitialState: function(){
     return({
@@ -11,7 +13,7 @@ var TicketList = React.createClass({
       pagination: null,
       pageNum: null,
       pastProps: null
-    })
+    });
   },
   init: function(){
     this.setState({status: this.props.status, flag: this.props.flag, subjectId: this.props.subjectId, subjectType: this.props.subjectType});
@@ -46,7 +48,7 @@ var TicketList = React.createClass({
   },
   render: function(){
     if (this.state.tickets && this.state.tickets.length>0){
-      var t = []
+      var t = [];
       for (var i=0;i<this.state.tickets.length;i++){
         t.push(
           <li key={i} className="list-group-item">
@@ -58,11 +60,11 @@ var TicketList = React.createClass({
               gs={this.props.gs} sgs={this.props.sgs}
               />
           </li>
-        )
+        );
       }
-      ticketCountTitle = null
+      var ticketCountTitle = null;
       if (this.ticketCount()){
-        ticketCountTitle = this.ticketCountTitle()
+        ticketCountTitle = this.ticketCountTitle();
       }
       return(
         <div className="panel panel-default">
@@ -81,7 +83,7 @@ var TicketList = React.createClass({
               />
           </div>
         </div>
-      )
+      );
     }else{
       return(null);
     }
@@ -95,13 +97,13 @@ var TicketList = React.createClass({
   },
   ticketCountTitle: function(){
     if (this.ticketCount()){
-      h = `${this.ticketCount()} ticket`;
+      var h = `${this.ticketCount()} ticket`;
       if (this.ticketCount() != 1){h += `s`}
       return h;
     }
   },
   pageResults: function(page){
-    this.loadTickets(this.state.status, this.state.flag, page)
+    this.loadTickets(this.state.status, this.state.flag, page);
     this.setState({currentPage: page});
   }
 })
