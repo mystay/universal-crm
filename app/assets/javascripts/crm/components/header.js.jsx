@@ -19,7 +19,7 @@ var Header = React.createClass({
             </button>
           </li>
           <li className="hidden-xs hidden-sm">
-            <CustomerSearch gs={this.props.gs} sgs={this.props.sgs} _goCustomerList={this.props._goCustomerList} />
+            <SearchInput gs={this.props.gs} sgs={this.props.sgs} _goSearch={this.props._goSearch} />
           </li>
         </ul>
         <ul className="nav navbar-nav navbar-right">

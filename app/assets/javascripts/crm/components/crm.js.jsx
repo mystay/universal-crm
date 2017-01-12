@@ -39,7 +39,7 @@ var CRM = React.createClass({
           username={this.props.username}
           loadCustomers={this.loadCustomers}
           handleSearch={this.handleSearch}
-          _goCustomerList={this._goCustomerList}
+          _goSearch={this._goSearch}
           />
         <Aside
           gs={this.state.gs} sgs={this.setGlobalState}
@@ -82,6 +82,7 @@ var CRM = React.createClass({
     this.setGlobalState('ticketStatus', status);
     this.setGlobalState('ticketFlag', flag);
     this.setGlobalState('pageTitle', title);
+    this.setGlobalState('searchWord', '');
     this.setState({mainComponent: <TicketList _goTicket={this._goTicket} gs={this.state.gs} sgs={this.setGlobalState} status={status} flag={flag} _goCustomer={this._goCustomer} />});
     if (status!=undefined){
       var title = `${status.charAt(0).toUpperCase() + status.slice(1)}`;
@@ -101,5 +102,14 @@ var CRM = React.createClass({
   },
   _goCustomerList: function(searchWord){
     this.setState({mainComponent: <CustomerList _goCustomer={this._goCustomer} gs={this.state.gs} sgs={this.setGlobalState} />});
+  },
+  _goSearch: function(searchWord){
+    var h = (
+      <div>
+        <CustomerList _goCustomer={this._goCustomer} gs={this.state.gs} sgs={this.setGlobalState} />
+        <TicketList _goTicket={this._goTicket} gs={this.state.gs} sgs={this.setGlobalState} />
+      </div>
+    );
+    this.setState({mainComponent: h});
   },
 });

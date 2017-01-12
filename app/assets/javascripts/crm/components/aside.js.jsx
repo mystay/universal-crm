@@ -4,7 +4,7 @@ var Aside = React.createClass({
     this.props._goTicketList('email');
   },
   loadTickets: function(e){
-    this.props._goTicketList($(e.target).attr('data-status'), null);
+    this.props._goTicketList($(e.target).attr('data-status'), null, null);
   },
   loadFlaggedTickets: function(e){
     this.props._goTicketList(null, $(e.target).attr('data-flag'));

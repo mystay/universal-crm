@@ -17,7 +17,7 @@ var TicketList = React.createClass({
   },
   init: function(){
     this.setState({status: this.props.status, flag: this.props.flag, subjectId: this.props.subjectId, subjectType: this.props.subjectType});
-    this.loadTickets(this.props.status, this.props.flag);    
+    this.loadTickets(this.props.status, this.props.flag, this.props.gs.searchWord);
   },
   componentDidMount: function(){
     this.init();
@@ -27,7 +27,7 @@ var TicketList = React.createClass({
       this.init();
     }
   },
-  loadTickets: function(status, flag, page){
+  loadTickets: function(status, flag, keyword, page){
     if (!this.state.loading){
       this.setState({loading: true, pastProps: this.props});
       scrollTo('body');
@@ -35,7 +35,7 @@ var TicketList = React.createClass({
       var _this = this;
       $.ajax({
         method: 'GET',
-        url: `/crm/tickets?status=${this.props.gs.ticketStatus}&subject_id=${this.props.subjectId}&subject_type=${this.props.subjectType}&flag=${this.props.gs.ticketFlag}&page=${page}`,
+        url: `/crm/tickets?q=${keyword}&status=${this.props.gs.ticketStatus}&subject_id=${this.props.subjectId}&subject_type=${this.props.subjectType}&flag=${this.props.gs.ticketFlag}&page=${page}`,
         success: function(data){
           _this.setState({
             loading: false,
