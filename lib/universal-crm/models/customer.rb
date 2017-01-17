@@ -33,7 +33,7 @@ module UniversalCrm
         
         search_in :n, :e
         
-        default_scope ->(){order_by(created_at: :desc)}
+        # default_scope ->(){order_by(created_at: :desc)}
         
         def inbound_email_address(config)
           "cr-#{self.token}@#{config.inbound_domain}"

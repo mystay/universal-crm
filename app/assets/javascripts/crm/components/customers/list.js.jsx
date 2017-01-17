@@ -3,9 +3,10 @@ var CustomerList = React.createClass({
     return({
       customers: null,
       loading: false,
-      customerPagination: null,
-      customerPage: null,
-      pastProps: null
+      pagination: null,
+      pageNum: null,
+      pastProps: null,
+      searchWord: null
     });
   },
   init: function(){
@@ -24,27 +25,23 @@ var CustomerList = React.createClass({
   },  
   loadCustomers: function(searchWord, page){
     if (!this.state.loading){
-      this.setState({loading: true, pastProps: this.props});
+      this.setState({loading: true, pastProps: this.props, searchWord: searchWord});
       if (page==undefined){page=1;}
-      if(searchWord==''){
-        this.setState({customers: []});
-        this.hideCustomerList();
-      }else{
-        var _this=this;
-        return $.ajax({
-          method: 'GET',
-          url: `/crm/customers?q=${searchWord}&page=${page}`,
-          success: function(data){
-            _this.setState({
-              loading: false,
-              customers: data.customers,
-              customerPagination: data.pagination,
-              customerPage: page
-            });
-            _this.props.sgs('searching', false);
-          }
-        });
-      }
+      if (searchWord==undefined){searchWord='';}
+      var _this=this;
+      return $.ajax({
+        method: 'GET',
+        url: `/crm/customers?q=${searchWord}&page=${page}`,
+        success: function(data){
+          _this.setState({
+            loading: false,
+            customers: data.customers,
+            pagination: data.pagination,
+            pageNum: page
+          });
+          _this.props.sgs('searching', false);
+        }
+      });
     }
   },
   hideCustomerList: function(){
@@ -61,22 +58,17 @@ var CustomerList = React.createClass({
         badgeCount = <span></span>
       }
       rows.push(
-        <div className="col-sm-3" key={customer.id}>
-          <div className="panel" style={{maxHeight: '70px'}}>
-            <div className="panel-body">
-              <div className="pull-right">{badgeCount}</div>
-              <div className="pull-left"><i className="fa fa-user fa-fw fa-2x text-muted" /></div>
-              <h4 id={customer.id} onClick={this.clickCustomer} style={{cursor: 'pointer'}}>{customer.name}</h4>
-              <p className="text-info" style={{overflow: 'hidden', width:'80%', fontSize: '0.7em'}}>{customer.email}</p>
-            </div>
-          </div>
-        </div>
+        <tr key={customer.id}>
+          <td><a id={customer.id} onClick={this.clickCustomer} style={{cursor: 'pointer'}}>{customer.name}</a></td>
+          <td>{customer.email}</td>
+          <td>{badgeCount}</td>
+        </tr>
       );
     }
     return rows;
   },
   pageResults: function(page){
-    this.props.loadCustomers(page)
+    this.loadCustomers(this.state.searchWord, page)
     this.setState({currentPage: page})
   },
   render: function(){
@@ -85,17 +77,25 @@ var CustomerList = React.createClass({
         <div className="panel panel-warning">
           <div className="panel-heading">
             <h3 className="panel-title">Customers</h3>
-            <div className="actions pull-right">
-              <i className="fa fa-times" onClick={this.props.hideCustomerList}/>
-            </div>
           </div>
           <div className="panel-body">
-            <div className="row">{this.customerList()}</div>
+            <table className="table table-striped table-condensed">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Email</th>
+                  <th>Open Tickets</th>
+                </tr>
+              </thead>
+              <tbody>
+                {this.customerList()}
+              </tbody>
+            </table>
             <Pagination
-              pagination={this.props.pagination}
-              currentPage={this.props.currentPage}
+              pagination={this.state.pagination}
+              currentPage={this.state.pageNum}
               pageResults={this.pageResults}
-              displayDescription={false} />
+              displayDescription={true} />
           </div>
         </div>
       )

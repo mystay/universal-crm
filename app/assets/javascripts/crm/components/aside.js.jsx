@@ -1,3 +1,6 @@
+/*global React*/
+/*global ReactDOM*/
+/*global $*/
 var Aside = React.createClass({
   
   home: function(){
@@ -55,12 +58,32 @@ var Aside = React.createClass({
                 New
               </a>
             </li>
+            <li>
+              <a style={{cursor: 'pointer'}} onClick={this.props._goCustomerList}>
+                <i className="fa fa-list fa-fw" />
+                List
+              </a>
+            </li>
           </ul>
-          <RecentCompanies _goCompany={this.props._goCompany} gs={this.props.gs} sgs={this.props.sgs} />
+          <h5 className="sidebar-header">Companies</h5>
+          <ul className="nav nav-pills nav-stacked">
+            <li>
+              <a style={{cursor: 'pointer'}} onClick={this.displayNewCompany}>
+                <i className="fa fa-plus fa-fw" />
+                New
+              </a>
+            </li>
+            <li>
+              <a style={{cursor: 'pointer'}} onClick={this.props._goCompanyList}>
+                <i className="fa fa-list fa-fw" />
+                List
+              </a>
+            </li>
+          </ul>
         </nav>
         <Modal ref='new_customer_modal' modalTitle="New Customer" modalContent={<NewCustomer />} />
       </aside>
-    )
+    );
   },
   displayNewCustomer: function(){
     var modal = ReactDOM.findDOMNode(this.refs.new_customer_modal);
@@ -70,16 +93,16 @@ var Aside = React.createClass({
   },
   flagLinks: function(){
     if (this.props.gs && this.props.gs.config){
-      h = []
+      var h = [];
       for (var i=0;i<this.props.gs.config.ticket_flags.length;i++){
-        flag = this.props.gs.config.ticket_flags[i];
+        var flag = this.props.gs.config.ticket_flags[i];
         h.push(
           <li key={flag['label']}>
             <a onClick={this.loadFlaggedTickets} data-flag={flag['label']} style={{cursor: 'pointer'}}>
               <i className="fa fa-fw fa-tag" style={{color: `#${flag['color']}`}}/> {flag['label']}
             </a>
           </li>
-        )
+        );
       }
       return(h);
     }

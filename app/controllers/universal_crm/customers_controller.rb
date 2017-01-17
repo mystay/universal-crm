@@ -6,7 +6,7 @@ module UniversalCrm
     
     def index
       params[:page] = 1 if params[:page].blank?
-      @customers = UniversalCrm::Customer.all
+      @customers = UniversalCrm::Customer.order_by(name: :asc)
       @customers = @customers.scoped_to(universal_scope) if !universal_scope.nil?
       if !params[:q].blank?
         @customers = @customers.full_text_search(params[:q], match: :all)
