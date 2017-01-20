@@ -20,6 +20,7 @@ var CustomerList = React.createClass({
     }
   },
   clickCustomer: function(e){
+    this.props.sgs('searchWord', '');
     this.props._goCustomer(e.target.id);
   },  
   loadCustomers: function(searchWord, page){
