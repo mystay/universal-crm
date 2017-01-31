@@ -1,3 +1,7 @@
+/*
+  global $
+  global React
+*/
 var CRM = React.createClass({
   getInitialState: function(){
     return {
@@ -84,10 +88,11 @@ var CRM = React.createClass({
     this.setGlobalState('pageTitle', title);
     this.setGlobalState('searchWord', '');
     this.setState({mainComponent: <TicketList _goTicket={this._goTicket} gs={this.state.gs} sgs={this.setGlobalState} status={status} flag={flag} _goCustomer={this._goCustomer} />});
+    var title = null;
     if (status!=undefined){
-      var title = `${status.charAt(0).toUpperCase() + status.slice(1)}`;
+      title = `${status.charAt(0).toUpperCase() + status.slice(1)}`;
     }else if (flag!=undefined){
-      var title = `${flag}`;
+      title = `${flag}`;
     }
 //     this.handlePageHistory(title, `/crm`);
   },

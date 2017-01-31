@@ -1,7 +1,11 @@
+/*
+  global React
+  global $
+*/
 var CustomerShow = React.createClass({
   render: function(){
     if (this.props.customer.id && this.props.customer){
-      newTicket = null
+      var newTicket = null;
       if (this.props.customer.status=='active'){
         newTicket = <NewTicket key="new_ticket"
               subjectId={this.props.customer.id}
@@ -11,7 +15,7 @@ var CustomerShow = React.createClass({
               gs={this.props.gs}
               sgs={this.props.sgs}
               _goTicket={this.props._goTicket}
-              />
+              />;
       }
       return(
         <div className="row">
@@ -31,7 +35,6 @@ var CustomerShow = React.createClass({
               </div>
             </div>
             {newTicket}
-
           </div>
           <div className="col-sm-6">
             <div className="panel panel-default">
@@ -69,14 +72,27 @@ var CustomerShow = React.createClass({
             </div>
           </div>
           <div className="col-sm-12">
-            <TicketList
-              _goTicket={this.props._goTicket}
-              _goCustomer={this.props._goCustomer}
-              subjectId={this.props.customer.id}
-              subjectType='UniversalCrm::Customer'
-              gs={this.props.gs}
-              sgs={this.props.sgs}
-              />
+            <div className="tab-wrapper tab-primary">
+              <ul className="nav nav-tabs">
+                <li className="active"><a data-toggle="tab" href="#tab-tickets">Tickets</a></li>
+                <li><a data-toggle="tab" href="#tab-ticket-attachments">Attachments</a></li>
+              </ul>
+              <div className="tab-content">
+                <div className="tab-pane active" id="tab-tickets">
+                  <TicketList
+                    _goTicket={this.props._goTicket}
+                    _goCustomer={this.props._goCustomer}
+                    subjectId={this.props.customer.id}
+                    subjectType='UniversalCrm::Customer'
+                    gs={this.props.gs}
+                    sgs={this.props.sgs}
+                    />
+                </div>
+                <div className="tab-pane" id="tab-ticket-attachments">
+                  <Attachments parentId={this.props.customer.id} parentType='UniversalCrm::Customer' subjectType='UniversalCrm::Ticket'/>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       );
@@ -93,7 +109,7 @@ var CustomerShow = React.createClass({
           setCustomerId={this.props.setCustomerId}
           setCustomer={this.props.setCustomer}
           />
-      )
+      );
     }else{
       return(
         <div className="row">
@@ -111,7 +127,7 @@ var CustomerShow = React.createClass({
             <Tags subjectType="UniversalCrm::Customer" subjectId={this.props.customer.id} tags={this.props.customer.tags} />
           </div>
         </div>
-      )
+      );
     }
   }
 });

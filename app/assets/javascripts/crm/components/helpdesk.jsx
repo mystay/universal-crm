@@ -56,9 +56,9 @@ var Helpdesk = React.createClass({
   },
   helpDesk: function(){
     if (this.state.ticket){
-      return this.helpDeskTicket()
+      return this.helpDeskTicket();
     }else{
-      return this.helpDeskForm()
+      return this.helpDeskForm();
     }
   },
   helpDeskTicket: function(){
