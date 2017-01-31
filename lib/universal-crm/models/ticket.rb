@@ -47,6 +47,10 @@ module UniversalCrm
           "#{config.url}/ticket/#{self.id}"
         end
         
+        def name
+          self.numbered_title  
+        end
+        
         def numbered_title
           [self.number, self.title].join(' - ')
         end

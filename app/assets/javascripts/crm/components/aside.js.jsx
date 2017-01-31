@@ -82,11 +82,18 @@ var Aside = React.createClass({
           </ul>
         </nav>
         <Modal ref='new_customer_modal' modalTitle="New Customer" modalContent={<NewCustomer />} />
+        <Modal ref='new_company_modal' modalTitle="New Company" modalContent={<NewCompany />} />
       </aside>
     );
   },
   displayNewCustomer: function(){
     var modal = ReactDOM.findDOMNode(this.refs.new_customer_modal);
+    if (modal){
+      $(modal).modal('show', {backdrop: 'static'});
+    }
+  },
+  displayNewCompany: function(){
+    var modal = ReactDOM.findDOMNode(this.refs.new_company_modal);
     if (modal){
       $(modal).modal('show', {backdrop: 'static'});
     }

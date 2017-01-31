@@ -23,9 +23,11 @@ var ExpandedTicket = React.createClass({
           {this.ticketDocument()}
           {this.referringUrl()}
           {this.ticketNotes()}
-          <div className="panel"><div className="panel-body">
-            <Attachments subjectId={this.props.ticket.id} subjectType='UniversalCrm::Ticket' gs={this.props.gs} />
-          </div></div>
+          <div className="panel">
+            <div className="panel-body">
+              <Attachments subjectId={this.props.ticket.id} subjectType='UniversalCrm::Ticket' gs={this.props.gs} />
+            </div>
+          </div>
           <Comments 
             subject_type='UniversalCrm::Ticket'
             subject_id={this.props.ticket.id}
@@ -34,7 +36,7 @@ var ExpandedTicket = React.createClass({
             openComments={this.ticketOpen()}
             newCommentPlaceholder={this.newCommentPlaceholder()}
             fullWidth={false}
-            allowEmail={this.props.ticket.kind == 'email'}
+            allowEmail={this.props.ticket.subject_email!=undefined}
             />
           {this.emailWarning()}
         </div>

@@ -87,7 +87,7 @@ var TicketShowContainer = React.createClass({
         <div className="panel panel-info">
           <div className="panel-heading">
             <h3 className="panel-title">
-              <div className="pull-right text-muted">{this.state.ticket.from_email}</div>
+              <div className="pull-right text-muted">{this.state.ticket.from_email || this.state.ticket.subject_email}</div>
               {this.fromTo()} <TicketCustomerName 
                 name={this.state.ticket.subject_name}
                 id={this.state.ticket.subject_id}

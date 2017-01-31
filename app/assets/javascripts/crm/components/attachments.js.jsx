@@ -1,11 +1,15 @@
+/*
+  global $, React
+*/
 var Attachments = React.createClass({
   getInitialState: function(){
     return({
       subjectId: null,
+      parentId: null,
       attachments: [],
       newAttachment: false,
       loading: false
-    })
+    });
   },
   init: function(){
     var input_id = `#file_input_${this.props.customerId}`;
@@ -33,13 +37,13 @@ var Attachments = React.createClass({
     this.init();
   },
   componentDidUpdate: function(){
-    if (this.props.subjectId != null && this.props.subjectId != this.state.subjectId && !this.state.loading){
+    if ((this.props.subjectId != null && this.props.subjectId != this.state.subjectId && !this.state.loading) || (this.props.parentId != null && this.props.parentId != this.state.parentId && !this.state.loading)){
       this.loadAttachments();
       this.init();
     }
   },
   url: function(){
-    return `/crm/attachments?subject_id=${this.props.subjectId}&subject_type=${this.props.subjectType}`
+    return `/crm/attachments?subject_id=${this.props.subjectId}&subject_type=${this.props.subjectType}&parent_id=${this.props.parentId}&parent_type=${this.props.parentType}`;
   },
   render: function(){
     return(
@@ -62,23 +66,25 @@ var Attachments = React.createClass({
     if (this.state.attachments.length==0 && (this.props.new==undefined || this.props.new==true)){
       //return(<div className="alert alert-info alert-sm">There are no attachments to list</div>);
     }else if (this.state.attachments.length>0){
-      var shortenUrlButton = this.shortenUrlButton
+      var shortenUrlButton = this.shortenUrlButton;
+      var filename=null;
       this.state.attachments.forEach(function(attachment){
         if (attachment.name){
-          var filename = attachment.name;
+          filename = attachment.name;
         }else{
-          var filename = attachment.file;
+          filename = attachment.file;
         }
         attachments.push(
-          <li key={attachment.id}>
-            <a href={attachment.url} target="_blank">{filename}</a>
+          <li key={attachment.id} style={{display: 'block'}}>
+            <h5><i className="fa fa-paperclip" /> <a href={attachment.url} target="_blank">{filename}</a></h5>
+            <p className="small">{attachment.subject_name} ({attachment.created_formatted})</p>
             {shortenUrlButton(attachment.id, attachment.url, attachment.shortened_url)}
           </li>
-        )
+        );
       });
       return(
         <div className="well well-sm">
-          <ol style={{marginBottom: 0}}>{attachments}</ol>
+          <ul style={{marginBottom: 0}} className="list-unstyled">{attachments}</ul>
         </div>
       );
     }
@@ -88,13 +94,13 @@ var Attachments = React.createClass({
       this.setState({loading: true});
       $.ajax({
         method: 'GET',
-        url: `/crm/attachments?subject_id=${this.props.subjectId}&subject_type=${this.props.subjectType}`,
+        url: `/crm/attachments?subject_id=${this.props.subjectId}&subject_type=${this.props.subjectType}&parent_id=${this.props.parentId}&parent_type=${this.props.parentType}`,
         success: (function(_this){
           return function(data){
             if (data){
-              _this.setState({subjectId: _this.props.subjectId, attachments: data.attachments, loading: false});
+              _this.setState({subjectId: _this.props.subjectId, parentId: _this.props.parentId, attachments: data.attachments, loading: false});
             }
-          }
+          };
         })(this)
       });
     }
@@ -111,7 +117,7 @@ var Attachments = React.createClass({
     }
   },
   shortenUrlButton: function(id, url, shortUrl){
-    if (this.props.gs.config.google_api_key){
+    if (this.props.gs && this.props.gs.config.google_api_key && this.props.subjectId){
       return(
         <ShortenUrl url={url} attachmentId={id} subjectId={this.props.subjectId} subjectType={this.props.subjectType} shortUrl={shortUrl} gs={this.props.gs} />
       );

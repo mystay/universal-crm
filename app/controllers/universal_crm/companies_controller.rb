@@ -60,5 +60,22 @@ module UniversalCrm
       end
     end
     
+    def create
+      #make sure we don't have an existing customer
+      @company = UniversalCrm::Company.find_or_create_by(scope: universal_scope, email: params[:email].strip)
+      if !@company.nil?
+        @company.update(name: params[:name].strip)
+        #Check if we need to link this to a User model
+        render json: {name: @company.name, email: @company.email}
+      else
+        render json: {}
+      end
+    end
+    
+    def update
+      @company.update(params.require(:company).permit(:name, :email, :phone_home, :phone_work, :phone_mobile))
+      render json: {company: @company.to_json(universal_crm_config)}
+    end
+    
   end
 end
