@@ -65,21 +65,7 @@ var Aside = React.createClass({
               </a>
             </li>
           </ul>
-          <h5 className="sidebar-header">Companies</h5>
-          <ul className="nav nav-pills nav-stacked">
-            <li>
-              <a style={{cursor: 'pointer'}} onClick={this.displayNewCompany}>
-                <i className="fa fa-plus fa-fw" />
-                New
-              </a>
-            </li>
-            <li>
-              <a style={{cursor: 'pointer'}} onClick={this.props._goCompanyList}>
-                <i className="fa fa-list fa-fw" />
-                List
-              </a>
-            </li>
-          </ul>
+          {this.companiesMenu()}
         </nav>
         <Modal ref='new_customer_modal' modalTitle="New Customer" modalContent={<NewCustomer />} />
         <Modal ref='new_company_modal' modalTitle="New Company" modalContent={<NewCompany />} />
@@ -96,6 +82,28 @@ var Aside = React.createClass({
     var modal = ReactDOM.findDOMNode(this.refs.new_company_modal);
     if (modal){
       $(modal).modal('show', {backdrop: 'static'});
+    }
+  },
+  companiesMenu: function(){
+    if (this.props.gs && this.props.gs.config && this.props.gs.config.companies){
+      return(<div>
+          <h5 className="sidebar-header">Companies</h5>
+          <ul className="nav nav-pills nav-stacked">
+            <li>
+              <a style={{cursor: 'pointer'}} onClick={this.displayNewCompany}>
+                <i className="fa fa-plus fa-fw" />
+                New
+              </a>
+            </li>
+            <li>
+              <a style={{cursor: 'pointer'}} onClick={this.props._goCompanyList}>
+                <i className="fa fa-list fa-fw" />
+                List
+              </a>
+            </li>
+          </ul>
+          </div>
+          );
     }
   },
   flagLinks: function(){

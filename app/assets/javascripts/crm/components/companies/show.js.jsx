@@ -81,6 +81,7 @@ var CompanyShow = React.createClass({
                   <ul className="nav nav-tabs">
                     <li className="active"><a data-toggle="tab" href="#tab-notes">Notes</a></li>
                     <li><a data-toggle="tab" href="#tab-attachments">Attachments</a></li>
+                    <li><a data-toggle="tab" href="#tab-employees">Employees</a></li>
                   </ul>
                   <div className="tab-content">
                     <div className="tab-pane active" id="tab-notes">
@@ -96,6 +97,9 @@ var CompanyShow = React.createClass({
                     </div>
                     <div className="tab-pane" id="tab-attachments">
                       <Attachments subjectId={this.props.company.id} subjectType='UniversalCrm::Company' />
+                    </div>
+                    <div className="tab-pane" id="tab-employees">
+                      <Employees company={this.props.company} gs={this.props.gs} />
                     </div>
                   </div>
                 </div>

@@ -28,7 +28,7 @@ var CRM = React.createClass({
     if (_this.props.customerId){
       window.setTimeout(function(){_this._goCustomer(_this.props.customerId);}, 1000);
     }else if (_this.props.companyId){
-      window.setTimeout(function(){_this._goCustomer(_this.props.companyId);}, 1000);
+      window.setTimeout(function(){_this._goCompany(_this.props.companyId);}, 1000);
     }else if (_this.props.ticketId){
       window.setTimeout(function(){_this._goTicket(_this.props.ticketId);}, 1000);
     }else{

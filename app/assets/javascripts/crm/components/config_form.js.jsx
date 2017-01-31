@@ -61,6 +61,12 @@ var ConfigForm = React.createClass({
           <input type="text" className="form-control" defaultValue={this.props.config.google_api_key} id="google_api_key" ref="google_api_key" />
         </div>
         <div className="form-group">
+          <label htmlFor="companies">Companies</label>
+          <p>
+            <input type="checkbox" defaultChecked={this.props.config.companies} id="companies" ref="companies" /> Use Companies within the CRM
+          </p>
+        </div>
+        <div className="form-group">
           <label htmlFor="token">Token</label>
           <input type="text" className="form-control" defaultValue={this.props.config.token} id="token" disabled="disabled"/>
         </div>
