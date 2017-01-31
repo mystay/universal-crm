@@ -1,3 +1,6 @@
+/*
+  global $, React
+*/
 var Attachments = React.createClass({
   getInitialState: function(){
     return({
@@ -5,7 +8,7 @@ var Attachments = React.createClass({
       attachments: [],
       newAttachment: false,
       loading: false
-    })
+    });
   },
   init: function(){
     var input_id = `#file_input_${this.props.customerId}`;
@@ -39,7 +42,7 @@ var Attachments = React.createClass({
     }
   },
   url: function(){
-    return `/crm/attachments?subject_id=${this.props.subjectId}&subject_type=${this.props.subjectType}`
+    return `/crm/attachments?subject_id=${this.props.subjectId}&subject_type=${this.props.subjectType}`;
   },
   render: function(){
     return(
@@ -70,7 +73,7 @@ var Attachments = React.createClass({
           var filename = attachment.file;
         }
         attachments.push(
-          <li key={attachment.id}>
+          <li key={attachment.id} style={{display: 'block'}}>
             <a href={attachment.url} target="_blank">{filename}</a>
             {shortenUrlButton(attachment.id, attachment.url, attachment.shortened_url)}
           </li>
@@ -111,7 +114,8 @@ var Attachments = React.createClass({
     }
   },
   shortenUrlButton: function(id, url, shortUrl){
-    if (this.props.gs.config.google_api_key){
+    console.log(this.props.gs)
+    if (this.props.gs && this.props.gs.config.google_api_key){
       return(
         <ShortenUrl url={url} attachmentId={id} subjectId={this.props.subjectId} subjectType={this.props.subjectType} shortUrl={shortUrl} gs={this.props.gs} />
       );
