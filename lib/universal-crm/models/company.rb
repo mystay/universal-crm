@@ -17,6 +17,7 @@ module UniversalCrm
         include Universal::Concerns::Employer
         include Universal::Concerns::Tokened
         include Universal::Concerns::HasAttachments
+        include Universal::Concerns::Addressed
         
         store_in session: UniversalCrm::Configuration.mongoid_session_name, collection: 'crm_companies'
 
@@ -48,7 +49,8 @@ module UniversalCrm
             inbound_email_address: self.inbound_email_address(config),
             closed_ticket_count: self.tickets.unscoped.closed.count,
             employee_ids: self.employee_ids,
-            employees: self.employees_json
+            employees: self.employees_json,
+            address: self.address
             }
         end
         

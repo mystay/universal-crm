@@ -1,57 +1,23 @@
-var CompanyShowContainer = React.createClass({
-  getInitialState: function(){
-    return({
-      companyId: null,
-      company: null,
-      loading: false
-    });
-  },
-  componentDidMount: function(){
-    this.loadCompany(this.props.companyId);
-  },
-  componentDidUpdate: function(){
-    if (this.props.companyId != null && this.props.companyId != this.state.companyId && !this.state.loading){
-      this.loadCompany(this.props.companyId);
-    }else if (this.props.companyId==null && this.state.companyId!=null){
-      this.setState({company: null})
-    }
-  },
-  loadCompany: function(id){
-    var _this=this;
-    if (id!=undefined&& id != ''&&!this.state.loading){
-      this.setState({loading: true});
-      $.ajax({
-        method: 'GET',
-        url: `/crm/companies/${id}.json`,
-        success: function(data){
-          if (data.company){
-            _this.setState({companyId: data.company.id, company: data.company, loading: false});
-            _this.props.handlePageHistory(`${data.company.name}`, `/crm/company/${id}`);
-          }
-        }
-      });
-    }
-  },
-  render: function(){
-    if (this.state.company){
-      return(<CompanyShow
-               company={this.state.company}
-               _goTicket={this.props._goTicket}
-               gs={this.props.gs}
-               sgs={this.props.sgs}
-               loadTickets={this.props.loadTickets}
-               />);
-    }else{
-      return(null);
-    }
-  }
-});
-  
+/*
+  global React
+  global $
+*/
 var CompanyShow = React.createClass({
-  
   render: function(){
-    return(
-      <div>
+    if (this.props.company.id && this.props.company){
+      var newTicket = null;
+      if (this.props.company.status=='active'){
+        newTicket = <NewTicket key="new_ticket"
+              subjectId={this.props.company.id}
+              subjectType='UniversalCrm::Company'
+              subject={this.props.company}
+              loadTickets={this.props.loadTickets}
+              gs={this.props.gs}
+              sgs={this.props.sgs}
+              _goTicket={this.props._goTicket}
+              />;
+      }
+      return(
         <div className="row">
           <div className="col-sm-6">
             <div className="panel panel-info">
@@ -59,29 +25,28 @@ var CompanyShow = React.createClass({
                 <h3 className="panel-title">{this.props.company.name}</h3>
               </div>
               <div className="panel-body">
-                Email: {this.props.company.email}
+                {this.renderViewEdit()}
+              </div>
+              <div className="panel-footer text-right">
+                <button className="btn btn-warning btn-sm m-0" onClick={this.props.handleEdit}>
+                  <i className="fa fa-pencil" />
+                  {this.props.edit ? ' Cancel' : ' Edit'}
+                </button>
               </div>
             </div>
-            <NewTicket key="new_ticket"
-              subjectId={this.props.company.id}
-              subjectType='UniversalCrm::Company'
-              subject={this.props.company}
-              loadTickets={this.props.loadTickets}
-              gs={this.props.gs}
-              _goTicket={this.props._goTicket}
-              />
+            {newTicket}
           </div>
           <div className="col-sm-6">
             <div className="panel panel-default">
               <div className="panel-heading">
-                <h3 className="panel-title">Company data</h3>
+                <h3 className="panel-title">company data</h3>
               </div>
               <div className="panel-body">
                 <div className="tab-wrapper tab-primary">
                   <ul className="nav nav-tabs">
                     <li className="active"><a data-toggle="tab" href="#tab-notes">Notes</a></li>
                     <li><a data-toggle="tab" href="#tab-attachments">Attachments</a></li>
-                    <li><a data-toggle="tab" href="#tab-employees">Employees</a></li>
+                    <li><a data-toggle="tab" href="#tab-settings">Settings</a></li>
                   </ul>
                   <div className="tab-content">
                     <div className="tab-pane active" id="tab-notes">
@@ -98,26 +63,67 @@ var CompanyShow = React.createClass({
                     <div className="tab-pane" id="tab-attachments">
                       <Attachments subjectId={this.props.company.id} subjectType='UniversalCrm::Company' />
                     </div>
-                    <div className="tab-pane" id="tab-employees">
-                      <Employees company={this.props.company} gs={this.props.gs} />
+                    <div className="tab-pane" id="tab-settings">
+                      <CompanySettings company={this.props.company} gs={this.props.gs} />
                     </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-        <div className="row">
           <div className="col-sm-12">
-            <TicketList
-              _goTicket={this.props._goTicket}
-              gs={this.props.gs}
-              sgs={this.props.sgs}
-              subjectId={this.props.company.id}
-              subjectType='UniversalCrm::Company' />
+            <div className="tab-wrapper tab-primary">
+              <ul className="nav nav-tabs">
+                <li className="active"><a data-toggle="tab" href="#tab-tickets">Tickets</a></li>
+                <li><a data-toggle="tab" href="#tab-ticket-attachments">Attachments</a></li>
+              </ul>
+              <div className="tab-content">
+                <div className="tab-pane active" id="tab-tickets">
+                  <TicketList
+                    _goTicket={this.props._goTicket}
+                    _gocompany={this.props._gocompany}
+                    subjectId={this.props.company.id}
+                    subjectType='UniversalCrm::Company'
+                    gs={this.props.gs}
+                    sgs={this.props.sgs}
+                    />
+                </div>
+                <div className="tab-pane" id="tab-ticket-attachments">
+                  <Attachments parentId={this.props.company.id} parentType='UniversalCrm::Company' subjectType='UniversalCrm::Ticket'/>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
-    );
+      );
+    }else{
+      return(null);
+    }
+  },
+  renderViewEdit: function(){
+    if (this.props.edit){
+      return(
+        <CompanyEdit
+          company={this.props.company}
+          handleEdit={this.props.handleEdit}
+          setcompanyId={this.props.setcompanyId}
+          setcompany={this.props.setcompany}
+          />
+      );
+    }else{
+      return(
+        <div className="row">
+          <div className="col-sm-8">
+            <dl className="dl-horizontal">
+              <dt>Email:</dt>
+              <dd className="small">{this.props.company.email}</dd>
+              <dt>Address:</dt>
+              <dd className="small">{this.props.company.address.formatted}</dd>
+            </dl>
+            <Tags subjectType="UniversalCrm::Company" subjectId={this.props.company.id} tags={this.props.company.tags} />
+          </div>
+        </div>
+      );
+    }
   }
 });

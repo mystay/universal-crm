@@ -1,3 +1,8 @@
+/*
+  global React
+  global ReactDOM
+  global $
+*/
 var CustomerEdit = React.createClass({
   handleSubmit: function(e){
     e.preventDefault();
@@ -11,7 +16,7 @@ var CustomerEdit = React.createClass({
       success: (function(_this){
         return function(data){
           _this.props.setCustomer(data.customer);
-        }
+        };
       })(this)
     });
   },
