@@ -100,6 +100,9 @@ var CustomerShow = React.createClass({
       return(null);
     }
   },
+  mailto: function(){
+    return `mailto:${this.props.customer.email}?bcc=${this.props.gs.config.inbound_email_addresses[0]}`
+  },
   renderViewEdit: function(){
     if (this.props.edit){
       return(
@@ -116,7 +119,7 @@ var CustomerShow = React.createClass({
           <div className="col-sm-8">
             <dl className="dl-horizontal">
               <dt> Email:</dt>
-              <dd className="small">{this.props.customer.email}</dd>
+              <dd className="small" style={{whiteSpace: 'nowrap'}}><a href={this.mailto()}>{this.props.customer.email} <i className="fa fa-external-link" /></a></dd>
               <dt>Phone (Home):</dt>
               <dd className="small">{this.props.customer.phone_home}</dd>
               <dt>Phone (Work):</dt>
