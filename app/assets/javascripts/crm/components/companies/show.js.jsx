@@ -110,8 +110,8 @@ var CompanyShow = React.createClass({
         <CompanyEdit
           company={this.props.company}
           handleEdit={this.props.handleEdit}
-          setcompanyId={this.props.setcompanyId}
-          setcompany={this.props.setcompany}
+          setCompanyId={this.props.setCompanyId}
+          setCompany={this.props.setCompany}
           />
       );
     }else{

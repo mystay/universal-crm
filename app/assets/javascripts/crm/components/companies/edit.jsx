@@ -39,7 +39,7 @@ var CompanyEdit = React.createClass({
       },
       success: (function(_this){
         return function(data){
-          _this.props.setcompany(data.company);
+          _this.props.setCompany(data.company);
         };
       })(this)
     });
