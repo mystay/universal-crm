@@ -25,7 +25,7 @@ module UniversalCrm
                                                 address_city: self.address_city,
                                                 address_state: self.address_state,
                                                 address_post_code: self.address_post_code,
-                                                country: self.country
+                                                country: (self.country.nil? ? Universal::Country.find_by(code: self.country_code) : self.country)
           return company
         end
         

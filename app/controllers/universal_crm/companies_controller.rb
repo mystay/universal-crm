@@ -74,7 +74,7 @@ module UniversalCrm
     end
     
     def update
-      @company.update(params.require(:company).permit(:name, :email, :address_line_1, :address_line_2, :address_city, :address_state, :address_post_code))
+      @company.update(params.require(:company).permit(:name, :email, :address_line_1, :address_line_2, :address_city, :address_state, :address_post_code, :country_id))
       render json: {company: @company.to_json(universal_crm_config)}
     end
     

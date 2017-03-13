@@ -92,7 +92,8 @@ var TicketShowContainer = React.createClass({
                 name={this.state.ticket.subject_name}
                 id={this.state.ticket.subject_id}
                 _goCustomer={this.props._goCustomer}
-              /> - <span className="text-muted">{this.state.ticket.created_at}</span>
+              /> <span className="text-muted">
+                  <small>({this.state.ticket.subject_email})</small> - {this.state.ticket.created_at}</span>
             </h3>
           </div>
           <div className="panel-body">
