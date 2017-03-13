@@ -52,6 +52,7 @@ var CustomerShowContainer = React.createClass({
           setCustomer={this.setCustomer}
           _goTicket={this.props._goTicket}
           _goCustomer={this.props._goCustomer}
+          _goCompany={this.props._goCompany}
           gs={this.props.gs} sgs={this.props.sgs}
         />
       );

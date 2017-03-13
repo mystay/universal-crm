@@ -126,11 +126,30 @@ var CustomerShow = React.createClass({
               <dd className="small">{this.props.customer.phone_work}</dd>
               <dt>Phone (Mobile):</dt>
               <dd className="small">{this.props.customer.phone_mobile}</dd>
+              {this.companies()}
             </dl>
             <Tags subjectType="UniversalCrm::Customer" subjectId={this.props.customer.id} tags={this.props.customer.tags} />
           </div>
         </div>
       );
     }
+  },
+  companies: function(){
+    if (this.props.gs && this.props.gs.config && this.props.gs.config.companies){
+      var rows = [];
+      var goCompany = this.clickCompany
+      this.props.customer.companies.forEach(function(company){
+        rows.push(<div key={company.id}>
+          <a id={company.id} onClick={goCompany} style={{cursor: 'pointer'}}>{company.name}</a>
+        </div>);
+      });
+      return (<div>
+        <dt>Companies:</dt>
+        <dd>{rows}</dd>
+      </div>);
+    }
+  },
+  clickCompany: function(e){
+    this.props._goCompany(e.target.id);
   }
 });

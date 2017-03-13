@@ -13,7 +13,7 @@ var CompanyShowContainer = React.createClass({
     };
   },
   init: function(){
-    this.loadcompany(this.props.companyId);
+    this.loadCompany(this.props.companyId);
   },
   componentDidMount: function(){
     this.init();
@@ -23,7 +23,7 @@ var CompanyShowContainer = React.createClass({
       this.init();
     }
   },
-  loadcompany: function(id){
+  loadCompany: function(id){
     var _this=this;
     if (id!=undefined&& id != ''&&!this.state.loading){
       this.setState({loading: true, pastProps: this.props});
@@ -32,13 +32,13 @@ var CompanyShowContainer = React.createClass({
         url: `/crm/companies/${id}.json`,
         success: function(data){
           if (data.company){
-            _this.setcompany(data.company);
+            _this.setCompany(data.company);
           }
         }
       });
     }
   },
-  setcompany: function(company){
+  setCompany: function(company){
     this.setState({company: company, companyId: company.id, edit: false, loading: false});
     this.props.handlePageHistory(`${company.name}`, `/crm/company/${company.id}`);
   },
@@ -53,9 +53,10 @@ var CompanyShowContainer = React.createClass({
           edit={this.state.edit}
           handleEdit={this.handleEdit}
           loadTickets={this.props.loadTickets}
-          setcompany={this.setcompany}
+          setCompany={this.setCompany}
           _goTicket={this.props._goTicket}
-          _gocompany={this.props._gocompany}
+          _goCompany={this.props._goCompany}
+          _goCustomer={this.props._goCustomer}
           gs={this.props.gs} sgs={this.props.sgs}
         />
       );

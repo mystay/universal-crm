@@ -18,6 +18,7 @@ module UniversalCrm
       if !params[:q].blank?
         @companies = @companies.full_text_search(params[:q], match: :all)
       end
+      @companies = @companies.order_by(name: :asc)
       @companies = @companies.page(params[:page])
       render json: {
         pagination: {
@@ -33,7 +34,8 @@ module UniversalCrm
           token: c.token,
           ticket_count: c.tickets.not_closed.count,
           employee_ids: c.employee_ids.to_s,
-          employees: c.employees_json
+          employees: c.employees_json,
+          address: c.address
           }}
         }
     end

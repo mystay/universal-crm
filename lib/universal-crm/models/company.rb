@@ -30,7 +30,7 @@ module UniversalCrm
         search_in :n, :e
 #         numbered_prefix 'CP'
         
-        default_scope ->(){order_by(created_at: :desc)}
+        # default_scope ->(){order_by(created_at: :desc)}
         
         def inbound_email_address(config)
           "cp-#{self.token}@#{config.inbound_domain}"

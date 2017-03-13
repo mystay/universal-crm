@@ -23,7 +23,7 @@ var CompanyList = React.createClass({
       this.init();
     }
   },
-  clickcompany: function(e){
+  clickCompany: function(e){
     this.props._goCompany(e.target.id);
   },  
   loadCompanies: function(searchWord, page){
@@ -50,11 +50,18 @@ var CompanyList = React.createClass({
   hidecompanyList: function(){
     
   },
+  companyStateCountry: function(address){
+    var items = []
+    if (address.state){items.push(address.state);}
+    if (address.country_code){items.push(address.country_code);}
+    return items.join(', ');
+  },
   companyList: function(){
     var rows = [];
     for (var i=0;i<this.state.companies.length;i++){
       var company = this.state.companies[i];
       var badgeCount;
+      var companyStateCountry = this.companyStateCountry(company.address);
       if (company.ticket_count>0){
         badgeCount = <span className="badge badge-warning" style={{fontSize: '12px', backgroundColor: '#ffab40'}}>{company.ticket_count}</span>;
       }else{
@@ -62,8 +69,10 @@ var CompanyList = React.createClass({
       }
       rows.push(
         <tr key={company.id}>
-          <td><a id={company.id} onClick={this.clickcompany} style={{cursor: 'pointer'}}>{company.name}</a></td>
+          <td><a id={company.id} onClick={this.clickCompany} style={{cursor: 'pointer'}}>{company.name}</a></td>
           <td>{company.email}</td>
+          <td>{companyStateCountry}</td>
+          <td>{company.employees.length}</td>
           <td>{badgeCount}</td>
         </tr>
       );
@@ -90,6 +99,8 @@ var CompanyList = React.createClass({
                 <tr>
                   <th>Name</th>
                   <th>Email</th>
+                  <th>State, Country</th>
+                  <th>Employees</th>
                   <th>Open Tickets</th>
                 </tr>
               </thead>

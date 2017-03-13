@@ -8,14 +8,14 @@ var CompanyShow = React.createClass({
       var newTicket = null;
       if (this.props.company.status=='active'){
         newTicket = <NewTicket key="new_ticket"
-              subjectId={this.props.company.id}
-              subjectType='UniversalCrm::Company'
-              subject={this.props.company}
-              loadTickets={this.props.loadTickets}
-              gs={this.props.gs}
-              sgs={this.props.sgs}
-              _goTicket={this.props._goTicket}
-              />;
+            subjectId={this.props.company.id}
+            subjectType='UniversalCrm::Company'
+            subject={this.props.company}
+            loadTickets={this.props.loadTickets}
+            gs={this.props.gs}
+            sgs={this.props.sgs}
+            _goTicket={this.props._goTicket}
+            />;
       }
       return(
         <div className="row">
@@ -45,6 +45,7 @@ var CompanyShow = React.createClass({
                 <div className="tab-wrapper tab-primary">
                   <ul className="nav nav-tabs">
                     <li className="active"><a data-toggle="tab" href="#tab-notes">Notes</a></li>
+                    <li><a data-toggle="tab" href="#tab-employees">Employees{this.employeeCount()}</a></li>
                     <li><a data-toggle="tab" href="#tab-attachments">Attachments</a></li>
                     <li><a data-toggle="tab" href="#tab-settings">Settings</a></li>
                   </ul>
@@ -59,6 +60,9 @@ var CompanyShow = React.createClass({
                         fullWidth={true}
                         allowEmail={false}
                         />
+                    </div>
+                    <div className="tab-pane" id="tab-employees">
+                      <Employees subjectId={this.props.company.id} subjectType='UniversalCrm::Company' employees={this.props.company.employees} sgs={this.props.sgs} _goCustomer={this.props._goCustomer} />
                     </div>
                     <div className="tab-pane" id="tab-attachments">
                       <Attachments subjectId={this.props.company.id} subjectType='UniversalCrm::Company' />
@@ -124,6 +128,11 @@ var CompanyShow = React.createClass({
           </div>
         </div>
       );
+    }
+  },
+  employeeCount: function(){
+    if (this.props.company.employees.length>0){
+      return(<span className="text-muted"> ({this.props.company.employees.length})</span>);
     }
   }
 });
