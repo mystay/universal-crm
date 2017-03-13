@@ -76,9 +76,9 @@ var TicketShowContainer = React.createClass({
   },
   fromTo: function(){
     if (this.state.ticket.incoming){
-      return 'From:'
+      return 'For:'
     }else{
-      return 'To:'
+      return 'For:'
     }
   },
   render: function(){
