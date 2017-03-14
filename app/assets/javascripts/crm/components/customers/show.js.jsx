@@ -116,7 +116,8 @@ var CustomerShow = React.createClass({
     }else{
       return(
         <div className="row">
-          <div className="col-sm-8">
+          <div className="col-sm-12">
+            {this.draftAlert()}
             <dl className="dl-horizontal">
               <dt> Email:</dt>
               <dd className="small" style={{whiteSpace: 'nowrap'}}><a href={this.mailto()}>{this.props.customer.email} <i className="fa fa-external-link" /></a></dd>
@@ -134,10 +135,15 @@ var CustomerShow = React.createClass({
       );
     }
   },
+  draftAlert: function(){
+    if (this.props.customer.status == 'draft'){
+      return(<div className="alert alert-danger alert-sm text-center"><i className="fa fa-exclamation-triangle" /> Draft Customer</div>);
+    }
+  },
   companies: function(){
-    if (this.props.gs && this.props.gs.config && this.props.gs.config.companies){
+    if (this.props.gs && this.props.gs.config && this.props.gs.config.companies && this.props.customer.companies.length>0){
       var rows = [];
-      var goCompany = this.clickCompany
+      var goCompany = this.clickCompany;
       this.props.customer.companies.forEach(function(company){
         rows.push(<div key={company.id}>
           <a id={company.id} onClick={goCompany} style={{cursor: 'pointer'}}>{company.name}</a>

@@ -56,10 +56,7 @@ var NewTicket = React.createClass({
             {emailCheckbox}
             {submitButton}
             <p className="small text-muted">
-              Or, send an email to:
-              <a href={`mailto:${this.props.subject.inbound_email_address}`} target="_blank">
-                {this.props.subject.inbound_email_address}
-              </a>
+              Or, forward an email to: <a href={`mailto:${this.props.subject.inbound_email_address}`}>{this.props.subject.inbound_email_address}</a>
             </p>
           </div>
         </div>

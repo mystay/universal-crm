@@ -25,7 +25,7 @@ var SearchInput = React.createClass({
   render: function(){
     return (
       <form onSubmit={this.handleSearch}>
-        <input type="text" placeholder='Search...' className="search" onChange={this.handleSearchWord} ref="search_input" />
+        <input type="text" placeholder='Quick Search...' className="search" onChange={this.handleSearchWord} ref="search_input" />
         <button type="submit" className="btn btn-sm btn-search"><i className={this.icon()}></i></button>
       </form>
     )

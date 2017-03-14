@@ -33,7 +33,7 @@ module UniversalCrm
         #we don't have universal scope here, so need to establish it from the to address or sender
         def inbound
           logger.warn "#### Inbound CRM mail received from #{params['From']}"
-          logger.info params
+          # logger.info params
           if request.post? and !params['From'].blank? and !params['ToFull'].blank?
             #find the email address we're sending to
             to = params['ToFull'][0]['Email'].downcase if !params['ToFull'].blank? and !params['ToFull'][0].blank? and !params['ToFull'][0]['Email'].blank? and params['ToFull'][0]['Email'].include?('@')
@@ -46,12 +46,15 @@ module UniversalCrm
               to = bcc
             end
             
+            from_name = params['FromName']
+            forwarded_from = nil
             #Need to establish if this was a forwarded message, and find who it was originally from
             forwarded_match_regexp = /.*(from\:)+.*(\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b).*/i
             s = params['TextBody']
             forwarded_message = s.match(forwarded_match_regexp)
             if !forwarded_message.nil?
-              to = forwarded_message[2].downcase
+              forwarded_from = forwarded_message[2].downcase.strip
+              from_name = forwarded_from
             end
   
             #parse the email, and create a ticket where necessary:
@@ -61,9 +64,9 @@ module UniversalCrm
               #find the senders first, there could be multiple across different scope, if the user config is scoped
               if !Universal::Configuration.class_name_user.blank?
                 if Universal::Configuration.user_scoped
-                  senders = Universal::Configuration.class_name_user.classify.constantize.where(email: /^#{from}$/i)
+                  senders = Universal::Configuration.class_name_user.classify.constantize.where(email: /^#{forwarded_from||from}$/i)
                 else #user is not scoped - easy
-                  sender = Universal::Configuration.class_name_user.classify.constantize.find_by(email: /^#{from}$/i)
+                  sender = Universal::Configuration.class_name_user.classify.constantize.find_by(email: /^#{forwarded_from||from}$/i)
                 end
               end
   
@@ -81,10 +84,10 @@ module UniversalCrm
                 if !sender.nil?
                   customer = UniversalCrm::Customer.find_by(subject: sender)
                 end
-                customer ||= UniversalCrm::Customer.find_by(scope: config.scope, email: /^#{from}$/i)
-                customer ||= UniversalCrm::Customer.create(scope: config.scope, email: from)
-                if customer.active?
-                  customer.update(name: params['FromName']) if customer.name.blank?
+                customer ||= UniversalCrm::Customer.find_by(scope: config.scope, email: /^#{forwarded_from||from}$/i)
+                customer ||= UniversalCrm::Customer.create(scope: config.scope, email: (forwarded_from||from), status: :draft)
+                if !customer.blocked?
+                  customer.update(name: from_name) if customer.name.blank?
                   ticket = customer.tickets.create  kind: :email,
                                                     title: params['Subject'],
                                                     content: params['TextBody'].hideQuotedLines,

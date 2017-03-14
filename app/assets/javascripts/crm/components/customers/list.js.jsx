@@ -52,17 +52,22 @@ var CustomerList = React.createClass({
     var rows = []
     for (var i=0;i<this.state.customers.length;i++){
       var customer = this.state.customers[i];
-      var badgeCount;
+      var badgeCount, draftBadge;
       if (customer.ticket_count>0){
         badgeCount = <span className="badge badge-warning" style={{fontSize: '12px', backgroundColor: '#ffab40'}}>{customer.ticket_count}</span>
       }else{
-        badgeCount = <span></span>
+        badgeCount=null;
+      }
+      if (customer.status=='draft'){
+        draftBadge = <span className="badge badge-danger" style={{marginRight: '10px'}}>Draft</span>
+      }else{
+        draftBadge = null;
       }
       rows.push(
         <tr key={customer.id}>
-          <td><a id={customer.id} onClick={this.clickCustomer} style={{cursor: 'pointer'}}>{customer.name}</a></td>
+          <td>{draftBadge}<a id={customer.id} onClick={this.clickCustomer} style={{cursor: 'pointer'}}>{customer.name}</a></td>
           <td>{customer.email}</td>
-          <td>{badgeCount}</td>
+          <td className="text-center">{badgeCount}</td>
         </tr>
       );
     }

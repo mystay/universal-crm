@@ -24,7 +24,8 @@ module UniversalCrm
           name: c.name, 
           email: c.email, 
           token: c.token,
-          ticket_count: c.tickets.not_closed.count
+          ticket_count: c.tickets.not_closed.count,
+          status: c.status
           }}
         }
     end

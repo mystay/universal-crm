@@ -61,7 +61,8 @@ module UniversalCrm
               id: e.id.to_s,
               name: e.name,
               email: e.email,
-              type: e.class.to_s
+              type: e.class.to_s,
+              open_ticket_count: e.tickets.active.count
               })
           end
           return a

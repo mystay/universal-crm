@@ -72,7 +72,7 @@ var CompanyList = React.createClass({
           <td><a id={company.id} onClick={this.clickCompany} style={{cursor: 'pointer'}}>{company.name}</a></td>
           <td>{company.email}</td>
           <td>{companyStateCountry}</td>
-          <td>{company.employees.length}</td>
+          <td className="text-center">{company.employees.length}</td>
           <td>{badgeCount}</td>
         </tr>
       );

@@ -39,6 +39,7 @@ var TicketListItem = React.createClass({
             _goCustomer={this.props._goCustomer}
             name={this.props.ticket.subject_name}
             id={this.props.ticket.subject_id}
+            status={this.props.ticket.subject_status}
           />
           {this.ticketSecondaryScope()}
         </div>

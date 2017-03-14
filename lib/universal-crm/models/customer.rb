@@ -29,7 +29,7 @@ module UniversalCrm
         has_many :tickets, as: :subject, class_name: 'UniversalCrm::Ticket'
         employed_by [{companies: 'UniversalCrm::Company'}]
 
-        statuses %w(active blocked), default: :active
+        statuses %w(active draft blocked), default: :active
         
         search_in :n, :e
         
