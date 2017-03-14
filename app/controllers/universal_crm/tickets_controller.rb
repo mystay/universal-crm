@@ -15,7 +15,14 @@ module UniversalCrm
         @tickets = @tickets.where('$and' => conditions)
       else
         if !params[:subject_id].blank? and params[:subject_id].to_s!='undefined' and !params[:subject_type].blank? and params[:subject_type].to_s!='undefined'
-            @tickets = @tickets.where(subject_id: params[:subject_id], subject_type: params[:subject_type])
+          conditions = [{'$and' => [{subject_id: params[:subject_id], subject_type: params[:subject_type]}]}]
+          if params[:subject_type]=='UniversalCrm::Company'
+            company = UniversalCrm::Company.find(params[:subject_id])
+            company.employees.each do |employee|
+              conditions.push({'$and' => [{subject_id: employee.id.to_s, subject_type: 'UniversalCrm::Customer'}]})
+            end
+          end
+          @tickets = @tickets.where('$or' => conditions)
         elsif !params[:flag].blank? and params[:flag]!='null' and params[:flag]!='undefined'
           @tickets = @tickets.flagged_with(params[:flag])        
         elsif params[:status] == 'email'
@@ -83,7 +90,8 @@ module UniversalCrm
                                         content: params[:content],
                                         scope: universal_scope,
                                         referring_url: params[:url],
-                                        document: document
+                                        document: document,
+                                        creator: universal_user
                                         
         if !document.nil? and !UniversalCrm::Configuration.secondary_scope_class.blank?
           ticket.secondary_scope = document.crm_secondary_scope

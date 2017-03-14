@@ -2,10 +2,11 @@ var TicketCustomerName = React.createClass({
   render: function(){
     if (this.props.name){
       return (
-        <div>
-          <div onClick={this.setCustomerId} style={{textDecoration: 'underline', cursor: 'pointer', display: 'inline'}}>
+        <div style={{display: 'inline-block'}}>
+          {this.creator()}
+          <span onClick={this.setCustomerId} style={{textDecoration: 'underline', cursor: 'pointer'}}>
             {this.props.name}
-          </div> {this.draft()}
+          </span> {this.draft()}
         </div>
       )
     }else{
@@ -13,13 +14,20 @@ var TicketCustomerName = React.createClass({
     }
   },
   setCustomerId: function(){
-    if (this.props._goCustomer){
+    if (this.props.subject_type == 'UniversalCrm::Customer' && this.props._goCustomer){
       this.props._goCustomer(this.props.id);
+    }else if (this.props.subject_type == 'UniversalCrm::Company' && this.props._goCompany){
+      this.props._goCompany(this.props.id);
     }
   },
   draft: function(){
     if (this.props.status=='draft'){
       return(<span className="text-muted">(Draft)</span>);
+    }
+  },
+  creator: function(){
+    if (this.props.creator_name){
+      return(<span className="text-info">{this.props.creator_name} &raquo; </span>);
     }
   },
 });

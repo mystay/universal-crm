@@ -85,7 +85,8 @@ var CompanyShow = React.createClass({
                 <div className="tab-pane active" id="tab-tickets">
                   <TicketList
                     _goTicket={this.props._goTicket}
-                    _gocompany={this.props._gocompany}
+                    _goCompany={this.props._goCompany}
+                    _goCustomer={this.props._goCustomer}
                     subjectId={this.props.company.id}
                     subjectType='UniversalCrm::Company'
                     gs={this.props.gs}
@@ -120,7 +121,7 @@ var CompanyShow = React.createClass({
           <div className="col-sm-8">
             <dl className="dl-horizontal">
               <dt>Email:</dt>
-              <dd className="small">{this.props.company.email}</dd>
+              <dd className="small" style={{whiteSpace: 'nowrap'}}><a href={this.mailto()}>{this.props.company.email} <i className="fa fa-external-link" /></a></dd>
               <dt>Address:</dt>
               <dd className="small">{this.props.company.address.formatted}</dd>
             </dl>
@@ -134,5 +135,8 @@ var CompanyShow = React.createClass({
     if (this.props.company.employees.length>0){
       return(<span className="text-muted"> ({this.props.company.employees.length})</span>);
     }
-  }
+  },
+  mailto: function(){
+    return `mailto:${this.props.company.email}?bcc=${this.props.gs.config.inbound_email_addresses[0]}`;
+  },
 });

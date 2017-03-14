@@ -6,6 +6,8 @@ module UniversalCrm
       included do
         has_many :crm_customers, as: :subject, class_name: 'UniversalCrm::Customer'
 
+        before_update :update_crm_customer
+        
         def crm_customer_name #can be overwritten in model
           self.name.to_s.strip.titleize
         end
@@ -22,6 +24,7 @@ module UniversalCrm
             customer.update(subject: self) if !customer.nil?
           end
           customer ||= self.crm_customers.create(scope: scope, name: self.crm_customer_name, email: self.crm_customer_email, kind: kind.to_s)
+          customer.active! if customer.draft?
           crm_company.add_employee!(customer) if !crm_company.nil?
           return customer
         end
@@ -31,6 +34,16 @@ module UniversalCrm
           crm_company.remove_employee!(customer) if !customer.nil?
         end
         
+      end
+      
+      private
+      def update_crm_customer
+        if self.given_names_changed? or self.family_name_changed? or self.email_changed?
+          #find the scope:
+          self.crm_customers.each do |customer|
+            customer.update(name: self.name.strip, email: self.email.strip.downcase)
+          end
+        end
       end
       
     end

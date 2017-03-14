@@ -53,10 +53,10 @@ var TicketShowContainer = React.createClass({
     this.changeTicketStatus('active');
   },    
   changeTicketStatusClosed: function(){
-    this.changeTicketStatus('closed')
+    this.changeTicketStatus('closed');
   },  
   changeTicketStatusActioned: function(){
-    this.changeTicketStatus('actioned')
+    this.changeTicketStatus('actioned');
   },
   changeTicketStatus: function(s, add){
     $.ajax({
@@ -76,9 +76,9 @@ var TicketShowContainer = React.createClass({
   },
   fromTo: function(){
     if (this.state.ticket.incoming){
-      return 'For:'
+      return 'For:';
     }else{
-      return 'For:'
+      return 'For:';
     }
   },
   render: function(){
@@ -90,10 +90,11 @@ var TicketShowContainer = React.createClass({
               <div className="pull-right text-muted">{this.state.ticket.from_email || this.state.ticket.subject_email}</div>
               {this.fromTo()} <TicketCustomerName 
                 name={this.state.ticket.subject_name}
+                status={this.state.ticket.subject_status}
+                subject_type={this.state.ticket.subject_type}
                 id={this.state.ticket.subject_id}
                 _goCustomer={this.props._goCustomer}
-              /> <span className="text-muted">
-                  <small>({this.state.ticket.subject_email})</small> - {this.state.ticket.created_at}</span>
+              /> <span className="text-muted"> {this.subjectEmail()} - {this.state.ticket.created_at}</span>
             </h3>
           </div>
           <div className="panel-body">
@@ -112,9 +113,14 @@ var TicketShowContainer = React.createClass({
               />
           </div>
         </div>
-      )
+      );
     }else{
       return(null);
+    }
+  },
+  subjectEmail: function(){
+    if (this.state.ticket.subject_email){
+      return(<small className="text-muted">({this.state.ticket.subject_email})</small>);
     }
   },
   emailAddressConflict: function(){

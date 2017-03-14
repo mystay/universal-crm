@@ -93,8 +93,7 @@ var CRM = React.createClass({
     this.setGlobalState('ticketStatus', status);
     this.setGlobalState('ticketFlag', flag);
     this.setGlobalState('searchWord', '');
-    this.setState({mainComponent: <TicketList _goTicket={this._goTicket} gs={this.state.gs} sgs={this.setGlobalState} status={status} flag={flag} _goCustomer={this._goCustomer} />});
-
+    this.setState({mainComponent: <TicketList _goTicket={this._goTicket} gs={this.state.gs} sgs={this.setGlobalState} status={status} flag={flag} _goCustomer={this._goCustomer} _goCompany={this._goCompany} />});
   },
   _goTicket: function(ticketId){
     this.setState({mainComponent: <TicketShowContainer ticketId={ticketId} gs={this.state.gs} sgs={this.setGlobalState} handlePageHistory={this.handlePageHistory} _goCustomer={this._goCustomer} />});

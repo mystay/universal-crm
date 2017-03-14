@@ -28,6 +28,8 @@ module UniversalCrm
         has_many :tickets, as: :subject, class_name: 'UniversalCrm::Ticket'
         
         search_in :n, :e
+
+        statuses %w(active draft blocked), default: :active
 #         numbered_prefix 'CP'
         
         # default_scope ->(){order_by(created_at: :desc)}

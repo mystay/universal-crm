@@ -56,6 +56,7 @@ var TicketList = React.createClass({
               ticket={this.state.tickets[i]}
               _goTicket={this.props._goTicket}
               _goCustomer={this.props._goCustomer}
+              _goCompany={this.props._goCompany}
               setCustomerId={this.props.setCustomerId}
               gs={this.props.gs} sgs={this.props.sgs}
               />

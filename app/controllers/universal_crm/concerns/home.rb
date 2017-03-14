@@ -46,15 +46,16 @@ module UniversalCrm
               to = bcc
             end
             
+            creator=nil
             from_name = params['FromName']
             forwarded_from = nil
             #Need to establish if this was a forwarded message, and find who it was originally from
-            forwarded_match_regexp = /.*(from\:)+.*(\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b).*/i
+            forwarded_match_regexp = /from:[\\n|\s]*(\b[\w|&|\s]*\b)?[\\n|\s|\<]*(\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b)\>/i
             s = params['TextBody']
             forwarded_message = s.match(forwarded_match_regexp)
             if !forwarded_message.nil?
-              forwarded_from = forwarded_message[2].downcase.strip
-              from_name = forwarded_from
+              from_name = forwarded_message[1].to_s.strip
+              forwarded_from = forwarded_message[2].to_s.downcase.strip
             end
   
             #parse the email, and create a ticket where necessary:
@@ -63,10 +64,11 @@ module UniversalCrm
               ticket=nil
               #find the senders first, there could be multiple across different scope, if the user config is scoped
               if !Universal::Configuration.class_name_user.blank?
-                if Universal::Configuration.user_scoped
-                  senders = Universal::Configuration.class_name_user.classify.constantize.where(email: /^#{forwarded_from||from}$/i)
+                if Universal::Configuration.user_scoped #not using this yet...
+                  # senders = Universal::Configuration.class_name_user.classify.constantize.where(email: /^#{forwarded_from||from}$/i)
                 else #user is not scoped - easy
                   sender = Universal::Configuration.class_name_user.classify.constantize.find_by(email: /^#{forwarded_from||from}$/i)
+                  creator = Universal::Configuration.class_name_user.classify.constantize.find_by(email: /^#{from}$/i)
                 end
               end
   
@@ -82,24 +84,26 @@ module UniversalCrm
                 logger.warn "Direct to config"
                 #we probably have to create a new customer
                 if !sender.nil?
-                  customer = UniversalCrm::Customer.find_by(subject: sender)
+                  ticket_subject = UniversalCrm::Customer.find_by(subject: sender)
                 end
-                customer ||= UniversalCrm::Customer.find_by(scope: config.scope, email: /^#{forwarded_from||from}$/i)
-                customer ||= UniversalCrm::Customer.create(scope: config.scope, email: (forwarded_from||from), status: :draft)
-                if !customer.blocked?
-                  customer.update(name: from_name) if customer.name.blank?
-                  ticket = customer.tickets.create  kind: :email,
+                ticket_subject ||= UniversalCrm::Customer.find_by(scope: config.scope, email: /^#{forwarded_from||from}$/i)
+                ticket_subject ||= UniversalCrm::Company.find_by(scope: config.scope, email: /^#{forwarded_from||from}$/i) #check if there's a company now
+                ticket_subject ||= UniversalCrm::Customer.create(scope: config.scope, email: (forwarded_from||from), status: :draft)
+                if !ticket_subject.nil? and !ticket_subject.blocked?
+                  ticket_subject.update(name: from_name) if ticket_subject.name.blank?
+                  ticket = ticket_subject.tickets.create  kind: :email,
                                                     title: params['Subject'],
                                                     content: params['TextBody'].hideQuotedLines,
                                                     html_body: params['HtmlBody'].hideQuotedLines,
                                                     scope: config.scope,
                                                     to_email: to,
-                                                    from_email: from
+                                                    from_email: from,
+                                                    creator: creator
   
-                  #Send this ticket to the customer now, so they can reply to it
+                  #Send this ticket to the ticket_subject now, so they can reply to it
                   #If it WASN'T sent to one of our inboud addresses that is:
                   if !config.inbound_email_addresses.include?(to)
-                    UniversalCrm::Mailer.new_ticket(config, customer, ticket, false).deliver_now
+                    UniversalCrm::Mailer.new_ticket(config, ticket_subject, ticket, false).deliver_now
                   end
                 end
               else
@@ -126,14 +130,15 @@ module UniversalCrm
                                             scope: subject.scope,
                                             responsible: sender,
                                             to_email: to,
-                                            from_email: from
+                                            from_email: from,
+                                            creator: creator
                     logger.warn ticket.errors.to_json
                   end
                 elsif to[0,3] == 'tk-'
                   logger.warn "Direct to ticket"
                   ticket = UniversalCrm::Ticket.find_by(token: /^#{token}$/i)
-                  customer = ticket.subject
-                  user = (customer.subject.class.to_s == Universal::Configuration.class_name_user.to_s ? customer.subject : nil),
+                  ticket_subject = ticket.subject
+                  user = (ticket_subject.subject.class.to_s == Universal::Configuration.class_name_user.to_s ? ticket_subject.subject : nil),
                   if !ticket.nil?
                     ticket.open!(user)
                     ticket.update(kind: :email)
@@ -142,7 +147,7 @@ module UniversalCrm
                                             user: user,
                                             kind: :email,
                                             when: Time.now.utc,
-                                            author: (customer.nil? ? 'Unknown' : customer.name),
+                                            author: (ticket_subject.nil? ? 'Unknown' : ticket_subject.name),
                                             incoming: true
                     
                     logger.warn comment.errors.to_json
@@ -157,7 +162,9 @@ module UniversalCrm
                                                     html_body: params['HtmlBody'],
                                                     scope: subject.scope,
                                                     to_email: to,
-                                                    from_email: from
+                                                    from_email: from,
+                                                    creator: creator
+                                                    
                     logger.warn ticket.errors.to_json
                   end
                 end
