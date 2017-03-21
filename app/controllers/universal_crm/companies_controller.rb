@@ -32,6 +32,7 @@ module UniversalCrm
           name: c.name, 
           email: c.email, 
           token: c.token,
+          tags: c.tags,
           ticket_count: c.tickets.not_closed.count,
           employee_ids: c.employee_ids.to_s,
           employees: c.employees_json,

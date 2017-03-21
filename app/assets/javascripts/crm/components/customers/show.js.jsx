@@ -122,17 +122,17 @@ var CustomerShow = React.createClass({
         <div className="row">
           <div className="col-sm-12">
             {this.draftAlert()}
-            <dl className="dl-horizontal no-margin">
+            <dl className="dl-horizontal no-margin small">
               <dt> Position:</dt>
-              <dd className="small">{this.props.customer.position}</dd>
+              <dd>{this.props.customer.position}</dd>
               <dt> Email:</dt>
-              <dd className="small" style={{whiteSpace: 'nowrap'}}>{this.mailto()}</dd>
+              <dd style={{whiteSpace: 'nowrap'}}>{this.mailto()}</dd>
               <dt>Phone (Home):</dt>
-              <dd className="small">{this.props.customer.phone_home}</dd>
+              <dd>{this.props.customer.phone_home}</dd>
               <dt>Phone (Work):</dt>
-              <dd className="small">{this.props.customer.phone_work}</dd>
+              <dd>{this.props.customer.phone_work}</dd>
               <dt>Phone (Mobile):</dt>
-              <dd className="small">{this.props.customer.phone_mobile}</dd>
+              <dd>{this.props.customer.phone_mobile}</dd>
               {this.companies()}
               <dt>Tags:</dt>
               <dd><Tags subjectType="UniversalCrm::Customer" subjectId={this.props.customer.id} tags={this.props.customer.tags} /></dd>

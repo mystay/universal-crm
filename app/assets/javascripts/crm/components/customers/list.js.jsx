@@ -70,7 +70,7 @@ var CustomerList = React.createClass({
       rows.push(
         <tr key={customer.id}>
           <td>{draftBadge}<a data-id={customer.id} onClick={this.clickCustomer} style={{cursor: 'pointer'}}>{customer.name}</a></td>
-          <td><a data-id={customer.id} onClick={this.clickCustomer} style={{cursor: 'pointer'}}>{customer.email}</a></td>
+          <td className="small"><a data-id={customer.id} onClick={this.clickCustomer} style={{cursor: 'pointer'}}>{customer.email}</a></td>
           <td className="text-center">{badgeCount}</td>
         </tr>
       );

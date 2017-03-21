@@ -62,6 +62,7 @@ var CompanyList = React.createClass({
       var company = this.state.companies[i];
       var badgeCount;
       var companyStateCountry = this.companyStateCountry(company.address);
+      var tags = this.tags(company.tags);
       if (company.ticket_count>0){
         badgeCount = <span className="badge badge-warning" style={{fontSize: '12px', backgroundColor: '#ffab40'}}>{company.ticket_count}</span>;
       }else{
@@ -69,10 +70,13 @@ var CompanyList = React.createClass({
       }
       rows.push(
         <tr key={company.id}>
-          <td><a id={company.id} onClick={this.clickCompany} style={{cursor: 'pointer'}}>{company.name}</a></td>
-          <td>{company.email}</td>
-          <td>{companyStateCountry}</td>
-          <td className="text-center">{company.employees.length}</td>
+          <td>
+            {tags}
+            <a id={company.id} onClick={this.clickCompany} style={{cursor: 'pointer'}}>{company.name}</a>
+          </td>
+          <td className="small">{company.email}</td>
+          <td className="small">{companyStateCountry}</td>
+          <td className="small text-center">{company.employees.length}</td>
           <td>{badgeCount}</td>
         </tr>
       );
@@ -116,6 +120,15 @@ var CompanyList = React.createClass({
     }else{
       return(null);
     }
+  },
+  tags: function(tags){
+    var labels = [];
+    for (var i=0;i<tags.length;i++){
+      var tag_label = tags[i];
+      labels.push(<span className="label label-info" key={i} style={{marginRight: '2px'}}>{tag_label}</span>);      
+    }
+    if (labels.length>0){
+      return(<div className="small pull-right">{labels}</div>);
+    }
   }
-  
 });
