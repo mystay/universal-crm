@@ -104,7 +104,7 @@ var TicketList = React.createClass({
     }
   },
   pageResults: function(page){
-    this.loadTickets(this.state.status, this.state.flag, '', page);
+    this.loadTickets(this.state.status, this.state.flag, this.props.gs.searchWord, page);
     this.setState({currentPage: page});
   }
 })

@@ -88,10 +88,7 @@ var CompanyList = React.createClass({
       return(
         <div className="panel panel-warning">
           <div className="panel-heading">
-            <h3 className="panel-title">companies</h3>
-            <div className="actions pull-right">
-              <i className="fa fa-times" onClick={this.props.hidecompanyList}/>
-            </div>
+            <h3 className="panel-title">Companies</h3>
           </div>
           <div className="panel-body">
             <table className="table table-striped table-condensed">

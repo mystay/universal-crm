@@ -26,12 +26,12 @@ var CustomerShow = React.createClass({
               </div>
               <div className="panel-body">
                 {this.renderViewEdit()}
-              </div>
-              <div className="panel-footer text-right">
-                <button className="btn btn-warning btn-sm m-0" onClick={this.props.handleEdit}>
-                  <i className="fa fa-pencil" />
-                  {this.props.edit ? ' Cancel' : ' Edit'}
-                </button>
+                <div className="text-right">
+                  <button className="btn btn-warning btn-xs m-0" onClick={this.props.handleEdit}>
+                    <i className="fa fa-pencil" />
+                    {this.props.edit ? ' Cancel' : ' Edit'}
+                  </button>
+                </div>
               </div>
             </div>
             {newTicket}
@@ -89,7 +89,7 @@ var CustomerShow = React.createClass({
                     />
                 </div>
                 <div className="tab-pane" id="tab-ticket-attachments">
-                  <Attachments parentId={this.props.customer.id} parentType='UniversalCrm::Customer' subjectType='UniversalCrm::Ticket'/>
+                  <Attachments parentId={this.props.customer.id} parentType='UniversalCrm::Customer' subjectType='UniversalCrm::Ticket' new={false} />
                 </div>
               </div>
             </div>
@@ -101,7 +101,11 @@ var CustomerShow = React.createClass({
     }
   },
   mailto: function(){
-    return `mailto:${this.props.customer.email}?bcc=${this.props.gs.config.inbound_email_addresses[0]}`
+    if (this.props.customer.email){
+      return(
+        <a href={`mailto:${this.props.customer.email}?bcc=${this.props.gs.config.inbound_email_addresses[0]}`}>{this.props.customer.email} <i className="fa fa-external-link" /></a>
+        );
+    }
   },
   renderViewEdit: function(){
     if (this.props.edit){
@@ -118,9 +122,9 @@ var CustomerShow = React.createClass({
         <div className="row">
           <div className="col-sm-12">
             {this.draftAlert()}
-            <dl className="dl-horizontal">
+            <dl className="dl-horizontal no-margin">
               <dt> Email:</dt>
-              <dd className="small" style={{whiteSpace: 'nowrap'}}><a href={this.mailto()}>{this.props.customer.email} <i className="fa fa-external-link" /></a></dd>
+              <dd className="small" style={{whiteSpace: 'nowrap'}}>{this.mailto()}</dd>
               <dt>Phone (Home):</dt>
               <dd className="small">{this.props.customer.phone_home}</dd>
               <dt>Phone (Work):</dt>
@@ -128,8 +132,9 @@ var CustomerShow = React.createClass({
               <dt>Phone (Mobile):</dt>
               <dd className="small">{this.props.customer.phone_mobile}</dd>
               {this.companies()}
+              <dt>Tags:</dt>
+              <dd><Tags subjectType="UniversalCrm::Customer" subjectId={this.props.customer.id} tags={this.props.customer.tags} /></dd>
             </dl>
-            <Tags subjectType="UniversalCrm::Customer" subjectId={this.props.customer.id} tags={this.props.customer.tags} />
           </div>
         </div>
       );

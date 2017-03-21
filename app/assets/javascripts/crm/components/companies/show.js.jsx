@@ -26,12 +26,12 @@ var CompanyShow = React.createClass({
               </div>
               <div className="panel-body">
                 {this.renderViewEdit()}
-              </div>
-              <div className="panel-footer text-right">
-                <button className="btn btn-warning btn-sm m-0" onClick={this.props.handleEdit}>
-                  <i className="fa fa-pencil" />
-                  {this.props.edit ? ' Cancel' : ' Edit'}
-                </button>
+                <div className="text-right">
+                  <button className="btn btn-warning btn-xs m-0" onClick={this.props.handleEdit}>
+                    <i className="fa fa-pencil" />
+                    {this.props.edit ? ' Cancel' : ' Edit'}
+                  </button>
+                </div>
               </div>
             </div>
             {newTicket}
@@ -94,7 +94,7 @@ var CompanyShow = React.createClass({
                     />
                 </div>
                 <div className="tab-pane" id="tab-ticket-attachments">
-                  <Attachments parentId={this.props.company.id} parentType='UniversalCrm::Company' subjectType='UniversalCrm::Ticket'/>
+                  <Attachments parentId={this.props.company.id} parentType='UniversalCrm::Company' subjectType='UniversalCrm::Ticket' new={false} />
                 </div>
               </div>
             </div>
@@ -118,14 +118,15 @@ var CompanyShow = React.createClass({
     }else{
       return(
         <div className="row">
-          <div className="col-sm-8">
-            <dl className="dl-horizontal">
+          <div className="col-sm-12">
+            <dl className="dl-horizontal no-margin">
               <dt>Email:</dt>
-              <dd className="small" style={{whiteSpace: 'nowrap'}}><a href={this.mailto()}>{this.props.company.email} <i className="fa fa-external-link" /></a></dd>
+              <dd className="small" style={{whiteSpace: 'nowrap'}}>{this.mailto()}</dd>
               <dt>Address:</dt>
               <dd className="small">{this.props.company.address.formatted}</dd>
+              <dt>Tags:</dt>
+              <dd><Tags subjectType="UniversalCrm::Company" subjectId={this.props.company.id} tags={this.props.company.tags} /></dd>
             </dl>
-            <Tags subjectType="UniversalCrm::Company" subjectId={this.props.company.id} tags={this.props.company.tags} />
           </div>
         </div>
       );
@@ -137,6 +138,10 @@ var CompanyShow = React.createClass({
     }
   },
   mailto: function(){
-    return `mailto:${this.props.company.email}?bcc=${this.props.gs.config.inbound_email_addresses[0]}`;
+    if (this.props.company.email){
+      return(
+        <a href={`mailto:${this.props.company.email}?bcc=${this.props.gs.config.inbound_email_addresses[0]}`}>{this.props.company.email} <i className="fa fa-external-link" /></a>
+        );
+    }
   },
 });

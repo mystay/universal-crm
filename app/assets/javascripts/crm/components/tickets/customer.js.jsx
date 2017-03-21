@@ -14,6 +14,8 @@ var TicketCustomerName = React.createClass({
     }
   },
   setCustomerId: function(){
+    console.log(this.props.subject_type);
+    console.log( this.props._goCompany);
     if (this.props.subject_type == 'UniversalCrm::Customer' && this.props._goCustomer){
       this.props._goCustomer(this.props.id);
     }else if (this.props.subject_type == 'UniversalCrm::Company' && this.props._goCompany){

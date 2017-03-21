@@ -80,7 +80,7 @@ var CompanyEdit = React.createClass({
             <label className="col-sm-2 control-label">Country</label>
             <div className="col-sm-10">{this.countrySelect()}</div>
           </div>
-          <div className="form-group">
+          <div className="form-group no-margin">
               <div className="col-sm-offset-2 col-sm-10">
                 <button className="btn btn-success">
                   <i className="fa fa-check" /> Update

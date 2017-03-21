@@ -94,6 +94,7 @@ var TicketShowContainer = React.createClass({
                 subject_type={this.state.ticket.subject_type}
                 id={this.state.ticket.subject_id}
                 _goCustomer={this.props._goCustomer}
+                _goCompany={this.props._goCompany}
               /> <span className="text-muted"> {this.subjectEmail()} - {this.state.ticket.created_at}</span>
             </h3>
           </div>

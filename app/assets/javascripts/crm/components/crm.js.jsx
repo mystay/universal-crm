@@ -96,7 +96,7 @@ var CRM = React.createClass({
     this.setState({mainComponent: <TicketList _goTicket={this._goTicket} gs={this.state.gs} sgs={this.setGlobalState} status={status} flag={flag} _goCustomer={this._goCustomer} _goCompany={this._goCompany} />});
   },
   _goTicket: function(ticketId){
-    this.setState({mainComponent: <TicketShowContainer ticketId={ticketId} gs={this.state.gs} sgs={this.setGlobalState} handlePageHistory={this.handlePageHistory} _goCustomer={this._goCustomer} />});
+    this.setState({mainComponent: <TicketShowContainer ticketId={ticketId} gs={this.state.gs} sgs={this.setGlobalState} handlePageHistory={this.handlePageHistory} _goCustomer={this._goCustomer} _goCompany={this._goCompany} />});
   },
   _goCompany: function(companyId){
     this.setState({mainComponent: <CompanyShowContainer companyId={companyId} gs={this.state.gs} sgs={this.setGlobalState} handlePageHistory={this.handlePageHistory} _goTicket={this._goTicket} _goCompany={this._goCompany} _goCustomer={this._goCustomer} />});
@@ -116,7 +116,8 @@ var CRM = React.createClass({
     var h = (
       <div>
         <CustomerList _goCustomer={this._goCustomer} gs={this.state.gs} sgs={this.setGlobalState} />
-        <TicketList _goTicket={this._goTicket} gs={this.state.gs} sgs={this.setGlobalState} />
+        <CompanyList _goCustomer={this._goCustomer} _goCompany={this._goCompany} gs={this.state.gs} sgs={this.setGlobalState} />
+        <TicketList _goTicket={this._goTicket} gs={this.state.gs} sgs={this.setGlobalState} _goCustomer={this._goCustomer} _goCompany={this._goCompany} />
       </div>
     );
     this.setState({mainComponent: h});

@@ -10,7 +10,12 @@ module UniversalCrm
       if !params[:q].blank? and params[:q].to_s != 'undefined'
         conditions = []
         params[:q].split(' ').each do |keyword|
-          conditions.push({'$or' => [{title: /#{keyword}/i}, {number: /#{keyword}/i}, {html_body: /#{keyword}/i}]})
+          conditions.push({'$or' => [
+            {title: /#{keyword}/i},
+            {number: /#{keyword}/i},
+            {html_body: /#{keyword}/i},
+            {tags: keyword}
+          ]})
         end
         @tickets = @tickets.where('$and' => conditions)
       else

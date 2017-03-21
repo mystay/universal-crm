@@ -38,11 +38,11 @@ var NewTicket = React.createClass({
               <i className={this.loadingIcon()} /> Save
             </button>
           </div>
-        if (this.props.gs.config && this.props.gs.config.transaction_email_address){
+        if (this.props.gs.config && this.props.gs.config.transaction_email_address && this.props.subject.email){
           emailCheckbox = (
             <div className="form-group">
               <label>
-                <input type="checkbox" ref="email" /> Send as email
+                <input type="checkbox" ref="email" /> Send as email <small>({this.props.subject.email})</small>
               </label>
             </div>
           )
@@ -55,7 +55,7 @@ var NewTicket = React.createClass({
             {contentField}
             {emailCheckbox}
             {submitButton}
-            <p className="small text-muted">
+            <p className="small text-muted no-margin">
               Or, forward an email to: <a href={`mailto:${this.props.subject.inbound_email_address}`}>{this.props.subject.inbound_email_address}</a>
             </p>
           </div>

@@ -44,7 +44,7 @@ var CustomerEdit = React.createClass({
             <label className="col-sm-2 control-label">Phone (Mobile)</label>
             <div className="col-sm-10"><input type="text" className="form-control" defaultValue={this.props.customer.phone_mobile} ref='phone_mobile' /></div>
           </div>
-          <div className="form-group">
+          <div className="form-group no-margin">
               <div className="col-sm-offset-2 col-sm-10">
                 <button className="btn btn-success">
                   <i className="fa fa-check" /> Update

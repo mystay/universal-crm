@@ -1,3 +1,7 @@
+/*
+global React
+global $
+*/
 var CustomerList = React.createClass({
   getInitialState: function(){
     return({
@@ -22,7 +26,7 @@ var CustomerList = React.createClass({
   },
   clickCustomer: function(e){
     this.props.sgs('searchWord', '');
-    this.props._goCustomer(e.target.id);
+    this.props._goCustomer($(e.target).attr('data-id'));
   },  
   loadCustomers: function(searchWord, page){
     if (!this.state.loading){
@@ -49,24 +53,24 @@ var CustomerList = React.createClass({
     
   },
   customerList: function(){
-    var rows = []
+    var rows = [];
     for (var i=0;i<this.state.customers.length;i++){
       var customer = this.state.customers[i];
       var badgeCount, draftBadge;
       if (customer.ticket_count>0){
-        badgeCount = <span className="badge badge-warning" style={{fontSize: '12px', backgroundColor: '#ffab40'}}>{customer.ticket_count}</span>
+        badgeCount = <span className="badge badge-warning" style={{fontSize: '12px', backgroundColor: '#ffab40'}}>{customer.ticket_count}</span>;
       }else{
         badgeCount=null;
       }
       if (customer.status=='draft'){
-        draftBadge = <span className="badge badge-danger" style={{marginRight: '10px'}}>Draft</span>
+        draftBadge = <span className="badge badge-danger" style={{marginRight: '10px'}}>Draft</span>;
       }else{
         draftBadge = null;
       }
       rows.push(
         <tr key={customer.id}>
-          <td>{draftBadge}<a id={customer.id} onClick={this.clickCustomer} style={{cursor: 'pointer'}}>{customer.name}</a></td>
-          <td>{customer.email}</td>
+          <td>{draftBadge}<a data-id={customer.id} onClick={this.clickCustomer} style={{cursor: 'pointer'}}>{customer.name}</a></td>
+          <td><a data-id={customer.id} onClick={this.clickCustomer} style={{cursor: 'pointer'}}>{customer.email}</a></td>
           <td className="text-center">{badgeCount}</td>
         </tr>
       );
@@ -74,8 +78,8 @@ var CustomerList = React.createClass({
     return rows;
   },
   pageResults: function(page){
-    this.loadCustomers(this.state.searchWord, page)
-    this.setState({currentPage: page})
+    this.loadCustomers(this.state.searchWord, page);
+    this.setState({currentPage: page});
   },
   render: function(){
     if (this.state.customers && this.state.customers.length>0){
@@ -104,7 +108,7 @@ var CustomerList = React.createClass({
               displayDescription={true} />
           </div>
         </div>
-      )
+      );
     }else{
       return(null);
     }

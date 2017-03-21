@@ -41,7 +41,8 @@ module UniversalCrm
         def to_json(config)
           return {
             id: self.id.to_s,
-            number: self.number.to_s, 
+            number: self.number.to_s,
+            status: self.status,
             name: self.name,
             email: self.email, 
             phone: self.phone,
