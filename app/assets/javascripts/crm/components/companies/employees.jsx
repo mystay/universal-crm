@@ -36,6 +36,7 @@ var Employees = React.createClass({
             {this.employeeList()}
           </tbody>
         </table>
+        <NewEmployee subjectId={this.props.subjectId} subjectType={this.props.subjectType} updateEmployeeList={this.updateEmployeeList} />
       </div>
     );
   },
@@ -63,4 +64,7 @@ var Employees = React.createClass({
       return(<span className="badge badge-warning" style={{fontSize: '12px', backgroundColor: '#ffab40'}}>{c}</span>)
     }
   },
+  updateEmployeeList: function(employees){
+    this.setState({employees: employees})
+  }
 });

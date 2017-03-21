@@ -34,6 +34,9 @@ UniversalCrm::Engine.routes.draw do
     collection do
       get :autocomplete, :recent
     end
+    member do
+      patch :add_employee
+    end
   end
   resources :tickets do
     member do

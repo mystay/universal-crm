@@ -3,7 +3,7 @@ require_dependency "universal_crm/application_controller"
 module UniversalCrm
   class CompaniesController < ApplicationController
     
-    before_filter :find_company, only: %w(show update update_status)
+    before_filter :find_company, only: %w(show update update_status add_employee)
     
     def recent
       @companies = UniversalCrm::Company.order_by(created_at: :desc).limit(8)
@@ -79,6 +79,13 @@ module UniversalCrm
     def update
       @company.update(params.require(:company).permit(:name, :email, :address_line_1, :address_line_2, :address_city, :address_state, :address_post_code, :country_id))
       render json: {company: @company.to_json(universal_crm_config)}
+    end
+    
+    def add_employee
+      employee = UniversalCrm::Customer.find(params[:customer_id])
+      @company.add_employee!(employee)
+      employee.active! if employee.draft?
+      render json: {employees: @company.employees_json}
     end
     
     private
