@@ -21,6 +21,7 @@ module UniversalCrm
         store_in session: UniversalCrm::Configuration.mongoid_session_name, collection: 'crm_customers'
 
         field :n, as: :name
+        field :p, as: :position
         field :e, as: :email
         field :ph, as: :phone_home
         field :pw, as: :phone_work
@@ -58,6 +59,7 @@ module UniversalCrm
             status: self.status,
             number: self.number.to_s, 
             name: self.name,
+            position: self.position,
             email: self.email, 
             phone_home: self.phone_home,
             phone_work: self.phone_work,

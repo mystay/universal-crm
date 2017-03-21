@@ -123,6 +123,8 @@ var CustomerShow = React.createClass({
           <div className="col-sm-12">
             {this.draftAlert()}
             <dl className="dl-horizontal no-margin">
+              <dt> Position:</dt>
+              <dd className="small">{this.props.customer.position}</dd>
               <dt> Email:</dt>
               <dd className="small" style={{whiteSpace: 'nowrap'}}>{this.mailto()}</dd>
               <dt>Phone (Home):</dt>

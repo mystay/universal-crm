@@ -20,9 +20,10 @@ module UniversalCrm
           per_page: 20
         },
         customers: @customers.map{|c| {id: c.id.to_s,
-          number: c.number.to_s, 
-          name: c.name, 
-          email: c.email, 
+          number: c.number.to_s,
+          name: c.name,
+          position: c.position,
+          email: c.email,
           token: c.token,
           ticket_count: c.tickets.not_closed.count,
           status: c.status
@@ -66,7 +67,7 @@ module UniversalCrm
     end
     
     def update
-      @customer.update(params.require(:customer).permit(:name, :email, :phone_home, :phone_work, :phone_mobile))
+      @customer.update(params.require(:customer).permit(:name, :position, :email, :phone_home, :phone_work, :phone_mobile))
       render json: {customer: @customer.to_json(universal_crm_config)}
     end
     
