@@ -3,7 +3,8 @@ var NewTicket = React.createClass({
     return({
       title: '',
       data: '',
-      loading: false
+      loading: false,
+      kind: null
     })
   },
   handleContentChange: function(e){
@@ -11,6 +12,21 @@ var NewTicket = React.createClass({
   },
   handleTitleChange: function(e){
     this.setState({title: e.target.value});
+  },
+  selectKind: function(e){
+    this.setState({kind: $(e.target).attr('data-kind')});
+  },
+  buttonList: function(){
+    var buttons = [];
+    buttons.push(<button key="btn-note" className="btn btn-info btn-sm" data-kind="note" onClick={this.selectKind}><i className="fa fa-sticky-note" /> New Note</button>
+    )
+    buttons.push(<button key="btn-task" className="btn btn-info btn-sm" data-kind="task" onClick={this.selectKind}><i className="fa fa-check-circle" /> New Task</button>
+    )
+    if (this.props.gs.config && this.props.gs.config.transaction_email_address && this.props.subject.email){
+      buttons.push(<button key="btn-email" className="btn btn-info btn-sm" data-kind="email" onClick={this.selectKind}><i className="fa fa-envelope" /> New Email</button>
+      )
+    }
+    return <div className="btn-group">{buttons}</div>;
   },
   render: function(){
     var titleField=null;
@@ -49,16 +65,9 @@ var NewTicket = React.createClass({
         }
       }
       return(
-        <div className="panel">
-          <div className="panel-body">
-            {titleField}
-            {contentField}
-            {emailCheckbox}
-            {submitButton}
-            <p className="small text-muted no-margin">
-              Or, forward an email to: <a href={`mailto:${this.props.subject.inbound_email_address}`}>{this.props.subject.inbound_email_address}</a>
-            </p>
-          </div>
+        <div>
+          {this.buttonList()}
+          {this.newForm()}
         </div>
       )
     }else{
@@ -90,5 +99,56 @@ var NewTicket = React.createClass({
     }else{
       return('fa fa-check');
     }
+  },
+  newForm: function(){
+    var form;
+    if (this.state.kind=='note'){
+      form = this.newNote();
+    }else if (this.state.kind=='task'){
+      form = this.newTask();
+    }else if (this.state.kind=='email'){
+      form = this.newEmail();
+    }
+    return(
+      <div className="panel">
+        <div className="panel-body">
+          {form}
+        </div>
+      </div>
+    );
+  },
+  newNote: function(){
+    return(
+      <div>
+        {this.titleField()}
+      </div>
+    );
+  },
+  newTask: function(){
+    return(
+      <div>
+        {this.titleField()}
+      </div>
+    );
+  },
+  newEmail: function(){
+    return(
+      <div>
+        {this.titleField()}
+      <p className="small text-muted no-margin">
+            Or, forward an email to: <a href={`mailto:${this.props.subject.inbound_email_address}`}>{this.props.subject.inbound_email_address}</a>
+          </p>
+          </div>
+    );
+  },
+  titleField: function(){
+    return(
+      <div className='form-group'>
+        <input type='text' 
+         value={this.state.title} 
+         className='form-control'
+         onChange={this.handleTitleChange} />
+      </div>
+    );
   }
 });

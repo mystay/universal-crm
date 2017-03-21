@@ -30,6 +30,13 @@ var TicketShowContainer = React.createClass({
           if (data.ticket){
             _this.setState({ticketId: data.ticket.id, ticket: data.ticket, loading: false});
             _this.props.handlePageHistory(`${data.ticket.number}: ${data.ticket.title}`, `/crm/ticket/${id}`);
+            if (data.ticket.kind=='email'){
+              _this.props.sgs('pageIcon', 'fa-envelope');
+            }else if (data.ticket.kind=='normal'){
+              _this.props.sgs('pageIcon', 'fa-sticky-note');
+            }else if (data.ticket.kind=='task'){
+              _this.props.sgs('pageIcon', 'fa-check-circle');
+            }
           }
         }
       });

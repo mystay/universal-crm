@@ -28,7 +28,7 @@ module UniversalCrm
         field :url, as: :referring_url
 
         statuses %w(active actioned closed), default: :active
-        kinds %w(normal email), :normal
+        kinds %w(normal email task), :normal
 
         flags %w(priority)
 

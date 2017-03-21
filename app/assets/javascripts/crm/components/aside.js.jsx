@@ -4,10 +4,18 @@
 var Aside = React.createClass({
   
   home: function(){
-    this.props._goTicketList('email');
+    this.props._goTicketList('active');
   },
   loadTickets: function(e){
     this.props._goTicketList($(e.target).attr('data-status'), null, null);
+    var title = $(e.target).attr('data-title');
+    if (title){
+      this.props.sgs('pageTitle', title);
+    }
+    var icon = $(e.target).attr('data-icon');
+    if (icon){
+      this.props.sgs('pageIcon', icon);
+    }
   },
   loadFlaggedTickets: function(e){
     this.props._goTicketList(null, $(e.target).attr('data-flag'));
@@ -25,25 +33,37 @@ var Aside = React.createClass({
               </a>
             </li>
             <li>
-              <a style={{cursor: 'pointer'}} onClick={this.loadTickets} data-status='email'>
+              <a style={{cursor: 'pointer'}} onClick={this.loadTickets} data-status='email' data-title="Emails" data-icon="fa-envelope">
                 <i className="fa fa-envelope fa-fw" />
-                Inbox
+                Emails
               </a>
             </li>
             <li>
-              <a style={{cursor: 'pointer'}} onClick={this.loadTickets} data-status='active'>
+              <a style={{cursor: 'pointer'}} onClick={this.loadTickets} data-status='task' data-title="Tasks" data-icon="fa-check-circle">
+                <i className="fa fa-check-circle fa-fw" />
+                Tasks
+              </a>
+            </li>
+            <li>
+              <a style={{cursor: 'pointer'}} onClick={this.loadTickets} data-status='normal' data-title="Notes" data-icon="fa-sticky-note">
+                <i className="fa fa-sticky-note fa-fw" />
+                Notes
+              </a>
+            </li>
+            <li>
+              <a style={{cursor: 'pointer'}} onClick={this.loadTickets} data-status='active' data-title="All Open Tickets" data-icon="fa-folder-open">
                 <i className="fa fa-folder-open fa-fw" />
-                Open
+                All Open Tickets
               </a>
             </li>
             <li>
-              <a style={{cursor: 'pointer'}} onClick={this.loadTickets} data-status='actioned'>
+              <a style={{cursor: 'pointer'}} onClick={this.loadTickets} data-status='actioned' data-title="Actioned" data-icon="fa-check">
                 <i className="fa fa-check fa-fw" />
                 Actioned
               </a>
             </li>
             <li>
-              <a style={{cursor: 'pointer'}} onClick={this.loadTickets} data-status='closed'>
+              <a style={{cursor: 'pointer'}} onClick={this.loadTickets} data-status='closed' data-title="Closed" data-icon="fa-ban">
                 <i className="fa fa-ban fa-fw" />
                 Closed
               </a>

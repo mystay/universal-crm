@@ -32,6 +32,10 @@ module UniversalCrm
           @tickets = @tickets.flagged_with(params[:flag])        
         elsif params[:status] == 'email'
           @tickets = @tickets.email.active
+        elsif params[:status] == 'normal'
+          @tickets = @tickets.normal.active
+        elsif params[:status] == 'task'
+          @tickets = @tickets.task.active
         elsif !params[:status].blank? and params[:status] != 'priority' and params[:status] != 'all' and params[:status] != 'null'
           @tickets = @tickets.for_status(params[:status])
         elsif params[:status] == 'priority'

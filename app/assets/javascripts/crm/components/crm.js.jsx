@@ -32,7 +32,7 @@ var CRM = React.createClass({
     }else if (_this.props.ticketId){
       window.setTimeout(function(){_this._goTicket(_this.props.ticketId);}, 1000);
     }else{
-      window.setTimeout(function(){_this._goTicketList('email');}, 1000);
+      window.setTimeout(function(){_this._goTicketList('active');}, 1000);
     }
   },
   render: function() {
@@ -78,7 +78,11 @@ var CRM = React.createClass({
   },
   setGlobalState: function(key, value){
     var globalState = this.state.gs;
-    globalState[key] = value;
+    if (value==null){
+      delete globalState[key];
+    }else{
+      globalState[key] = value;
+    }
     this.setState({gs: globalState});
   },
   //Faux Routing
@@ -86,13 +90,17 @@ var CRM = React.createClass({
     this.setState({mainComponent: comp});
   },
   _goHome: function(){
-    this._goTicketList('email');
+    this._goTicketList('active');
+    this.setGlobalState('pageIcon', null);
     this.handlePageHistory('Home', '/crm');
   },
   _goTicketList: function(status, flag){
     this.setGlobalState('ticketStatus', status);
     this.setGlobalState('ticketFlag', flag);
     this.setGlobalState('searchWord', '');
+    this.setGlobalState('pageIcon', null);
+    this.setGlobalState('pageTitle', null);
+    this.handlePageHistory('Home', '/crm');
     this.setState({mainComponent: <TicketList _goTicket={this._goTicket} gs={this.state.gs} sgs={this.setGlobalState} status={status} flag={flag} _goCustomer={this._goCustomer} _goCompany={this._goCompany} />});
   },
   _goTicket: function(ticketId){

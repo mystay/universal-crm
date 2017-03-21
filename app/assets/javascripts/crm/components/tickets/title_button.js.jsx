@@ -19,9 +19,15 @@ var TicketTitleButton = React.createClass({
     }
   },
   emailIcon: function(){
+    var icon;
     if (this.props.ticket.kind.toString()=='email'){
-      return(<i className="fa fa-envelope fa-fw" style={{marginRight: '5px'}} />)
+      icon = 'fa-envelope text-info';
+    }else if (this.props.ticket.kind.toString()=='normal'){
+      icon = 'fa-sticky-note text-warning';
+    } else if (this.props.ticket.kind.toString()=='task'){
+      icon = 'fa-check-circle text-success';
     }
+    return(<i className={`fa fa-fw ${icon}`} style={{marginRight: '5px'}} />)
   },
   statusLabel: function(){
     if (this.props.ticket && this.props.ticket.status == 'closed'){
