@@ -1,10 +1,15 @@
+/*
+  global React
+  global $
+*/
 var NewComment = React.createClass({
   getInitialState: function(){
     return({
       loading: false,
       content: '',
-      allowEmail: false
-    })
+      allowEmail: false,
+      editing: false
+    });
   },
   componentDidMount: function(){
     this.setState({allowEmail: this.props.allowEmail});
@@ -13,6 +18,13 @@ var NewComment = React.createClass({
     return (this.state.content != '');
   },
   handleChange: function(e){
+    if (!this.state.editing && this.props.subject_type == 'UniversalCrm::Ticket'){
+      this.setState({editing: true});
+      $.ajax({
+        type: 'PATCH',
+        url: `/crm/tickets/${this.props.subject_id}/editing`
+      });
+    }
     this.setState({content: e.target.value});
   },
   submitEmail: function(e){
@@ -32,12 +44,10 @@ var NewComment = React.createClass({
     }  
   },
   handleSubmit: function(sendAsEmail){
-    console.log(sendAsEmail)
     var _this=this;
     if (!this.state.loading){
       this.setState({loading: true});
-      var emailKind = (sendAsEmail ? 'email' : 'normal')
-      console.log(emailKind)
+      var emailKind = (sendAsEmail ? 'email' : 'normal');
       $.ajax({
         method: 'POST',
         url: '/universal/comments',

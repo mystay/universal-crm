@@ -1,16 +1,17 @@
+/*
+  global React
+  global $
+*/
 var Comments = React.createClass({
-  
   getInitialState: function(){
-    return(
-      {
-        subject_id: null,
-        comments: [],
-        content: '',
-        focused: false,
-        loading: false,
-        pastProps: null
-      }
-    )
+    return({
+      subject_id: null,
+      comments: [],
+      content: '',
+      focused: false,
+      loading: false,
+      pastProps: null
+    });
   },
   init: function(){
     this.loadComments();
@@ -24,7 +25,7 @@ var Comments = React.createClass({
     }
   },
   updateCommentList: function(comments){
-    this.setState({comments: comments})
+    this.setState({comments: comments});
   },
   render: function(){
     if (this.props.newCommentPosition == 'bottom'){
@@ -33,14 +34,14 @@ var Comments = React.createClass({
           {this.renderCommentList()}
           {this.renderCommentForm()}
         </div>
-      )
+      );
     }else{
       return(
         <div>
           {this.renderCommentForm()}
           {this.renderCommentList()}
         </div>
-      )
+      );
     }
   },
   renderCommentForm: function(){
@@ -52,25 +53,21 @@ var Comments = React.createClass({
                newCommentPlaceholder={this.props.newCommentPlaceholder} 
                allowEmail={this.props.allowEmail} 
                hidePrivateComments={this.props.hidePrivateComments}
-               />)
-    }else{
-      return(null);
+               />);
     }
   },
   renderCommentList: function(){
-    var comments = []
+    var comments = [];
     var fullWidth = this.props.fullWidth;
     this.state.comments.forEach(function(comment){
-      comments.push(<Comment key={comment.id} comment={comment} fullWidth={fullWidth} />)
+      comments.push(<Comment key={comment.id} comment={comment} fullWidth={fullWidth} />);
     });
     if (this.state.comments){
       return(
         <div className="chat-widget">
           {comments}
         </div>
-      )
-    }else{
-      return(null)
+      );
     }
   },
   loadComments: function(){

@@ -26,6 +26,8 @@ module UniversalCrm
         field :te, as: :to_email
         field :fe, as: :from_email
         field :url, as: :referring_url
+        field :vids, as: :viewer_ids, type: Array, default: [] #an array of universal users who are viewing this ticket
+        field :eids, as: :editor_ids, type: Array, default: [] #an array of universal users who are editing this ticket (replying)
 
         statuses %w(active actioned closed), default: :active
         kinds %w(normal email), :normal
@@ -95,6 +97,30 @@ module UniversalCrm
           end
         end
         
+        def viewers
+          Universal::Configuration.class_name_user.classify.constantize.in(id: self.viewer_ids)
+        end
+        
+        def editors
+          Universal::Configuration.class_name_user.classify.constantize.in(id: self.editor_ids)
+        end
+        
+        def being_viewed_by!(user)
+          self.push(viewer_ids: user.id.to_s) if !self.viewer_ids.include?(user.id.to_s)
+        end
+        
+        def being_edited_by!(user)
+          self.push(editor_ids: user.id.to_s) if !self.editor_ids.include?(user.id.to_s)
+        end
+        
+        def not_viewed_by!(user)
+          self.pull(viewer_ids: user.id.to_s)
+        end
+        
+        def not_edited_by!(user)
+          self.pull(editor_ids: user.id.to_s)
+        end
+        
         def to_json
           {
             id: self.id.to_s,
@@ -109,6 +135,10 @@ module UniversalCrm
             document_type: self.document_type,
             document_id: self.document_id.to_s,
             secondary_scope_name: self.secondary_scope_name,
+            viewer_ids: self.viewer_ids,
+            viewer_names: self.viewers.map{|v| v.name},
+            editor_ids: self.editor_ids,
+            editor_names: self.editors.map{|e| e.name},
             title: self.title,
             content: self.content,
             html_body: self.html_body,
