@@ -15,13 +15,13 @@ var TicketStatus = React.createClass({
     var editors = this.editors();
     if (editors){
       return(
-        <div className="alert alert-danger alert-sm">
+        <div className="alert alert-danger alert-sm no-margin text-center">
           <i className="fa fa-exclamation-triangle" /> Currently being edited by: {this.editors()}
         </div>
       );
     }else if (viewers){
       return(
-        <div className="alert alert-warning alert-sm">
+        <div className="alert alert-warning alert-sm no-margin text-center">
           <i className="fa fa-exclamation-triangle" /> Currently being viewed by: {this.viewers()}
         </div>
       );
