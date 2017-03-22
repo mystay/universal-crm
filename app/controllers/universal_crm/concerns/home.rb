@@ -175,6 +175,11 @@ module UniversalCrm
           end
           render json: {}
         end
+        
+        def unload
+          remove_tickets_viewing!
+          render json: {}
+        end
       end
     end
   end

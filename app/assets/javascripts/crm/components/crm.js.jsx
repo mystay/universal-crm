@@ -23,6 +23,12 @@ var CRM = React.createClass({
         _this.init(_this);
       })
     });
+    $(document).ready(function(){
+      console.log('mounted');
+      window.onbeforeunload = function(e){
+        $.ajax({type: 'GET', url: '/crm/unload'});
+      };
+    });
   },
   init: function(_this){
     if (_this.props.customerId){
