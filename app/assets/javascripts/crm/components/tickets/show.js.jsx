@@ -1,3 +1,7 @@
+/*
+  global React
+  global $
+*/
 var TicketShowContainer = React.createClass({
   getInitialState: function(){
     return ({
@@ -6,7 +10,7 @@ var TicketShowContainer = React.createClass({
       ticket: null,
       loading: null,
       pastProps: null
-    })
+    });
   },
   init: function(){
     this.loadTicket(this.props.ticketId);
@@ -52,7 +56,7 @@ var TicketShowContainer = React.createClass({
       success: (function(_this){
         return function(data){
           _this.setState({ticket: data.ticket});
-        }
+        };
       })(this)
     });
   },
@@ -72,7 +76,7 @@ var TicketShowContainer = React.createClass({
       success: (function(_this){
         return function(data){
           _this.setState({ticket: data.ticket});
-        }
+        };
       })(this)
     });
   },

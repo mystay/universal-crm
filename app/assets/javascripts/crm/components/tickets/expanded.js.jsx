@@ -1,5 +1,7 @@
+/*
+  global React
+*/
 var ExpandedTicket = React.createClass({
-  
   render: function(){
     if (this.props.ticketId == this.props.ticket.id){
       return(
@@ -19,6 +21,7 @@ var ExpandedTicket = React.createClass({
             <div style={{marginTop: '2px'}}><Tags subjectType="UniversalCrm::Ticket" subjectId={this.props.ticket.id} tags={this.props.ticket.tags} /></div>
             <hr />
           </div>
+          <TicketDueOn dueOn={this.props.ticket.due_on} />
           {this.actionedStatus()}
           {this.ticketDocument()}
           {this.referringUrl()}
@@ -40,7 +43,7 @@ var ExpandedTicket = React.createClass({
             />
           {this.emailWarning()}
         </div>
-      )
+      );
     }else{
       return(null);
     }
@@ -72,14 +75,14 @@ var ExpandedTicket = React.createClass({
         <blockquote>
           <div dangerouslySetInnerHTML={{__html: this.props.ticket.html_body}} />
         </blockquote>
-      )
+      );
     }
     else if (this.props.ticket.content){
       return(
         <blockquote>
           <div dangerouslySetInnerHTML={{__html: this.props.ticket.content.replace(/(?:\r\n|\r|\n)/g, '<br />')}} />
         </blockquote>
-      )
+      );
     }
   },
   ticketOpen: function(){
@@ -94,9 +97,9 @@ var ExpandedTicket = React.createClass({
         <div className="alert alert-warning alert-sm">
           <i className="fa fa-exclamation-triangle" /> <strong>Note:</strong> Email replies will be sent to: {this.props.ticket.subject_email}
         </div>
-      )
+      );
     }else{
-      return(null)
+      return(null);
     }
   },
   newCommentPlaceholder: function(){
@@ -117,5 +120,5 @@ var ExpandedTicket = React.createClass({
         </div>
       );
     }
-  }
+  },
 });
