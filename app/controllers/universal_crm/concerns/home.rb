@@ -22,6 +22,7 @@ module UniversalCrm
 
           if universal_user
             json.merge!({universal_user: {
+              id: universal_user.id.to_s,
               name: universal_user.name,
               email: universal_user.email,
               functions: (universal_user.universal_user_group_functions.blank? ? [] : universal_user.universal_user_group_functions['crm'])

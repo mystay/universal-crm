@@ -8,14 +8,14 @@ var CustomerShow = React.createClass({
       var newTicket = null;
       if (this.props.customer.status=='active'){
         newTicket = <NewTicket key="new_ticket"
-              subjectId={this.props.customer.id}
-              subjectType='UniversalCrm::Customer'
-              subject={this.props.customer}
-              loadTickets={this.props.loadTickets}
-              gs={this.props.gs}
-              sgs={this.props.sgs}
-              _goTicket={this.props._goTicket}
-              />;
+          subjectId={this.props.customer.id}
+          subjectType='UniversalCrm::Customer'
+          subject={this.props.customer}
+          loadTickets={this.props.loadTickets}
+          gs={this.props.gs}
+          sgs={this.props.sgs}
+          _goTicket={this.props._goTicket}
+          />;
       }
       return(
         <div className="row">

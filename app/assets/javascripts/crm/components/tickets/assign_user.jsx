@@ -1,9 +1,14 @@
+/*
+  global React
+  global ReactDOM
+  global $
+ */ 
 var AssignUser = React.createClass({
   getInitialState: function(){
     return({
       loading: false,
       assignedTo: null
-    })
+    });
   },
   render: function(){
     return(
@@ -17,10 +22,10 @@ var AssignUser = React.createClass({
   },
   users: function(){
     if (this.props.gs && this.props.gs.users){
-      u = [];
+      var u = [];
       for (var i=0;i<this.props.gs.users.length;i++){
-        user = this.props.gs.users[i];
-        u.push(<li key={user.id}>{this.userButton(user)}</li>)
+        var user = this.props.gs.users[i];
+        u.push(<li key={user.id}>{this.userButton(user)}</li>);
       }
       return(<ul className="list-inline">{u}</ul>);
     }

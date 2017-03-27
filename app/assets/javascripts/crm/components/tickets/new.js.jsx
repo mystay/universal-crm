@@ -12,7 +12,8 @@ var NewTicket = React.createClass({
       data: '',
       loading: false,
       kind: null,
-      datepickerLoaded: false
+      datepickerLoaded: false,
+      responsibleId: null
     });
   },
   componentDidUpdate: function(){
@@ -22,7 +23,7 @@ var NewTicket = React.createClass({
         onSelect: function(date){
           _this.handleDueOnChange(date);
         }});
-      this.setState({datepickerLoaded: true});
+      this.setState({datepickerLoaded: true, responsibleId: this.props.gs.user.id});
     }
   },
   handleContentChange: function(e){
@@ -78,7 +79,8 @@ var NewTicket = React.createClass({
           due_on: this.state.dueOn,
           subject_id: this.props.subjectId,
           subject_type: this.props.subjectType,
-          kind: this.state.kind
+          kind: this.state.kind,
+          responsible_id: this.state.responsibleId
         },
         success: function(data){
           _this.setState({title: '', content: '', loading: false, kind: null, dueOn: null});
@@ -130,7 +132,16 @@ var NewTicket = React.createClass({
       <div>
         {this.titleField()}
         {this.contentField()}
-        {this.dueOn()}
+        <div className="form-group">
+          <div className="row">
+            <div className="col-sm-4 col-xs-6">
+              {this.dueOn()}
+            </div>
+            <div className="col-sm-8 col-xs-12">
+              {this.assignTo()}
+            </div>
+          </div>
+        </div>
       </div>
     );
   },
@@ -194,17 +205,48 @@ var NewTicket = React.createClass({
   dueOn: function(){
     if (this.state.title){
       return(
-        <div className="form-group">
-          <div className="row">
-            <div className="col-sm-4 col-xs-12">
-              <label>
-                Due date:
-                <input type="text" className="datepicker form-control" placeholder="DD-MM-YYYY"/>
-              </label>
-            </div>
-          </div>
-        </div>
+        <label>
+          Due date:
+          <input type="text" className="datepicker form-control" placeholder="DD-MM-YYYY"/>
+        </label>
       );
     }
+  },
+  assignTo: function(){
+    if (this.state.title){
+      return(
+        <label>
+          Assign to:
+          {this.users()}
+        </label>
+      );
+    }
+  },
+  users: function(){
+    if (this.props.gs && this.props.gs.users){
+      var u = [];
+      for (var i=0;i<this.props.gs.users.length;i++){
+        var user = this.props.gs.users[i];
+        u.push(<li key={user.id}>{this.userButton(user)}</li>);
+      }
+      return(<ul className="list-inline">{u}</ul>);
+    }
+  },
+  userButton: function(user){
+    var btnClass = 'btn-default';
+    var btnText = user.name;
+    if (this.state.responsibleId==user.id){
+      btnClass = 'btn-primary';
+    }
+    if (this.props.gs.user.id==user.id){
+      btnText = 'Me'
+    }
+    return(
+      <button className={`btn ${btnClass} btn-xs`} onClick={this.assignUser} data-id={user.id} data-name={user.name}>{btnText}</button>
+    );
+  },
+  assignUser: function(e){
+    var userId = $(e.target).attr('data-id');
+    this.setState({responsibleId: userId});
   }
 });
