@@ -34,7 +34,6 @@ var CustomerShow = React.createClass({
                 </div>
               </div>
             </div>
-            {newTicket}
           </div>
           <div className="col-sm-6">
             <div className="panel panel-default">
@@ -70,6 +69,9 @@ var CustomerShow = React.createClass({
                 </div>
               </div>
             </div>
+          </div>
+          <div className="col-sm-12 text-center">
+            {newTicket}
           </div>
           <div className="col-sm-12">
             <div className="tab-wrapper tab-primary">

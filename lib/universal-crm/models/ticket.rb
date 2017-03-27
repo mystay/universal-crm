@@ -26,6 +26,8 @@ module UniversalCrm
         field :te, as: :to_email
         field :fe, as: :from_email
         field :url, as: :referring_url
+        field :do, as: :due_on, type: Date
+        field :su, as: :snooze_until, type: Date
 
         statuses %w(active actioned closed), default: :active
         kinds %w(normal email task), :normal
@@ -41,6 +43,8 @@ module UniversalCrm
         end
 
         default_scope ->(){order_by(status: :asc, updated_at: :desc)}
+        scope :due_today, ->(date=Time.zone.now.to_date){where(due_on: date)}
+        scope :overdue, ->(date=Time.zone.now.to_date){where(due_on.lt => date)}
         
         search_in :t, :c, :te, :fe
         
@@ -124,6 +128,8 @@ module UniversalCrm
             token: self.token,
             flags: self.flags,
             tags: self.tags,
+            due_on: self.due_on,
+            snooze_until: self.snooze_until,
             attachments: self.attachments.map{|a| {name: a.name, url: a.file.url, filename: a.file_filename}},
             incoming: self.incoming?,
             responsible_id: self.responsible_id.to_s,

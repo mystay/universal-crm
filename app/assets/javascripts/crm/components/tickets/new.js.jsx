@@ -1,11 +1,29 @@
+/*
+  global React
+  global ReactDOM
+  global $
+ */ 
 var NewTicket = React.createClass({
   getInitialState: function(){
     return({
       title: '',
+      content: '',
+      dueOn: null,
       data: '',
       loading: false,
-      kind: null
-    })
+      kind: null,
+      datepickerLoaded: false
+    });
+  },
+  componentDidUpdate: function(){
+    if (this.isTask() && this.state.title && !this.state.datepickerLoaded){
+      var _this=this;
+      $('.datepicker').datepicker({dateFormat:'yy-mm-dd', 
+        onSelect: function(date){
+          _this.handleDueOnChange(date);
+        }});
+      this.setState({datepickerLoaded: true});
+    }
   },
   handleContentChange: function(e){
     this.setState({content: e.target.value});
@@ -13,81 +31,57 @@ var NewTicket = React.createClass({
   handleTitleChange: function(e){
     this.setState({title: e.target.value});
   },
+  handleDueOnChange: function(date){
+    this.setState({dueOn: date});
+  },
   selectKind: function(e){
     this.setState({kind: $(e.target).attr('data-kind')});
   },
+  isNote: function(){
+    return(this.state.kind=='note');
+  },
+  isTask: function(){
+    return(this.state.kind=='task');
+  },
+  isEmail: function(){
+    return(this.state.kind=='email');
+  },
   buttonList: function(){
     var buttons = [];
-    buttons.push(<button key="btn-note" className="btn btn-info btn-sm" data-kind="note" onClick={this.selectKind}><i className="fa fa-sticky-note" /> New Note</button>
-    )
-    buttons.push(<button key="btn-task" className="btn btn-info btn-sm" data-kind="task" onClick={this.selectKind}><i className="fa fa-check-circle" /> New Task</button>
-    )
+    buttons.push(<button key="btn-note" className="btn btn-info btn-sm" disabled={this.isNote()} data-kind="note" onClick={this.selectKind}><i className="fa fa-sticky-note" /> New Note</button>);
+    buttons.push(<button key="btn-task" className="btn btn-info btn-sm" disabled={this.isTask()} data-kind="task" onClick={this.selectKind}><i className="fa fa-check-circle" /> New Task</button>);
     if (this.props.gs.config && this.props.gs.config.transaction_email_address && this.props.subject.email){
-      buttons.push(<button key="btn-email" className="btn btn-info btn-sm" data-kind="email" onClick={this.selectKind}><i className="fa fa-envelope" /> New Email</button>
-      )
+      buttons.push(<button key="btn-email" className="btn btn-info btn-sm" disabled={this.isEmail()} data-kind="email" onClick={this.selectKind}><i className="fa fa-envelope" /> New Email</button>);
     }
-    return <div className="btn-group">{buttons}</div>;
+    return(<div className="form-group"><div className="btn-group">{buttons}</div></div>);
   },
   render: function(){
-    var titleField=null;
-    var contentField=null;
-    var submitButton=null;
-    var emailCheckbox=null
-    if (this.props.subject){
-      var placeholder=`New ticket for ${this.props.subject.name}...`
-      titleField = <div className='form-group'>
-                    <input type='text' 
-                               value={this.state.title} 
-                               className='form-control'
-                               placeholder={placeholder}
-                               onChange={this.handleTitleChange} />
-                    </div>
-      if (this.state.title){
-        contentField = <div className="form-group">
-            <textarea className="form-control" 
-              placeholder="Content..."
-              onChange={this.handleContentChange}
-              style={{height: '250px'}}>{this.state.content}</textarea>
-          </div>
-        submitButton = <div className="form-group m-0">
-            <button className='btn btn-primary btn-sm' onClick={this.handleSubmit}>
-              <i className={this.loadingIcon()} /> Save
-            </button>
-          </div>
-        if (this.props.gs.config && this.props.gs.config.transaction_email_address && this.props.subject.email){
-          emailCheckbox = (
-            <div className="form-group">
-              <label>
-                <input type="checkbox" ref="email" /> Send as email <small>({this.props.subject.email})</small>
-              </label>
-            </div>
-          )
-        }
-      }
-      return(
-        <div>
-          {this.buttonList()}
-          {this.newForm()}
-        </div>
-      )
-    }else{
-      return(null);                              
-    }
+    return(
+      <div>
+        {this.buttonList()}
+        {this.newForm()}
+      </div>
+    );
   },
   handleSubmit: function(e){
     e.preventDefault();
     var _this=this;
     if (!this.state.loading){
       this.setState({loading: true});
-      var email = ReactDOM.findDOMNode(this.refs.email);
-      email = (email!=undefined ? email.checked : false)
       $.ajax({
         method: 'POST',
         url: '/crm/tickets',
         dataType: 'JSON',
-        data:{title: this.state.title, content: this.state.content, subject_id: this.props.subjectId, subject_type: this.props.subjectType, email: email},
+        data:{
+          title: this.state.title,
+          content: this.state.content,
+          due_on: this.state.dueOn,
+          subject_id: this.props.subjectId,
+          subject_type: this.props.subjectType,
+          kind: this.state.kind
+        },
         success: function(data){
-          _this.setState({title: '', content: '', loading: false});
+          _this.setState({title: '', content: '', loading: false, kind: null, dueOn: null});
           _this.props._goTicket(data.ticket.id);
         }
       });
@@ -102,25 +96,32 @@ var NewTicket = React.createClass({
   },
   newForm: function(){
     var form;
-    if (this.state.kind=='note'){
+    if (this.isNote()){
       form = this.newNote();
-    }else if (this.state.kind=='task'){
+    }else if (this.isTask()){
       form = this.newTask();
-    }else if (this.state.kind=='email'){
+    }else if (this.isEmail()){
       form = this.newEmail();
     }
-    return(
-      <div className="panel">
-        <div className="panel-body">
-          {form}
+    if (this.state.kind){
+      return(
+        <div className="panel panel-success text-left">
+          <div className="panel-heading">
+            <h3 className="panel-title">New {this.state.kind}</h3>
+          </div>
+          <div className="panel-body">
+            {form}
+          </div>
+          <div className="panel-footer">{this.submitButton()}</div>
         </div>
-      </div>
-    );
+      );
+    }
   },
   newNote: function(){
     return(
       <div>
         {this.titleField()}
+        {this.contentField()}
       </div>
     );
   },
@@ -128,6 +129,8 @@ var NewTicket = React.createClass({
     return(
       <div>
         {this.titleField()}
+        {this.contentField()}
+        {this.dueOn()}
       </div>
     );
   },
@@ -135,20 +138,73 @@ var NewTicket = React.createClass({
     return(
       <div>
         {this.titleField()}
-      <p className="small text-muted no-margin">
-            Or, forward an email to: <a href={`mailto:${this.props.subject.inbound_email_address}`}>{this.props.subject.inbound_email_address}</a>
-          </p>
-          </div>
+        {this.contentField()}
+        <p className="small text-muted no-margin hidden">
+          Or, forward an email to: <a href={`mailto:${this.props.subject.inbound_email_address}`}>{this.props.subject.inbound_email_address}</a>
+        </p>
+      </div>
     );
   },
   titleField: function(){
     return(
       <div className='form-group'>
         <input type='text' 
-         value={this.state.title} 
+         defaultValue={this.state.title} 
          className='form-control'
-         onChange={this.handleTitleChange} />
+         onChange={this.handleTitleChange}
+         placeholder="Title..." />
       </div>
     );
+  },
+  contentField: function(){
+    var height=150;
+    if (this.isEmail()){
+      height=250;
+    }
+    if (this.state.title){
+      return(
+        <div className="form-group">
+          <textarea className="form-control" 
+            placeholder="Content..."
+            onChange={this.handleContentChange}
+            defaultValue={this.state.content}
+            style={{height: `${height}px`}} />
+        </div>
+      );
+    }
+  },
+  submitButton: function(){
+    var action = `Save`;
+    var formValid=this.state.title;
+    if (this.isEmail()){
+      action = 'Send';
+    }else if (this.isTask()){
+      // formValid = (this.state.title && this.state.dueOn);
+    }
+    if (formValid){
+      return(
+        <div className="form-group m-0">
+          <button className='btn btn-success upcase' onClick={this.handleSubmit}>
+            <i className={this.loadingIcon()} /> {action} {this.state.kind}
+          </button>
+        </div>
+      );
+    }
+  },
+  dueOn: function(){
+    if (this.state.title){
+      return(
+        <div className="form-group">
+          <div className="row">
+            <div className="col-sm-4 col-xs-12">
+              <label>
+                Due date:
+                <input type="text" className="datepicker form-control" placeholder="DD-MM-YYYY"/>
+              </label>
+            </div>
+          </div>
+        </div>
+      );
+    }
   }
 });

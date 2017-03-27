@@ -80,7 +80,7 @@ module UniversalCrm
     def create
       if !params[:subject_id].blank? and !params[:subject_type].blank?
         subject = params[:subject_type].classify.constantize.find params[:subject_id]
-        kind = (params[:email].to_s == 'true' ? :email : :normal)
+        kind = (params[:kind].to_s=='note' ? 'normal' : params[:kind])
         sent_from_crm=true
       elsif !params[:customer_name].blank? and !params[:customer_email].blank?
         #find a customer by this email
@@ -100,6 +100,7 @@ module UniversalCrm
                                         scope: universal_scope,
                                         referring_url: params[:url],
                                         document: document,
+                                        due_on: params[:due_on],
                                         creator: universal_user
                                         
         if !document.nil? and !UniversalCrm::Configuration.secondary_scope_class.blank?
