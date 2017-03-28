@@ -11,7 +11,7 @@ module UniversalCrm
         end
 
         def crm_company_email #can be overwritten in model
-          self.email.to_s.strip
+          self.email.to_s.strip.downcase
         end
         
         def crm_company(scope, kind=nil)
