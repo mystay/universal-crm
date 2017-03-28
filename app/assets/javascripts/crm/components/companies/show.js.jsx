@@ -26,12 +26,7 @@ var CompanyShow = React.createClass({
               </div>
               <div className="panel-body">
                 {this.renderViewEdit()}
-                <div className="text-right">
-                  <button className="btn btn-warning btn-xs m-0" onClick={this.props.handleEdit}>
-                    <i className="fa fa-pencil" />
-                    {this.props.edit ? ' Cancel' : ' Edit'}
-                  </button>
-                </div>
+                {this.renderEditButton()}
               </div>
             </div>
             {newTicket}
@@ -119,6 +114,7 @@ var CompanyShow = React.createClass({
       return(
         <div className="row">
           <div className="col-sm-12">
+            {this.draftAlert()}
             <dl className="dl-horizontal no-margin">
               <dt>Email:</dt>
               <dd className="small" style={{whiteSpace: 'nowrap'}}>{this.mailto()}</dd>
@@ -130,6 +126,11 @@ var CompanyShow = React.createClass({
           </div>
         </div>
       );
+    }
+  },
+  draftAlert: function(){
+    if (this.props.company.status == 'draft'){
+      return(<div className="alert alert-danger alert-sm text-center"><i className="fa fa-exclamation-triangle" /> Draft Company</div>);
     }
   },
   employeeCount: function(){
@@ -144,4 +145,16 @@ var CompanyShow = React.createClass({
         );
     }
   },
+  renderEditButton: function(){
+    if (this.props.gs.config.edit_companies){
+      return(
+        <div className="text-right">
+          <button className="btn btn-warning btn-xs m-0" onClick={this.props.handleEdit}>
+            <i className="fa fa-pencil" />
+            {this.props.edit ? ' Cancel' : ' Edit'}
+          </button>
+        </div>
+      );
+    }
+  }
 });

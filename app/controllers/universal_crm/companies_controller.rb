@@ -32,6 +32,7 @@ module UniversalCrm
           name: c.name, 
           email: c.email, 
           token: c.token,
+          status: c.status,
           tags: c.tags,
           ticket_count: c.tickets.not_closed.count,
           employee_ids: c.employee_ids.to_s,
@@ -66,11 +67,11 @@ module UniversalCrm
     
     def create
       #make sure we don't have an existing customer
-      @company = UniversalCrm::Company.find_or_create_by(scope: universal_scope, email: params[:email].strip)
+      @company = UniversalCrm::Company.find_or_create_by(scope: universal_scope, email: params[:email].strip.downcase)
       if !@company.nil?
-        @company.update(name: params[:name].strip)
+        @company.update(name: params[:name].strip.downcase, status: :draft)
         #Check if we need to link this to a User model
-        render json: {name: @company.name, email: @company.email}
+        render json: {name: @company.name, email: @company.email, existing: @company.created_at<1.minute.ago}
       else
         render json: {}
       end

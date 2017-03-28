@@ -34,6 +34,8 @@ module UniversalCrm
         
         search_in :n, :e
         
+        validates :email, presence: true
+        validates_uniqueness_of :email, scope: [:scope_type, :scope_id]
         # default_scope ->(){order_by(created_at: :desc)}
         
         def inbound_email_address(config)
@@ -84,6 +86,9 @@ module UniversalCrm
         end
         
       end
+      
+      private
+      
     end
   end
 end

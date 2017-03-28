@@ -1,3 +1,8 @@
+/*
+  global React
+  global ReactDOM
+  global $
+*/
 var Config = React.createClass({
   
   getInitialState: function(){
@@ -15,7 +20,7 @@ var Config = React.createClass({
       success: (function(_this){
         return function(data){
           _this.setState({config: data});
-        }
+        };
       })(this)
     });
   },
@@ -32,7 +37,7 @@ var Config = React.createClass({
           </div>
         </div>
       </div>
-    )
+    );
   },
   configForm: function(){
     if (this.state.signedIn){
@@ -61,7 +66,7 @@ var Config = React.createClass({
           _this.setState({config: data});
           showSuccess('Password saved: ' + password);
           _this.finished();
-        }
+        };
       })(this)
     });
   },
@@ -83,7 +88,7 @@ var Config = React.createClass({
             showErrorMessage('Incorrect password');  
           }
           _this.finished();
-        }
+        };
       })(this)
     });
   },
@@ -106,7 +111,8 @@ var Config = React.createClass({
           ticket_flags: ReactDOM.findDOMNode(refs.ticket_flags).value,
           url: ReactDOM.findDOMNode(refs.url).value,
           google_api_key: ReactDOM.findDOMNode(refs.google_api_key).value,
-          companies: ReactDOM.findDOMNode(refs.companies).checked
+          companies: ReactDOM.findDOMNode(refs.companies).checked,
+          edit_companies: ReactDOM.findDOMNode(refs.edit_companies).checked
         }
       },
       success: (function(_this){
@@ -114,7 +120,7 @@ var Config = React.createClass({
           showSuccess('Config updated');
           _this.setState({config: data});
           _this.finished();
-        }
+        };
       })(this)
     });
   }

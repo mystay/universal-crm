@@ -60,19 +60,24 @@ var CompanyList = React.createClass({
     var rows = [];
     for (var i=0;i<this.state.companies.length;i++){
       var company = this.state.companies[i];
-      var badgeCount;
+      var badgeCount, draftBadge;
       var companyStateCountry = this.companyStateCountry(company.address);
       var tags = this.tags(company.tags);
       if (company.ticket_count>0){
         badgeCount = <span className="badge badge-warning" style={{fontSize: '12px', backgroundColor: '#ffab40'}}>{company.ticket_count}</span>;
       }else{
-        badgeCount = <span></span>;
+        badgeCount = null;
+      }
+      if (company.status=='draft'){
+        draftBadge = <span className="badge badge-danger" style={{marginRight: '10px'}}>Draft</span>;
+      }else{
+        draftBadge = null;
       }
       rows.push(
         <tr key={company.id}>
           <td>
             {tags}
-            <a id={company.id} onClick={this.clickCompany} style={{cursor: 'pointer'}}>{company.name}</a>
+            {draftBadge}<a id={company.id} onClick={this.clickCompany} style={{cursor: 'pointer'}}>{company.name}</a>
           </td>
           <td className="small">{company.email}</td>
           <td className="small">{companyStateCountry}</td>

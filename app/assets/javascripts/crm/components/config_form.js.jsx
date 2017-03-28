@@ -67,6 +67,12 @@ var ConfigForm = React.createClass({
           </p>
         </div>
         <div className="form-group">
+          <label htmlFor="edit_companies">Edit Companies</label>
+          <p>
+            <input type="checkbox" defaultChecked={this.props.config.edit_companies} id="edit_companies" ref="edit_companies" /> Edit Companies within the CRM
+          </p>
+        </div>
+        <div className="form-group">
           <label htmlFor="token">Token</label>
           <input type="text" className="form-control" defaultValue={this.props.config.token} id="token" disabled="disabled"/>
         </div>

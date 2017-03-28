@@ -1,3 +1,8 @@
+/*
+  global React
+  global ReactDOM
+  global $
+*/
 var NewCustomer = React.createClass({
   getInitialState: function(){
     return({
@@ -17,12 +22,16 @@ var NewCustomer = React.createClass({
       },
       success: (function(_this){
         return function(data){
-          ReactDOM.findDOMNode(_this.refs.name).value=''
-          ReactDOM.findDOMNode(_this.refs.email).value=''
+          ReactDOM.findDOMNode(_this.refs.name).value='';
+          ReactDOM.findDOMNode(_this.refs.email).value='';
           if (data.email){
-            showSuccess('Customer created: ' + data.email);
+            if (data.existing){
+              showErrorMessage('Customer already exists: ' + data.email);
+            }else{
+              showSuccess('Customer created: ' + data.email);
+            }
           }
-        }
+        };
       })(this)
     });
   },

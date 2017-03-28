@@ -20,7 +20,11 @@ var NewCompany = React.createClass({
           ReactDOM.findDOMNode(_this.refs.name).value=''
           ReactDOM.findDOMNode(_this.refs.email).value=''
           if (data.email){
-            showSuccess('Company created: ' + data.email);
+            if (data.existing){
+              showErrorMessage('Company already exists: ' + data.name);
+            }else{
+              showSuccess('Company created: ' + data.name);
+            }
           }
         }
       })(this)

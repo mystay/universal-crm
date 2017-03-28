@@ -24,7 +24,7 @@ module UniversalCrm
             customer.update(subject: self) if !customer.nil?
           end
           customer ||= self.crm_customers.create(scope: scope, name: self.crm_customer_name, email: self.crm_customer_email, kind: kind.to_s)
-          customer.active! if customer.draft?
+          # customer.active! if customer.draft?
           crm_company.add_employee!(customer) if !crm_company.nil?
           return customer
         end
