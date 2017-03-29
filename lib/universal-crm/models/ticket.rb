@@ -77,7 +77,7 @@ module UniversalCrm
         
         def action!(user=nil)
           if self.active?
-            self.save_comment!("Ticket Actioned", user)
+            self.save_comment!("Marked as Follow Up", user)
             self.actioned!
           end
         end

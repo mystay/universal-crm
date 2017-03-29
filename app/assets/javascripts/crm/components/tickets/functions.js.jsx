@@ -1,3 +1,6 @@
+/*
+  global React
+*/
 var TicketFunctions = React.createClass({
   render: function(){
     return(
@@ -8,20 +11,20 @@ var TicketFunctions = React.createClass({
         {this.ticketFlags()}
         &nbsp;
       </div>
-    )
+    );
   },
   ticketFlags: function(){
     var btns = [];
     btns.push(<i className="fa fa-fw fa-flag text-info" key="flag_icon" style={{marginRight: '5px'}} />);
     for (var i=0;i<this.props.ticketFlags.length;i++){
       var flag = this.props.ticketFlags[i];
-      flagStyle = this.flagButtonStyle(flag.label, `#${flag.color}`);
-      var btn = []
-      btn.push(<button key={`add_${flag.label}`} className="btn no-margin btn-xs" style={flagStyle} onClick={this.addFlag} name={`add_${flag.label}`}>{flag.label}</button>)
+      var flagStyle = this.flagButtonStyle(flag.label, `#${flag.color}`);
+      var btn = [];
+      btn.push(<button key={`add_${flag.label}`} className="btn no-margin btn-xs" style={flagStyle} onClick={this.addFlag} name={`add_${flag.label}`}>{flag.label}</button>);
       if (this.flagged(flag.label)){
-        btn.push(<button key={`remove_${flag.label}`} className="btn no-margin btn-xs btn-default" style={flagStyle} onClick={this.removeFlag} name={`remove_${flag.label}`}>x</button>)
+        btn.push(<button key={`remove_${flag.label}`} className="btn no-margin btn-xs btn-default" style={flagStyle} onClick={this.removeFlag} name={`remove_${flag.label}`}>x</button>);
       }
-      btns.push(<div key={`btn_group_${flag.label}`} className="btn-group" style={{marginRight: '5px'}}>{btn}</div>)
+      btns.push(<div key={`btn_group_${flag.label}`} className="btn-group" style={{marginRight: '5px'}}>{btn}</div>);
     }
     if (this.props.status != 'closed'){
       return (<span>{btns}</span>);
@@ -30,29 +33,27 @@ var TicketFunctions = React.createClass({
     }
   },
   removeFlag: function(e){
-    flag = e.target.name.replace('remove_','');
+    var flag = e.target.name.replace('remove_','');
     if (this.flagged(flag)){
       this.props.changeTicketFlag(flag, false);
     }
   },
   addFlag: function(e){
-    flag = e.target.name.replace('add_','');
+    var flag = e.target.name.replace('add_','');
     if (!this.flagged(flag)){
       this.props.changeTicketFlag(flag, true);
     }
   },
   flagButtonStyle: function(flag_label, color){
     if (this.flagged(flag_label)){
-      return {background: color, color: '#FFF'}
-    }else{
-      return null
+      return({background: color, color: '#FFF'});
     }
   },
   flagged: function(flag_label){
     return this.props.flags.indexOf(flag_label.toString())>-1;
   },
   buttons: function(){
-    var b = []
+    var b = [];
     if (this.props.status == 'closed'){
       b.push(<li key='reopen'>{this.reopenButton()}</li>);
     }else if (this.props.status == 'active'){
@@ -64,7 +65,7 @@ var TicketFunctions = React.createClass({
       b.push(<li key='change'>{this.customerChangeButton()}</li>);
       b.push(<li key='close'>{this.closeButton()}</li>);
     }
-    return(<ul className="list-inline">{b}</ul>)
+    return(<ul className="list-inline">{b}</ul>);
   },
   reopenButton: function(){
     return(
@@ -81,8 +82,8 @@ var TicketFunctions = React.createClass({
   },
   actionedButton: function(){
     return(
-      <button className="btn no-margin btn-success btn-xs" onClick={this.props.changeTicketStatusActioned}>
-        <i className="fa fa-check" /> Actioned
+      <button className="btn no-margin btn-warning btn-xs" onClick={this.props.changeTicketStatusActioned} disabled={this.props.replyCount==0}>
+        <i className="fa fa-exclamation-triangle" /> Follow up
       </button>
     );
   },

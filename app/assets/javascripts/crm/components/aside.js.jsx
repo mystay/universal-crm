@@ -35,8 +35,8 @@ var Aside = React.createClass({
             </li>
             <li>
               <a style={{cursor: 'pointer'}} onClick={this.loadTickets} data-status='actioned'>
-                <i className="fa fa-check fa-fw" />
-                Actioned
+                <i className="fa fa-exclamation-triangle fa-fw" />
+                Follow up
               </a>
             </li>
             <li>

@@ -27,7 +27,7 @@ var TicketTitleButton = React.createClass({
     if (this.props.ticket && this.props.ticket.status == 'closed'){
       return <span className='label label-default' style={{marginRight: '5px'}}>Closed</span>
     }else if (this.props.ticket && this.props.ticket.status == 'actioned'){
-      return <span className='label label-success' style={{marginRight: '5px'}}>Actioned</span>
+      return <span className='label label-warning' style={{marginRight: '5px'}}>Follow up</span>
     }
   },
   tags: function(){
