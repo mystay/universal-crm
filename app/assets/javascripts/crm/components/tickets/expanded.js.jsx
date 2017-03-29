@@ -1,5 +1,15 @@
+/*
+  global React
+*/
 var ExpandedTicket = React.createClass({
-  
+  getInitialState: function(){
+    return({
+      replyCount: 0
+    });
+  },
+  componentDidMount: function(){
+    this.setState({replyCount: this.props.ticket.reply_count});
+  },
   render: function(){
     if (this.props.ticketId == this.props.ticket.id){
       return(
@@ -15,6 +25,7 @@ var ExpandedTicket = React.createClass({
               changeTicketStatusClosed={this.props.changeTicketStatusClosed}
               changeTicketStatusActioned={this.props.changeTicketStatusActioned}
               ticketFlags={this.props.ticketFlags}
+              replyCount={this.state.replyCount}
               />
             <div style={{marginTop: '2px'}}><Tags subjectType="UniversalCrm::Ticket" subjectId={this.props.ticket.id} tags={this.props.ticket.tags} /></div>
             <hr />
@@ -37,6 +48,7 @@ var ExpandedTicket = React.createClass({
             newCommentPlaceholder={this.newCommentPlaceholder()}
             fullWidth={false}
             allowEmail={this.props.ticket.subject_email!=undefined}
+            newCommentReceived={this.newCommentReceived}
             />
           {this.emailWarning()}
         </div>
@@ -112,10 +124,19 @@ var ExpandedTicket = React.createClass({
   actionedStatus: function(){
     if (this.actioned()){
       return(
-        <div className="alert alert-success alert-sm text-center">
-          <i className="fa fa-check" /> Actioned
+        <div className="alert alert-warning alert-sm text-center">
+          <i className="fa fa-exclamation-triangle" /> Follow up
         </div>
       );
     }
+  },
+  newCommentReceived: function(data){
+    var replyCount=0;
+    data.forEach(function(comment){
+      if(!comment.system_generated){
+        replyCount+=1;
+      }
+    });
+    this.setState({replyCount: replyCount});
   }
 });

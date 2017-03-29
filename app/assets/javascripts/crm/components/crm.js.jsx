@@ -24,7 +24,6 @@ var CRM = React.createClass({
       })
     });
     $(document).ready(function(){
-      console.log('mounted');
       window.onbeforeunload = function(e){
         $.ajax({type: 'GET', url: '/crm/unload'});
       };

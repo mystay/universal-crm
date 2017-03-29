@@ -7,7 +7,7 @@ var ChangeCustomerButton = React.createClass({
   render: function(){
     return(
       <div>
-        <button className="btn btn-warning btn-xs" onClick={this.displayChangeCustomer}>
+        <button className="btn btn-default btn-xs" onClick={this.displayChangeCustomer}>
           <i className="fa fa-user" /> Change customer
         </button>
         <Modal ref='change_customer_modal' modalTitle="Change Customer" modalContent={<ChangeCustomer ticket={this.props.ticket}/>} />

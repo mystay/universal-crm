@@ -53,6 +53,7 @@ var Comments = React.createClass({
                newCommentPlaceholder={this.props.newCommentPlaceholder} 
                allowEmail={this.props.allowEmail} 
                hidePrivateComments={this.props.hidePrivateComments}
+               newCommentReceived={this.props.newCommentReceived}
                />);
     }
   },

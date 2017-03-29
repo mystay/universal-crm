@@ -1,5 +1,6 @@
 /*
   global React
+  global ReactDOM
   global $
 */
 var NewComment = React.createClass({
@@ -64,6 +65,9 @@ var NewComment = React.createClass({
           _this.props.updateCommentList(data);
           ReactDOM.findDOMNode(_this.refs.content).value='';
           showSuccess("Comments saved");
+          if (_this.props.newCommentReceived){
+            _this.props.newCommentReceived(data);
+          }
         }
       });
     }
@@ -130,7 +134,7 @@ var NewComment = React.createClass({
   },
   textareaStyle: function(){
     if (this.state.content){
-      return {minHeight: '200px'}
+      return {minHeight: '150px'}
     }else{
       return {height: '40px', backgroundColor: '#fafafa'}
     }
