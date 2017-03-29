@@ -1,5 +1,9 @@
+/*
+  global React
+  global ReactDOM
+  global $
+*/
 var Aside = React.createClass({
-  
   dashboard: function(){
     this.props._goDashboard();
   },
@@ -23,25 +27,25 @@ var Aside = React.createClass({
             </li>
             <li>
               <a style={{cursor: 'pointer'}} onClick={this.loadTickets} data-status='email'>
-                <i className="fa fa-envelope fa-fw" />
+                <i className="fa fa-envelope fa-fw" data-status='email' />
                 Inbox
               </a>
             </li>
             <li>
               <a style={{cursor: 'pointer'}} onClick={this.loadTickets} data-status='active'>
-                <i className="fa fa-folder-open fa-fw" />
+                <i className="fa fa-folder-open fa-fw" data-status='active' />
                 Open
               </a>
             </li>
             <li>
               <a style={{cursor: 'pointer'}} onClick={this.loadTickets} data-status='actioned'>
-                <i className="fa fa-exclamation-triangle fa-fw" />
+                <i className="fa fa-exclamation-triangle fa-fw" data-status='actioned' />
                 Follow up
               </a>
             </li>
             <li>
               <a style={{cursor: 'pointer'}} onClick={this.loadTickets} data-status='closed'>
-                <i className="fa fa-ban fa-fw" />
+                <i className="fa fa-ban fa-fw" data-status='closed' />
                 Closed
               </a>
             </li>
@@ -70,16 +74,16 @@ var Aside = React.createClass({
   },
   flagLinks: function(){
     if (this.props.gs && this.props.gs.config){
-      h = []
+      var h = []
       for (var i=0;i<this.props.gs.config.ticket_flags.length;i++){
-        flag = this.props.gs.config.ticket_flags[i];
+        var flag = this.props.gs.config.ticket_flags[i];
         h.push(
           <li key={flag['label']}>
             <a onClick={this.loadFlaggedTickets} data-flag={flag['label']} style={{cursor: 'pointer'}}>
-              <i className="fa fa-fw fa-tag" style={{color: `#${flag['color']}`}}/> {flag['label']}
+              <i className="fa fa-fw fa-tag" style={{color: `#${flag['color']}`}} data-flag={flag['label']} /> {flag['label']}
             </a>
           </li>
-        )
+        );
       }
       return(h);
     }

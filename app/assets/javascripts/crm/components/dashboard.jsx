@@ -7,21 +7,31 @@ var Dashboard = React.createClass({
     return({
       ticketCounts: null,
       flagCounts: null,
-      totalFlags: 0
+      totalFlags: 0,
+      timer: null,
+      loading: false,
+      pastProps: null
     });
   },
   componentDidMount: function(){
     this.init();
   },
+  componentWillUnmount: function(){
+    window.clearTimeout(this.state.timer);
+  },
   init: function(){
-    var _this=this;
-    $.ajax({
-      type: 'GET',
-      url: '/crm/dashboard',
-      success: function(data){
-        _this.setState({ticketCounts: data.ticket_counts, flagCounts: data.flags, totalFlags: data.totalFlags});
-      }
-    });
+    if (!this.state.loading){
+      this.setState({loading: true, pastProps: this.props});
+      var _this=this;
+      $.ajax({
+        type: 'GET',
+        url: '/crm/dashboard',
+        success: function(data){
+          _this.setState({ticketCounts: data.ticket_counts, flagCounts: data.flags, totalFlags: data.totalFlags, loading: false});
+          _this.setState({timer: window.setTimeout(_this.init, 120000)});
+        }
+      });
+    }
   },
   render: function(){
     return(
