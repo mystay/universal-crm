@@ -1,7 +1,7 @@
 var Aside = React.createClass({
   
-  home: function(){
-    this.props._goTicketList('email');
+  dashboard: function(){
+    this.props._goDashboard();
   },
   loadTickets: function(e){
     this.props._goTicketList($(e.target).attr('data-status'), null, null);
@@ -15,10 +15,10 @@ var Aside = React.createClass({
         <nav>
           <h5 className="sidebar-header">Tickets</h5>
           <ul className="nav nav-pills nav-stacked">
-            <li className="hidden">
-              <a style={{cursor: 'pointer'}} onClick={this.home}>
-                <i className="fa fa-home fa-fw" />
-                Home
+            <li>
+              <a style={{cursor: 'pointer'}} onClick={this.dashboard}>
+                <i className="fa fa-dashboard fa-fw" />
+                Dashboard
               </a>
             </li>
             <li>

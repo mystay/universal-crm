@@ -37,7 +37,7 @@ var CRM = React.createClass({
     }else if (_this.props.ticketId){
       window.setTimeout(function(){_this._goTicket(_this.props.ticketId);}, 1000);
     }else{
-      window.setTimeout(function(){_this._goTicketList('email');}, 1000);
+      window.setTimeout(function(){_this._goDashboard();}, 1000);
     }
   },
   render: function() {
@@ -52,7 +52,7 @@ var CRM = React.createClass({
           />
         <Aside
           gs={this.state.gs} sgs={this.setGlobalState}
-          _goHome={this._goHome}
+          _goDashboard={this._goDashboard}
           _goCompany={this._goCompany}
           _goTicketList={this._goTicketList}
           />
@@ -101,14 +101,18 @@ var CRM = React.createClass({
     }
 //     this.handlePageHistory(title, `/crm`);
   },
+  _goDashboard: function(){
+    this.setGlobalState('pageTitle', 'Dashboard');
+    this.setState({mainComponent: <Dashboard gs={this.state.gs} sgs={this.setGlobalState} _goTicketList={this._goTicketList} />});
+  },
   _goTicket: function(ticketId){
     this.setState({mainComponent: <TicketShowContainer ticketId={ticketId} gs={this.state.gs} sgs={this.setGlobalState} handlePageHistory={this.handlePageHistory} _goCustomer={this._goCustomer} />});
   },
   _goCompany: function(companyId){
-    this.setState({mainComponent: <CompanyShowContainer companyId={companyId} gs={this.state.gs} sgs={this.setGlobalState} handlePageHistory={this.handlePageHistory} _goTicket={this._goTicket} _goCompany={this._goCompany} />})
+    this.setState({mainComponent: <CompanyShowContainer companyId={companyId} gs={this.state.gs} sgs={this.setGlobalState} handlePageHistory={this.handlePageHistory} _goTicket={this._goTicket} _goCompany={this._goCompany} />});
   },
   _goCustomer: function(customerId){
-    this.setState({mainComponent: <CustomerShowContainer customerId={customerId} gs={this.state.gs} sgs={this.setGlobalState} handlePageHistory={this.handlePageHistory} _goTicket={this._goTicket} _goCustomer={this._goCustomer} />})
+    this.setState({mainComponent: <CustomerShowContainer customerId={customerId} gs={this.state.gs} sgs={this.setGlobalState} handlePageHistory={this.handlePageHistory} _goTicket={this._goTicket} _goCustomer={this._goCustomer} />});
   },
   _goCustomerList: function(searchWord){
     this.setState({mainComponent: <CustomerList _goCustomer={this._goCustomer} gs={this.state.gs} sgs={this.setGlobalState} />});
