@@ -50,9 +50,9 @@ var Dashboard = React.createClass({
       return(
         <div className="row">
           <div className="col-sm-6">{this.dashboardTile('envelope', this.state.ticketCounts.inbox, 'Inbox', 'success', 'email')}</div>
-          <div className="col-sm-6">{this.dashboardTile('folder-open', this.state.ticketCounts.open, 'Open', 'primary', 'active')}</div>
+          <div className="col-sm-6">{this.dashboardTile('folder-open', this.state.ticketCounts.open, 'Open Tickets', 'primary', 'active')}</div>
           <div className="col-sm-6">{this.dashboardTile('exclamation-triangle', this.state.ticketCounts.actioned, 'Follow up', 'warning', 'actioned')}</div>
-          <div className="col-sm-6">{this.dashboardTile('ban', this.state.ticketCounts.closed, 'Closed', 'default', 'closed')}</div>
+          <div className="col-sm-6">{this.dashboardTile('ban', this.state.ticketCounts.closed, 'Closed Tickets', 'default', 'closed')}</div>
         </div>
       );
     }

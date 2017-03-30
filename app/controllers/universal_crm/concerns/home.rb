@@ -211,17 +211,17 @@ module UniversalCrm
           flag_count = @tickets.map_reduce(map_flags, reduce).out(inline: true)
           flags = {}
           flag_count.sort_by{|a| -a['value'].to_i}.each do |c|
-            flags.merge!(c['_id'] => c['value'])  
+            flags.merge!(c['_id'] => ActiveSupport::NumberHelper.number_to_delimited(c['value'].to_i))  
           end
           render json: {
             ticket_counts: {
-              inbox: status_count.select{|s| s['_id']['kind']=='email' && s['_id']['status'] == 'active'}.map{|s| s['value'].to_i}.sum,
-              open: status_count.select{|s| s['_id']['status'] == 'active'}.map{|s| s['value'].to_i}.sum,
-              actioned: status_count.select{|s| s['_id']['status'] == 'actioned'}.map{|s| s['value'].to_i}.sum,
-              closed: status_count.select{|s| s['_id']['status'] == 'closed'}.map{|s| s['value'].to_i}.sum
+              inbox: ActiveSupport::NumberHelper.number_to_delimited(status_count.select{|s| s['_id']['kind']=='email' && s['_id']['status'] == 'active'}.map{|s| s['value'].to_i}.sum),
+              open: ActiveSupport::NumberHelper.number_to_delimited(status_count.select{|s| s['_id']['status'] == 'active'}.map{|s| s['value'].to_i}.sum),
+              actioned: ActiveSupport::NumberHelper.number_to_delimited(status_count.select{|s| s['_id']['status'] == 'actioned'}.map{|s| s['value'].to_i}.sum),
+              closed: ActiveSupport::NumberHelper.number_to_delimited(status_count.select{|s| s['_id']['status'] == 'closed'}.map{|s| s['value'].to_i}.sum)
               },
             flags: flags,
-            totalFlags:  flags.to_a.map{|a| a[1].to_i}.sum
+            totalFlags:  flag_count.map{|a| a['value'].to_i}.sum
           }
         end
       end
