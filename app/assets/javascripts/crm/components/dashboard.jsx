@@ -69,16 +69,15 @@ var Dashboard = React.createClass({
     );
   },
   goTicketList: function(e){
-    console.log(e.target);
     this.props._goTicketList($(e.target).attr('data-link'));
   },
   flagCounts: function(){
     var f = [];
     var flagCounts = this.state.flagCounts;
-    var totalFlags = this.state.totalFlags
+    var totalFlags = this.state.totalFlags;
     if (this.props.gs.config.ticket_flags && flagCounts){
       this.props.gs.config.ticket_flags.forEach(function(flag){
-        var flagCount = flagCounts[flag['label']]
+        var flagCount = flagCounts[flag['label']];
         f.push(
           <li key={flag['label']}>
             <span className="text-left">

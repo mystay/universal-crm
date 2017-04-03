@@ -60,7 +60,6 @@ var Aside = React.createClass({
               </a>
             </li>
           </ul>
-          <RecentCompanies _goCompany={this.props._goCompany} gs={this.props.gs} sgs={this.props.sgs} />
         </nav>
         <Modal ref='new_customer_modal' modalTitle="New Customer" modalContent={<NewCustomer />} />
       </aside>

@@ -85,7 +85,6 @@ var Helpdesk = React.createClass({
   },
   displayHelpdesk: function(){
     var modal = ReactDOM.findDOMNode(this.refs.helpdesk_modal);
-    console.log(modal);
     if (modal){
       $(modal).modal('show', {backdrop: 'static'});
     }
