@@ -163,6 +163,10 @@ module UniversalCrm
         def dashboard
           @tickets = UniversalCrm::Ticket.unscoped
           @tickets = @tickets.scoped_to(universal_scope) if !universal_scope.nil?
+          @customers = UniversalCrm::Customer.unscoped
+          @customers = @customers.scoped_to(universal_scope) if !universal_scope.nil?
+          @companies = UniversalCrm::Company.unscoped
+          @companies = @companies.scoped_to(universal_scope) if !universal_scope.nil?
           map = %Q{
             function(){
               emit({status: this._s, kind: this._kn}, 1);
@@ -195,12 +199,20 @@ module UniversalCrm
           render json: {
             ticket_counts: {
               inbox: ActiveSupport::NumberHelper.number_to_delimited(status_count.select{|s| s['_id']['kind']=='email' && s['_id']['status'] == 'active'}.map{|s| s['value'].to_i}.sum),
+              notes: ActiveSupport::NumberHelper.number_to_delimited(status_count.select{|s| s['_id']['kind']=='normal' && s['_id']['status'] == 'active'}.map{|s| s['value'].to_i}.sum),
+              tasks: ActiveSupport::NumberHelper.number_to_delimited(status_count.select{|s| s['_id']['kind']=='task' && s['_id']['status'] == 'active'}.map{|s| s['value'].to_i}.sum),
               open: ActiveSupport::NumberHelper.number_to_delimited(status_count.select{|s| s['_id']['status'] == 'active'}.map{|s| s['value'].to_i}.sum),
               actioned: ActiveSupport::NumberHelper.number_to_delimited(status_count.select{|s| s['_id']['status'] == 'actioned'}.map{|s| s['value'].to_i}.sum),
               closed: ActiveSupport::NumberHelper.number_to_delimited(status_count.select{|s| s['_id']['status'] == 'closed'}.map{|s| s['value'].to_i}.sum)
               },
             flags: flags,
-            totalFlags:  flag_count.map{|a| a['value'].to_i}.sum
+            totalFlags:  flag_count.map{|a| a['value'].to_i}.sum,
+            customer_counts: {
+              draft: ActiveSupport::NumberHelper.number_to_delimited(@customers.draft.count)
+            },
+            company_counts: {
+              draft: ActiveSupport::NumberHelper.number_to_delimited(@companies.draft.count)
+            }
           }
         end
       end

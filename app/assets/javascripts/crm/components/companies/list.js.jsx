@@ -9,11 +9,12 @@ var CompanyList = React.createClass({
       loading: false,
       companyPagination: null,
       companyPage: null,
-      pastProps: null
+      pastProps: null,
+      companyStatus: null
     });
   },
   init: function(){
-    this.loadCompanies(this.props.gs.searchWord);
+    this.loadCompanies(this.props.gs.searchWord, this.props.gs.companyStatus);
   },
   componentDidMount: function(){
     this.init();
@@ -26,15 +27,16 @@ var CompanyList = React.createClass({
   clickCompany: function(e){
     this.props._goCompany(e.target.id);
   },  
-  loadCompanies: function(searchWord, page){
+  loadCompanies: function(searchWord, companyStatus, page){
     if (!this.state.loading){
-      this.setState({loading: true, pastProps: this.props});
+      this.setState({loading: true, pastProps: this.props, companyStatus: companyStatus});
       if (page==undefined){page=1;}
       if (searchWord==undefined){searchWord='';}
+      if (companyStatus==undefined){companyStatus='';}
       var _this=this;
       return $.ajax({
         method: 'GET',
-        url: `/crm/companies?q=${searchWord}&page=${page}`,
+        url: `/crm/companies?q=${searchWord}&page=${page}&status=${companyStatus}`,
         success: function(data){
           _this.setState({
             loading: false,
@@ -47,11 +49,8 @@ var CompanyList = React.createClass({
       });
     }
   },
-  hidecompanyList: function(){
-    
-  },
   companyStateCountry: function(address){
-    var items = []
+    var items = [];
     if (address.state){items.push(address.state);}
     if (address.country_code){items.push(address.country_code);}
     return items.join(', ');
@@ -89,7 +88,7 @@ var CompanyList = React.createClass({
     return rows;
   },
   pageResults: function(page){
-    this.props.loadCompanies(page);
+    this.props.loadCompanies(this.state.searchWord, this.state.companyStatus, page);
     this.setState({currentPage: page});
   },
   render: function(){

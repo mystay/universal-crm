@@ -15,6 +15,7 @@ module UniversalCrm
       params[:page] = 1 if params[:page].blank?
       @companies = UniversalCrm::Company.all
       @companies = @companies.scoped_to(universal_scope) if !universal_scope.nil?
+      @companies = @companies.where(status: params[:status]) if !params[:status].blank?
       if !params[:q].blank?
         @companies = @companies.full_text_search(params[:q], match: :all)
       end

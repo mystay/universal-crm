@@ -110,7 +110,7 @@ var CRM = React.createClass({
   },
   _goDashboard: function(){
     this.setGlobalState('pageTitle', 'Dashboard');
-    this.setState({mainComponent: <Dashboard gs={this.state.gs} sgs={this.setGlobalState} _goTicketList={this._goTicketList} />});
+    this.setState({mainComponent: <Dashboard gs={this.state.gs} sgs={this.setGlobalState} _goTicketList={this._goTicketList} _goCustomerList={this._goCustomerList} _goCompanyList={this._goCompanyList} />});
   },
   _goTicket: function(ticketId){
     this.setState({mainComponent: <TicketShowContainer ticketId={ticketId} gs={this.state.gs} sgs={this.setGlobalState} handlePageHistory={this.handlePageHistory} _goCustomer={this._goCustomer} _goCompany={this._goCompany} />});
@@ -121,12 +121,14 @@ var CRM = React.createClass({
   _goCustomer: function(customerId){
     this.setState({mainComponent: <CustomerShowContainer customerId={customerId} gs={this.state.gs} sgs={this.setGlobalState} handlePageHistory={this.handlePageHistory} _goTicket={this._goTicket} _goCompany={this._goCompany} _goCustomer={this._goCustomer} />});
   },
-  _goCustomerList: function(searchWord){
+  _goCustomerList: function(searchWord, status){
     this.setGlobalState('searchWord', '');
+    this.setGlobalState('customerStatus', status);
     this.setState({mainComponent: <CustomerList _goCustomer={this._goCustomer} gs={this.state.gs} sgs={this.setGlobalState} />});
   },
-  _goCompanyList: function(searchWord){
+  _goCompanyList: function(searchWord, status){
     this.setGlobalState('searchWord', '');
+    this.setGlobalState('companyStatus', status);
     this.setState({mainComponent: <CompanyList _goCustomer={this._goCustomer} _goCompany={this._goCompany} gs={this.state.gs} sgs={this.setGlobalState} />});
   },
   _goSearch: function(searchWord){

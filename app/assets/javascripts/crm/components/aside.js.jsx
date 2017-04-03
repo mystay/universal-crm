@@ -58,9 +58,9 @@ var Aside = React.createClass({
               </a>
             </li>
             <li>
-              <a style={{cursor: 'pointer'}} onClick={this.loadTickets} data-status='actioned' data-title="Actioned" data-icon="fa-check">
-                <i className="fa fa-check fa-fw" />
-                Actioned
+              <a style={{cursor: 'pointer'}} onClick={this.loadTickets} data-status='actioned' data-title="Follow up" data-icon="fa-exclamation-triangle">
+                <i className="fa fa-exclamation-triangle fa-fw" />
+                Follow up
               </a>
             </li>
             <li>
@@ -80,7 +80,7 @@ var Aside = React.createClass({
               </a>
             </li>
             <li>
-              <a style={{cursor: 'pointer'}} onClick={this.props._goCustomerList}>
+              <a style={{cursor: 'pointer'}} onClick={this.listCustomers}>
                 <i className="fa fa-list fa-fw" />
                 List
               </a>
@@ -92,6 +92,12 @@ var Aside = React.createClass({
         <Modal ref='new_company_modal' modalTitle="New Company" modalContent={<NewCompany />} />
       </aside>
     );
+  },
+  listCustomers: function(){
+    this.props._goCustomerList('','');
+  },
+  listCompanies: function(){
+    this.props._goCompanyList('');
   },
   displayNewCustomer: function(){
     var modal = ReactDOM.findDOMNode(this.refs.new_customer_modal);
@@ -117,7 +123,7 @@ var Aside = React.createClass({
             </a>
           </li>
           <li>
-            <a style={{cursor: 'pointer'}} onClick={this.props._goCompanyList}>
+            <a style={{cursor: 'pointer'}} onClick={this.listCompanies}>
               <i className="fa fa-list fa-fw" />
               List
             </a>

@@ -10,11 +10,12 @@ var CustomerList = React.createClass({
       pagination: null,
       pageNum: null,
       pastProps: null,
-      searchWord: null
+      searchWord: null,
+      customerStatus: null
     });
   },
   init: function(){
-    this.loadCustomers(this.props.gs.searchWord);
+    this.loadCustomers(this.props.gs.searchWord, this.props.gs.customerStatus);
   },
   componentDidMount: function(){
     this.init();
@@ -25,18 +26,20 @@ var CustomerList = React.createClass({
     }
   },
   clickCustomer: function(e){
-    this.props.sgs('searchWord', '');
+    this.props.sgs('searchWord', null);
+    this.props.sgs('customerStatus', null);
     this.props._goCustomer($(e.target).attr('data-id'));
   },  
-  loadCustomers: function(searchWord, page){
+  loadCustomers: function(searchWord, customerStatus, page){
     if (!this.state.loading){
-      this.setState({loading: true, pastProps: this.props, searchWord: searchWord});
+      this.setState({loading: true, pastProps: this.props, searchWord: searchWord, customerStatus: customerStatus});
       if (page==undefined){page=1;}
       if (searchWord==undefined){searchWord='';}
+      if (customerStatus==undefined){customerStatus='';}
       var _this=this;
       return $.ajax({
         method: 'GET',
-        url: `/crm/customers?q=${searchWord}&page=${page}`,
+        url: `/crm/customers?q=${searchWord}&page=${page}&status=${customerStatus}`,
         success: function(data){
           _this.setState({
             loading: false,
@@ -48,9 +51,6 @@ var CustomerList = React.createClass({
         }
       });
     }
-  },
-  hideCustomerList: function(){
-    
   },
   customerList: function(){
     var rows = [];
@@ -78,7 +78,7 @@ var CustomerList = React.createClass({
     return rows;
   },
   pageResults: function(page){
-    this.loadCustomers(this.state.searchWord, page);
+    this.loadCustomers(this.state.searchWord, this.state.customerStatus, page);
     this.setState({currentPage: page});
   },
   render: function(){
