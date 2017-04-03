@@ -78,6 +78,7 @@ var Dashboard = React.createClass({
     if (this.props.gs.config.ticket_flags && flagCounts){
       this.props.gs.config.ticket_flags.forEach(function(flag){
         var flagCount = flagCounts[flag['label']];
+        flagCount=((flagCount==undefined) ? 0 : flagCount.replace(',',''));
         f.push(
           <li key={flag['label']}>
             <span className="text-left">
@@ -86,7 +87,6 @@ var Dashboard = React.createClass({
             <div className="progress progress-xs">
               <div className="progress-bar progress-bar-success" role="progressbar" style={{backgroundColor: `#${flag['color']}`, width: `${parseInt((flagCount/totalFlags)*100)}%`}}></div>
             </div>
-            
           </li>
         );
       });
