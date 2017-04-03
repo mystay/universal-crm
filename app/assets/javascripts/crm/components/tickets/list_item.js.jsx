@@ -14,6 +14,7 @@ var TicketListItem = React.createClass({
             selectTicketId={this.selectTicketId}
             gs={this.props.gs} sgs={this.props.sgs}
           />
+          <div style={{marginTop: '5px'}}><TicketStatus ticket={this.props.ticket} gs={this.props.gs} /></div>
         </h4>
         {this.listItemDetails()}
       </div>

@@ -14,6 +14,8 @@ UniversalCrm::Engine.routes.draw do
   get '/active', to: 'home#index'
   get '/closed', to: 'home#index'
   get '/init.json', to: 'home#init'
+  get '/unload', to: 'home#unload'
+  get '/dashboard', to: 'home#dashboard'
   
   resource :config, controller: :config
   
@@ -40,7 +42,7 @@ UniversalCrm::Engine.routes.draw do
   end
   resources :tickets do
     member do
-      patch :update_status, :flag, :update_customer, :assign_user
+      patch :update_status, :flag, :update_customer, :assign_user, :editing
     end
   end
   resources :comments

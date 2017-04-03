@@ -17,7 +17,6 @@ var ChangeCustomer = React.createClass({
       select: function(e, ui){
         e.preventDefault();
         searchField.value = ui.item.label;
-        console.log(ui.item.label);
         _this.setState({customerId: ui.item.value});
       },
       focus: function(e,ui){

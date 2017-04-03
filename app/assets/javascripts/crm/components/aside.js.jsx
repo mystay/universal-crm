@@ -1,10 +1,11 @@
-/*global React*/
-/*global ReactDOM*/
-/*global $*/
+/*
+  global React
+  global ReactDOM
+  global $
+*/
 var Aside = React.createClass({
-  
-  home: function(){
-    this.props._goTicketList('active');
+  dashboard: function(){
+    this.props._goDashboard();
   },
   loadTickets: function(e){
     this.props._goTicketList($(e.target).attr('data-status'), null, null);
@@ -26,10 +27,10 @@ var Aside = React.createClass({
         <nav>
           <h5 className="sidebar-header">Tickets</h5>
           <ul className="nav nav-pills nav-stacked">
-            <li className="hidden">
-              <a style={{cursor: 'pointer'}} onClick={this.home}>
-                <i className="fa fa-home fa-fw" />
-                Home
+            <li>
+              <a style={{cursor: 'pointer'}} onClick={this.dashboard}>
+                <i className="fa fa-dashboard fa-fw" />
+                Dashboard
               </a>
             </li>
             <li>
@@ -107,23 +108,23 @@ var Aside = React.createClass({
   companiesMenu: function(){
     if (this.props.gs && this.props.gs.config && this.props.gs.config.companies){
       return(<div>
-          <h5 className="sidebar-header">Companies</h5>
-          <ul className="nav nav-pills nav-stacked">
-            <li>
-              <a style={{cursor: 'pointer'}} onClick={this.displayNewCompany}>
-                <i className="fa fa-plus fa-fw" />
-                New
-              </a>
-            </li>
-            <li>
-              <a style={{cursor: 'pointer'}} onClick={this.props._goCompanyList}>
-                <i className="fa fa-list fa-fw" />
-                List
-              </a>
-            </li>
-          </ul>
-          </div>
-          );
+        <h5 className="sidebar-header">Companies</h5>
+        <ul className="nav nav-pills nav-stacked">
+          <li>
+            <a style={{cursor: 'pointer'}} onClick={this.displayNewCompany}>
+              <i className="fa fa-plus fa-fw" />
+              New
+            </a>
+          </li>
+          <li>
+            <a style={{cursor: 'pointer'}} onClick={this.props._goCompanyList}>
+              <i className="fa fa-list fa-fw" />
+              List
+            </a>
+          </li>
+        </ul>
+        </div>
+      );
     }
   },
   flagLinks: function(){
@@ -134,7 +135,7 @@ var Aside = React.createClass({
         h.push(
           <li key={flag['label']}>
             <a onClick={this.loadFlaggedTickets} data-flag={flag['label']} style={{cursor: 'pointer'}}>
-              <i className="fa fa-fw fa-tag" style={{color: `#${flag['color']}`}}/> {flag['label']}
+              <i className="fa fa-fw fa-tag" style={{color: `#${flag['color']}`}} data-flag={flag['label']} /> {flag['label']}
             </a>
           </li>
         );

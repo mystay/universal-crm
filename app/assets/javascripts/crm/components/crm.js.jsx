@@ -23,6 +23,11 @@ var CRM = React.createClass({
         _this.init(_this);
       })
     });
+    $(document).ready(function(){
+      window.onbeforeunload = function(e){
+        $.ajax({type: 'GET', url: '/crm/unload'});
+      };
+    });
   },
   init: function(_this){
     if (_this.props.customerId){
@@ -32,7 +37,7 @@ var CRM = React.createClass({
     }else if (_this.props.ticketId){
       window.setTimeout(function(){_this._goTicket(_this.props.ticketId);}, 1000);
     }else{
-      window.setTimeout(function(){_this._goTicketList('active');}, 1000);
+      window.setTimeout(function(){_this._goDashboard();}, 1000);
     }
   },
   render: function() {
@@ -47,7 +52,7 @@ var CRM = React.createClass({
           />
         <Aside
           gs={this.state.gs} sgs={this.setGlobalState}
-          _goHome={this._goHome}
+          _goDashboard={this._goDashboard}
           _goCompany={this._goCompany}
           _goTicketList={this._goTicketList}
           _goCustomerList={this._goCustomerList}
@@ -102,6 +107,10 @@ var CRM = React.createClass({
     this.setGlobalState('pageTitle', null);
     this.handlePageHistory('Home', '/crm');
     this.setState({mainComponent: <TicketList _goTicket={this._goTicket} gs={this.state.gs} sgs={this.setGlobalState} status={status} flag={flag} _goCustomer={this._goCustomer} _goCompany={this._goCompany} />});
+  },
+  _goDashboard: function(){
+    this.setGlobalState('pageTitle', 'Dashboard');
+    this.setState({mainComponent: <Dashboard gs={this.state.gs} sgs={this.setGlobalState} _goTicketList={this._goTicketList} />});
   },
   _goTicket: function(ticketId){
     this.setState({mainComponent: <TicketShowContainer ticketId={ticketId} gs={this.state.gs} sgs={this.setGlobalState} handlePageHistory={this.handlePageHistory} _goCustomer={this._goCustomer} _goCompany={this._goCompany} />});

@@ -2,6 +2,8 @@ require_dependency "universal_crm/application_controller"
 
 module UniversalCrm
   class TicketsController < ApplicationController
+
+    before_filter :remove_tickets_viewing!, only: %w(index)
     
     def index
       params[:page] = 1 if params[:page].blank?
@@ -68,6 +70,7 @@ module UniversalCrm
       if @ticket.nil?
         render json: {ticket: nil}
       else
+        @ticket.being_viewed_by!(universal_user)
         respond_to do |format|
           format.html{}
           format.json{
@@ -172,6 +175,12 @@ module UniversalCrm
       end
       render json: {user: {name: @user.name, email: @user.email}}
         
+    end
+    
+    def editing
+      @ticket = UniversalCrm::Ticket.find(params[:id])
+      @ticket.being_edited_by!(universal_user)
+      render json: {}
     end
     
   end

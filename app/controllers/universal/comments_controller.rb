@@ -16,8 +16,11 @@ module Universal
       @comment.when = Time.now.utc
       @comment.user = current_user
       if @comment.save
-        if @model.class == UniversalCrm::Ticket and @comment.email?
-          UniversalCrm::Mailer.ticket_reply(universal_crm_config, @model.subject, @model, @comment).deliver_now
+        if @model.class == UniversalCrm::Ticket 
+          if @comment.email?
+            UniversalCrm::Mailer.ticket_reply(universal_crm_config, @model.subject, @model, @comment).deliver_now
+          end
+          @model.not_edited_by!(universal_user)
         end
         @model.touch
       else

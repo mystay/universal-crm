@@ -95,34 +95,37 @@ var TicketShowContainer = React.createClass({
   render: function(){
     if (this.state.ticket){
       return (
-        <div className="panel panel-info">
-          <div className="panel-heading">
-            <h3 className="panel-title">
-              <div className="pull-right text-muted">{this.state.ticket.from_email || this.state.ticket.subject_email}</div>
-              {this.fromTo()} <TicketCustomerName 
-                name={this.state.ticket.subject_name}
-                status={this.state.ticket.subject_status}
-                subject_type={this.state.ticket.subject_type}
-                id={this.state.ticket.subject_id}
-                _goCustomer={this.props._goCustomer}
-                _goCompany={this.props._goCompany}
-              /> <span className="text-muted"> {this.subjectEmail()} - {this.state.ticket.created_at}</span>
-            </h3>
-          </div>
-          <div className="panel-body">
-            {this.emailAddressConflict()}
-            <ExpandedTicket
-              ticketId={this.state.ticket.id}
-              ticket={this.state.ticket}
-              status={this.state.ticket.status}
-              changeTicketFlag={this.changeTicketFlag}
-              changeTicketStatusActive={this.changeTicketStatusActive}
-              changeTicketStatusClosed={this.changeTicketStatusClosed}
-              changeTicketStatusActioned={this.changeTicketStatusActioned}
-              countComments={this.countComments}
-              ticketFlags={this.props.gs.config.ticket_flags}
-              gs={this.props.gs}
-              />
+        <div>
+          <TicketStatus ticket={this.state.ticket} gs={this.props.gs} />
+          <div className="panel panel-info">
+            <div className="panel-heading">
+              <h3 className="panel-title">
+                <div className="pull-right text-muted">{this.state.ticket.from_email || this.state.ticket.subject_email}</div>
+                {this.fromTo()} <TicketCustomerName 
+                  name={this.state.ticket.subject_name}
+                  status={this.state.ticket.subject_status}
+                  subject_type={this.state.ticket.subject_type}
+                  id={this.state.ticket.subject_id}
+                  _goCustomer={this.props._goCustomer}
+                  _goCompany={this.props._goCompany}
+                /> <span className="text-muted"> {this.subjectEmail()} - {this.state.ticket.created_at}</span>
+              </h3>
+            </div>
+            <div className="panel-body">
+              {this.emailAddressConflict()}
+              <ExpandedTicket
+                ticketId={this.state.ticket.id}
+                ticket={this.state.ticket}
+                status={this.state.ticket.status}
+                changeTicketFlag={this.changeTicketFlag}
+                changeTicketStatusActive={this.changeTicketStatusActive}
+                changeTicketStatusClosed={this.changeTicketStatusClosed}
+                changeTicketStatusActioned={this.changeTicketStatusActioned}
+                countComments={this.countComments}
+                ticketFlags={this.props.gs.config.ticket_flags}
+                gs={this.props.gs}
+                />
+            </div>
           </div>
         </div>
       );
