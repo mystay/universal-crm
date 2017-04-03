@@ -15,7 +15,6 @@ var TicketFunctions = React.createClass({
   },
   ticketFlags: function(){
     var btns = [];
-    btns.push(<i className="fa fa-fw fa-flag text-info" key="flag_icon" style={{marginRight: '5px'}} />);
     for (var i=0;i<this.props.ticketFlags.length;i++){
       var flag = this.props.ticketFlags[i];
       var flagStyle = this.flagButtonStyle(flag.label, `#${flag.color}`);

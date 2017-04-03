@@ -86,6 +86,7 @@ module UniversalCrm
     def add_employee
       employee = UniversalCrm::Customer.find(params[:customer_id])
       @company.add_employee!(employee)
+      @company.subject.add_employee!(employee.subject) if employee.subject and @company.subject
       employee.active! if employee.draft?
       render json: {employees: @company.employees_json}
     end
