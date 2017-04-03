@@ -41,6 +41,7 @@ var TicketListItem = React.createClass({
             _goCompany={this.props._goCompany}
             subject_type={this.props.ticket.subject_type}
             name={this.props.ticket.subject_name}
+            email={this.props.ticket.subject_email}
             id={this.props.ticket.subject_id}
             status={this.props.ticket.subject_status}
             creator_name={this.props.ticket.creator_name}

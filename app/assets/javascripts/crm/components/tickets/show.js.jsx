@@ -103,6 +103,7 @@ var TicketShowContainer = React.createClass({
                 <div className="pull-right text-muted">{this.state.ticket.from_email || this.state.ticket.subject_email}</div>
                 {this.fromTo()} <TicketCustomerName 
                   name={this.state.ticket.subject_name}
+                  email={this.state.ticket.subject_email}
                   status={this.state.ticket.subject_status}
                   subject_type={this.state.ticket.subject_type}
                   id={this.state.ticket.subject_id}

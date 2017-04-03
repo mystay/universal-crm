@@ -110,6 +110,7 @@ var CRM = React.createClass({
   },
   _goDashboard: function(){
     this.setGlobalState('pageTitle', 'Dashboard');
+    this.handlePageHistory('Dashboard', '/crm');
     this.setState({mainComponent: <Dashboard gs={this.state.gs} sgs={this.setGlobalState} _goTicketList={this._goTicketList} _goCustomerList={this._goCustomerList} _goCompanyList={this._goCompanyList} />});
   },
   _goTicket: function(ticketId){

@@ -56,7 +56,9 @@ module UniversalCrm
             closed_ticket_count: self.tickets.unscoped.closed.count,
             employee_ids: self.employee_ids,
             employees: self.employees_json,
-            address: self.address
+            address: self.address,
+            subject_type: self.subject_type,
+            subject_id: self.subject_id.to_s
             }
         end
         

@@ -71,7 +71,9 @@ module UniversalCrm
             token: self.token,
             inbound_email_address: self.inbound_email_address(config),
             closed_ticket_count: self.tickets.unscoped.closed.count,
-            companies: self.companies.map{|c| c.to_json(config)}
+            companies: self.companies.map{|c| c.to_json(config)},
+            subject_type: self.subject_type,
+            subject_id: self.subject_id.to_s
             }
         end
         

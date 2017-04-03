@@ -70,7 +70,7 @@ module UniversalCrm
                 #find who it was originally from:
                 forwarded_from = nil
                 #Need to establish if this was a forwarded message, and find who it was originally from
-                forwarded_match_regexp = /from:[\\n|\s]*(\b[^\<]*)?[\\n|\s|\<]*(\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b)\>/i
+                forwarded_match_regexp = /from:[\\n|\s]*(\b[^\<\[]*)?[\\n|\s|\<|\[]*[\b|mailto\:]*([A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b)[\>|\]]/i
                 s = params['TextBody']
                 forwarded_message = s.match(forwarded_match_regexp)
                 if !forwarded_message.nil?

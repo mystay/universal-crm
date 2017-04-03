@@ -27,7 +27,7 @@ var CompanySettings = React.createClass({
       method: 'PATCH',
       url: `/crm/companies/${this.props.company.id}/update_status?status=${status}`,
       success: function(data){
-        console.log(data);
+        // console.log(data);
       }
     });
   },
