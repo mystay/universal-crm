@@ -27,7 +27,7 @@ var CustomerSettings = React.createClass({
       method: 'PATCH',
       url: `/crm/customers/${this.props.customer.id}/update_status?status=${status}`,
       success: function(data){
-        console.log(data);
+        // console.log(data);
       }
     });
   },

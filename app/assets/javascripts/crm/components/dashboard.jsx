@@ -69,25 +69,24 @@ var Dashboard = React.createClass({
     );
   },
   goTicketList: function(e){
-    console.log(e.target);
     this.props._goTicketList($(e.target).attr('data-link'));
   },
   flagCounts: function(){
     var f = [];
     var flagCounts = this.state.flagCounts;
-    var totalFlags = this.state.totalFlags
+    var totalFlags = this.state.totalFlags;
     if (this.props.gs.config.ticket_flags && flagCounts){
       this.props.gs.config.ticket_flags.forEach(function(flag){
-        var flagCount = flagCounts[flag['label']]
+        var flagCount = flagCounts[flag['label']];
+        flagCount=((flagCount==undefined) ? 0 : flagCount.replace(',',''));
         f.push(
           <li key={flag['label']}>
             <span className="text-left">
               <i className="fa fa-fw fa-tag pull-right" style={{color: `#${flag['color']}`}}/> {flag['label']} <span className="text-info">({flagCount})</span>
             </span>
             <div className="progress progress-xs">
-              <div className="progress-bar progress-bar-success" role="progressbar" style={{backgroundColor: `#${flag['color']}`, width: `${parseInt((flagCount/totalFlags)*100)}%`}}></div>
+              <div className="progress-bar progress-bar-success" role="progressbar" style={{backgroundColor: `#${flag['color']}`, width: `${Math.round((flagCount/totalFlags)*100)}%`}}></div>
             </div>
-            
           </li>
         );
       });
