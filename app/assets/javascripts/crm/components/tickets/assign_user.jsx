@@ -25,18 +25,18 @@ var AssignUser = React.createClass({
       var u = [];
       for (var i=0;i<this.props.gs.users.length;i++){
         var user = this.props.gs.users[i];
-        u.push(<li key={user.id}>{this.userButton(user)}</li>);
+        u.push(<div className="col-xs-3" key={user.id}>{this.userButton(user)}</div>);
       }
-      return(<ul className="list-inline">{u}</ul>);
+      return(<div className="row">{u}</div>);
     }
   },
   userButton: function(user){
     return(
-      <button className="btn btn-info" onClick={this.assignUser} data-id={user.id} data-name={user.name}>{user.name}</button>
+      <button className="btn btn-primary btn-sm btn-block" onClick={this.assignUser} data-id={user.id} data-name={user.name}>{user.name}</button>
     );
   },
   assignUser: function(e){
-    var button = $(e.target)
+    var button = $(e.target);
     var userId = button.attr('data-id');
     if (confirm(`Are you sure you want to assign this ticket to ${button.attr('data-name')}?`)){
       var _this=this;
@@ -56,7 +56,7 @@ var AssignUser = React.createClass({
     if (this.state.assignedTo){
       return(
         <p className="lead">Ticket has been assigned to: {this.state.assignedTo.name}</p>
-      )
+      );
     }
   }
 });
