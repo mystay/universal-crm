@@ -47,6 +47,9 @@ module UniversalCrm
             #check if the BCC is for our inbound addresses:
             if !bcc.blank?
               config = UniversalCrm::Config.find_by(inbound_email_addresses: bcc)
+              #check if it was forwarded to the bcc address:
+              possible_token = bcc.split('@')[0]
+              config = UniversalCrm::Config.find_by(token: /#{possible_token}/i)
               #To = customer, From = user
               if !config.nil?
                 ticket_subject = UniversalCrm::Customer.find_by(scope: config.scope, email: /^#{to}$/i)
