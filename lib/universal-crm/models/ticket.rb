@@ -156,6 +156,8 @@ module UniversalCrm
             incoming: self.incoming?,
             responsible_id: self.responsible_id.to_s,
             responsible_name: (self.responsible.nil? ? nil : self.responsible.name),
+            creator_id: self.creator_id.to_s,
+            creator_name: (self.creator.nil? ? nil : self.creator.name),
             referring_url: self.referring_url
           }
         end
