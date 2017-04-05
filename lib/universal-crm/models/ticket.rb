@@ -35,6 +35,7 @@ module UniversalCrm
         flags %w(priority)
 
         belongs_to :document, polymorphic: true #the related document that this ticket should link to.
+        belongs_to :creator, class_name: Universal::Configuration.class_name_user, foreign_key: :creator_id
         belongs_to :responsible, class_name: Universal::Configuration.class_name_user, foreign_key: :responsible_id
         
         if !UniversalCrm::Configuration.secondary_scope_class.blank?
