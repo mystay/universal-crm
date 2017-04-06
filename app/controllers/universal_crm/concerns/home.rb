@@ -53,7 +53,7 @@ module UniversalCrm
                 #To = Owner, From = user, BCC'd/forwarded to CRM
                 ticket_subject = UniversalCrm::Customer.find_by(scope: config.scope, email: /^#{from}$/i)
                 ticket_subject ||= UniversalCrm::Company.find_by(scope: config.scope, email: /^#{from}$/i) #check if there's a company now
-                ticket_subject ||= UniversalCrm::Customer.create(scope: config.scope, email: (from), name: from_name)
+                ticket_subject ||= UniversalCrm::Customer.create(scope: config.scope, email: (from), name: from_name, status: config.default_customer_status)
                 creator = Universal::Configuration.class_name_user.classify.constantize.find_by(email: /^#{from}$/i)
                 if !ticket_subject.nil? and !ticket_subject.blocked?
                   ticket_subject.update(name: to_name) if ticket_subject.name.blank?
@@ -70,7 +70,7 @@ module UniversalCrm
                 #To = customer, From = user
                 ticket_subject = UniversalCrm::Customer.find_by(scope: config.scope, email: /^#{to}$/i)
                 ticket_subject ||= UniversalCrm::Company.find_by(scope: config.scope, email: /^#{to}$/i) #check if there's a company now
-                ticket_subject ||= UniversalCrm::Customer.create(scope: config.scope, email: (to), name: to_name, status: :draft)
+                ticket_subject ||= UniversalCrm::Customer.create(scope: config.scope, email: (to), name: to_name, status: config.default_customer_status)
                 creator = Universal::Configuration.class_name_user.classify.constantize.find_by(email: /^#{from}$/i)
                 if !ticket_subject.nil? and !ticket_subject.blocked?
                   ticket_subject.update(name: to_name) if ticket_subject.name.blank?
@@ -98,12 +98,12 @@ module UniversalCrm
                   forwarded_from = forwarded_message[2].to_s.downcase.strip
                   ticket_subject = UniversalCrm::Customer.find_by(scope: config.scope, email: /^#{forwarded_from||to}$/i)
                   ticket_subject ||= UniversalCrm::Company.find_by(scope: config.scope, email: /^#{forwarded_from||to}$/i) #check if there's a company now
-                  ticket_subject ||= UniversalCrm::Customer.create(scope: config.scope, email: (forwarded_from||to), status: :draft)
+                  ticket_subject ||= UniversalCrm::Customer.create(scope: config.scope, email: (forwarded_from||to), status: config.default_customer_status)
                   ticket_subject.update(name: from_name) if ticket_subject.name.blank?
                 else
                   ticket_subject = UniversalCrm::Customer.find_by(scope: config.scope, email: /^#{forwarded_from||from}$/i)
                   ticket_subject ||= UniversalCrm::Company.find_by(scope: config.scope, email: /^#{forwarded_from||from}$/i) #check if there's a company now
-                  ticket_subject ||= UniversalCrm::Customer.create(scope: config.scope, email: (forwarded_from||from), status: :draft)
+                  ticket_subject ||= UniversalCrm::Customer.create(scope: config.scope, email: (forwarded_from||from), status: config.default_customer_status)
                   ticket_subject.update(name: to_name) if ticket_subject.name.blank?
                 end
                 puts ticket_subject.to_json(config)

@@ -24,7 +24,10 @@ module UniversalCrm
         :ticket_flags,
         :google_api_key,
         :test_email,
-        :tasks
+        :tasks,
+        :companies,
+        :edit_companies,
+        :default_customer_status
       )
       p[:ticket_flags] = p[:ticket_flags].to_s.gsub('\r','').split("\n").map{|p| {label: p.split('|')[0], color: p.split('|')[1]}}
       p[:inbound_email_addresses] = p[:inbound_email_addresses].downcase.gsub(' ','').split(',')
