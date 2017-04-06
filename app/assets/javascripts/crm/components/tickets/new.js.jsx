@@ -49,10 +49,23 @@ var NewTicket = React.createClass({
   },
   buttonList: function(){
     var buttons = [];
-    buttons.push(<button key="btn-note" className="btn btn-info btn-sm" disabled={this.isNote()} data-kind="note" onClick={this.selectKind}><i className="fa fa-sticky-note" /> New Note</button>);
-    buttons.push(<button key="btn-task" className="btn btn-info btn-sm" disabled={this.isTask()} data-kind="task" onClick={this.selectKind}><i className="fa fa-check-circle" /> New Task</button>);
+    buttons.push(
+      <button key="btn-note" className="btn btn-info btn-sm" disabled={this.isNote()} data-kind="note" onClick={this.selectKind}>
+        <i className="fa fa-sticky-note" onClick={this.selectKind} data-kind="note" /> New Note
+      </button>
+    );
+    if (this.props.gs && this.props.gs.config && this.props.gs.config.tasks){
+      buttons.push(
+        <button key="btn-task" className="btn btn-info btn-sm" disabled={this.isTask()} data-kind="task" onClick={this.selectKind}>
+          <i className="fa fa-check-circle" onClick={this.selectKind} data-kind="task" /> New Task
+        </button>
+      );
+    }
     if (this.props.gs.config && this.props.gs.config.transaction_email_address && this.props.subject.email){
-      buttons.push(<button key="btn-email" className="btn btn-info btn-sm" disabled={this.isEmail()} data-kind="email" onClick={this.selectKind}><i className="fa fa-envelope" /> New Email</button>);
+      buttons.push(
+        <button key="btn-email" className="btn btn-info btn-sm" disabled={this.isEmail()} data-kind="email" onClick={this.selectKind}>
+          <i className="fa fa-envelope" onClick={this.selectKind} data-kind="email" /> New Email
+        </button>);
     }
     return(<div className="form-group"><div className="btn-group">{buttons}</div></div>);
   },
@@ -132,16 +145,7 @@ var NewTicket = React.createClass({
       <div>
         {this.titleField()}
         {this.contentField()}
-        <div className="form-group">
-          <div className="row">
-            <div className="col-sm-4 col-xs-6">
-              {this.dueOn()}
-            </div>
-            <div className="col-sm-8 col-xs-12">
-              {this.assignTo()}
-            </div>
-          </div>
-        </div>
+        {this.taskFields()}
       </div>
     );
   },
@@ -168,9 +172,9 @@ var NewTicket = React.createClass({
     );
   },
   contentField: function(){
-    var height=150;
+    var height=100;
     if (this.isEmail()){
-      height=250;
+      height=200;
     }
     if (this.state.title){
       return(
@@ -202,23 +206,25 @@ var NewTicket = React.createClass({
       );
     }
   },
-  dueOn: function(){
+  taskFields: function(){
     if (this.state.title){
       return(
-        <label>
-          Due date:
-          <input type="text" className="datepicker form-control" placeholder="DD-MM-YYYY"/>
-        </label>
-      );
-    }
-  },
-  assignTo: function(){
-    if (this.state.title){
-      return(
-        <label>
-          Assign to:
-          {this.users()}
-        </label>
+        <div className="form-group">
+          <div className="row">
+            <div className="col-sm-4 col-xs-6">
+              <label>
+                Due date:
+                <input type="text" className="datepicker form-control" placeholder="DD-MM-YYYY"/>
+              </label>
+            </div>
+            <div className="col-sm-8 col-xs-12">
+              <label>
+                Assign to:
+                {this.users()}
+              </label>
+            </div>
+          </div>
+        </div>
       );
     }
   },
@@ -239,7 +245,7 @@ var NewTicket = React.createClass({
       btnClass = 'btn-primary';
     }
     if (this.props.gs.user.id==user.id){
-      btnText = 'Me'
+      btnText = 'Me';
     }
     return(
       <button className={`btn ${btnClass} btn-xs`} onClick={this.assignUser} data-id={user.id} data-name={user.name}>{btnText}</button>

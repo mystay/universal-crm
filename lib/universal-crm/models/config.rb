@@ -24,6 +24,7 @@ module UniversalCrm
         field :gak, as: :google_api_key
         field :cs, as: :companies, type: Boolean, default: false
         field :ecs, as: :edit_companies, type: Boolean, default: false
+        field :ts, as: :tasks, type: Boolean, default: false
         
         def to_json
           {
@@ -42,6 +43,7 @@ module UniversalCrm
             email_footer: self.email_footer,
             google_api_key: self.google_api_key,
             companies: self.companies,
+            tasks: self.tasks,
             edit_companies: self.edit_companies
           }
         end

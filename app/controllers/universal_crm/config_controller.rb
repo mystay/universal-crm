@@ -12,7 +12,8 @@ module UniversalCrm
     
     def update
       p = params.require(:config).permit(:system_name, :url, :inbound_domain, :inbound_email_addresses, :transaction_email_address, :transaction_email_from,
-        :new_ticket_header, :new_reply_header, :email_footer, :ticket_flags, :google_api_key, :companies, :edit_companies)
+        :new_ticket_header, :new_reply_header, :email_footer, :ticket_flags, :google_api_key, :companies, :edit_companies,
+        :tasks)
       p[:ticket_flags] = p[:ticket_flags].to_s.gsub('\r','').split("\n").map{|p| {label: p.split('|')[0], color: p.split('|')[1]}}
       p[:inbound_email_addresses] = p[:inbound_email_addresses].downcase.gsub(' ','').split(',')
       puts p

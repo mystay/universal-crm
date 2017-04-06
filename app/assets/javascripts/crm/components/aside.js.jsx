@@ -39,12 +39,7 @@ var Aside = React.createClass({
                 Emails
               </a>
             </li>
-            <li>
-              <a style={{cursor: 'pointer'}} onClick={this.loadTickets} data-status='task' data-title="Tasks" data-icon="fa-check-circle">
-                <i className="fa fa-check-circle fa-fw" />
-                Tasks
-              </a>
-            </li>
+            {this.tasksButton()}
             <li>
               <a style={{cursor: 'pointer'}} onClick={this.loadTickets} data-status='normal' data-title="Notes" data-icon="fa-sticky-note">
                 <i className="fa fa-sticky-note fa-fw" />
@@ -147,6 +142,18 @@ var Aside = React.createClass({
         );
       }
       return(h);
+    }
+  },
+  tasksButton: function(){
+    if (this.props.gs && this.props.gs.config && this.props.gs.config.tasks){
+      return(
+        <li>
+          <a style={{cursor: 'pointer'}} onClick={this.loadTickets} data-status='task' data-title="Tasks" data-icon="fa-check-circle">
+            <i className="fa fa-check-circle fa-fw" />
+            Tasks
+          </a>
+        </li>
+      );
     }
   }
 })

@@ -73,6 +73,12 @@ var ConfigForm = React.createClass({
           </p>
         </div>
         <div className="form-group">
+          <label htmlFor="tasks">Tasks</label>
+          <p>
+            <input type="checkbox" defaultChecked={this.props.config.tasks} id="tasks" ref="tasks" /> Use Tasks system within the CRM
+          </p>
+        </div>
+        <div className="form-group">
           <label htmlFor="token">Token</label>
           <input type="text" className="form-control" defaultValue={this.props.config.token} id="token" disabled="disabled"/>
         </div>

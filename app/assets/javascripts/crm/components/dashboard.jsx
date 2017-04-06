@@ -53,7 +53,7 @@ var Dashboard = React.createClass({
         <div>
           <div className="row">
             <div className="col-sm-4 col-xs-6">{this.dashboardTile('envelope', this.state.ticketCounts.inbox, 'Emails', 'primary', 'email', this.goTicketList)}</div>
-            <div className="col-sm-4 col-xs-6">{this.dashboardTile('check-circle', this.state.ticketCounts.tasks, 'Tasks', 'primary', 'task', this.goTicketList)}</div>
+            {this.tasksTile()}
             <div className="col-sm-4 col-xs-6">{this.dashboardTile('sticky-note', this.state.ticketCounts.notes, 'Notes', 'primary', 'normal', this.goTicketList)}</div>
             <div className="col-sm-4 col-xs-6">{this.dashboardTile('folder-open', this.state.ticketCounts.open, 'Open Tickets', 'success', 'active', this.goTicketList)}</div>
             <div className="col-sm-4 col-xs-6">{this.dashboardTile('exclamation-triangle', this.state.ticketCounts.actioned, 'Follow up', 'warning', 'actioned', this.goTicketList)}</div>
@@ -77,6 +77,13 @@ var Dashboard = React.createClass({
         </div>
       </div>
     );
+  },
+  tasksTile: function(){
+    if (this.props.gs && this.props.gs.config && this.props.gs.config.tasks){
+      return(
+        <div className="col-sm-4 col-xs-6">{this.dashboardTile('check-circle', this.state.ticketCounts.tasks, 'Tasks', 'primary', 'task', this.goTicketList)}</div>
+      );
+    }
   },
   goTicketList: function(e){
     this.props._goTicketList($(e.target).attr('data-link'));
