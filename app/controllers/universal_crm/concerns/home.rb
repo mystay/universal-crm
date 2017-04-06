@@ -47,9 +47,27 @@ module UniversalCrm
             
             #check if the BCC is for our inbound addresses:
             if !bcc.blank?
-              config = UniversalCrm::Config.find_by(inbound_email_addresses: bcc)
-              #To = customer, From = user
-              if !config.nil?
+              #check if it was forwarded to the bcc address:
+              possible_token = bcc.split('@')[0]
+              if config = UniversalCrm::Config.find_by(token: /#{possible_token}/i)
+                #To = Owner, From = user, BCC'd/forwarded to CRM
+                ticket_subject = UniversalCrm::Customer.find_by(scope: config.scope, email: /^#{from}$/i)
+                ticket_subject ||= UniversalCrm::Company.find_by(scope: config.scope, email: /^#{from}$/i) #check if there's a company now
+                ticket_subject ||= UniversalCrm::Customer.create(scope: config.scope, email: (from), name: from_name)
+                creator = Universal::Configuration.class_name_user.classify.constantize.find_by(email: /^#{from}$/i)
+                if !ticket_subject.nil? and !ticket_subject.blocked?
+                  ticket_subject.update(name: to_name) if ticket_subject.name.blank?
+                  ticket = ticket_subject.tickets.create  kind: :email,
+                                                          title: params['Subject'],
+                                                          content: params['TextBody'].hideQuotedLines,
+                                                          html_body: params['HtmlBody'].hideQuotedLines,
+                                                          scope: config.scope,
+                                                          to_email: to,
+                                                          from_email: from,
+                                                          creator: creator
+                end
+              elsif config = UniversalCrm::Config.find_by(inbound_email_addresses: bcc)
+                #To = customer, From = user
                 ticket_subject = UniversalCrm::Customer.find_by(scope: config.scope, email: /^#{to}$/i)
                 ticket_subject ||= UniversalCrm::Company.find_by(scope: config.scope, email: /^#{to}$/i) #check if there's a company now
                 ticket_subject ||= UniversalCrm::Customer.create(scope: config.scope, email: (to), name: to_name, status: :draft)
@@ -99,34 +117,34 @@ module UniversalCrm
                                                           from_email: from,
                                                           creator: creator
                 end
-              else
-                #find email addresses that match our config domains
-                inbound_domains = UniversalCrm::Config.all.map{|c| c.inbound_domain}
-                puts inbound_domains
-                if !to.blank? and inbound_domains.include?(to[to.index('@')+1, to.length])
-                  to = to
-                elsif !bcc.blank? and inbound_domains.include?(bcc[bcc.index('@')+1, bcc.length])
-                  to = bcc
-                end
-                token = to[3, to.index('@')-3]
-                if to[0,3] == 'tk-'
-                  logger.warn "Direct to ticket"
-                  ticket = UniversalCrm::Ticket.find_by(token: /^#{token}$/i)
-                  ticket_subject = ticket.subject
-                  user = (ticket_subject.subject.class.to_s == Universal::Configuration.class_name_user.to_s ? ticket_subject.subject : nil),
-                  if !ticket.nil?
-                    ticket.open!(user)
-                    ticket.update(kind: :email)
-                    comment = ticket.comments.create content: params['TextBody'].hideQuotedLines,
-                                            html_body: params['HtmlBody'].hideQuotedLines,
-                                            user: user,
-                                            kind: :email,
-                                            when: Time.now.utc,
-                                            author: (ticket_subject.nil? ? 'Unknown' : ticket_subject.name),
-                                            incoming: true
-                    
-                    logger.warn comment.errors.to_json
-                  end
+              end
+            elsif !to.blank?
+              #find email addresses that match our config domains
+              inbound_domains = UniversalCrm::Config.all.map{|c| c.inbound_domain}
+              puts inbound_domains
+              if !to.blank? and inbound_domains.include?(to[to.index('@')+1, to.length])
+                to = to
+              elsif !bcc.blank? and inbound_domains.include?(bcc[bcc.index('@')+1, bcc.length])
+                to = bcc
+              end
+              token = to[3, to.index('@')-3]
+              if to[0,3] == 'tk-'
+                logger.warn "Direct to ticket"
+                ticket = UniversalCrm::Ticket.find_by(token: /^#{token}$/i)
+                ticket_subject = ticket.subject
+                user = (ticket_subject.subject.class.to_s == Universal::Configuration.class_name_user.to_s ? ticket_subject.subject : nil),
+                if !ticket.nil?
+                  ticket.open!(user)
+                  ticket.update(kind: :email)
+                  comment = ticket.comments.create content: params['TextBody'].hideQuotedLines,
+                                          html_body: params['HtmlBody'].hideQuotedLines,
+                                          user: user,
+                                          kind: :email,
+                                          when: Time.now.utc,
+                                          author: (ticket_subject.nil? ? 'Unknown' : ticket_subject.name),
+                                          incoming: true
+                  
+                  logger.warn comment.errors.to_json
                 end
               end
             else
