@@ -45,7 +45,7 @@ module UniversalCrm
             google_api_key: self.google_api_key,
             companies: self.companies,
             tasks: self.tasks,
-            edit_companies: self.edit_companies
+            edit_companies: self.edit_companies,
             test_email: self.test_email
           }
         end
