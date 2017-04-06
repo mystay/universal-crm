@@ -58,7 +58,7 @@ module UniversalCrm
       #make sure we don't have an existing customer
       @customer = UniversalCrm::Customer.find_or_create_by(scope: universal_scope, email: params[:email].strip.downcase)
       if !@customer.nil?
-        @customer.update(name: params[:name].strip, status: :draft)    
+        @customer.update(name: params[:name].strip, status: universal_crm_config.default_customer_status)    
         render json: {name: @customer.name, email: @customer.email, existing: @customer.created_at<1.minute.ago}
       else
         render json: {}
