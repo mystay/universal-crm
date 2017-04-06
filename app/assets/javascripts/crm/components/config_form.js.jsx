@@ -40,6 +40,11 @@ var ConfigForm = React.createClass({
           <input type="text" className="form-control" defaultValue={this.props.config.transaction_email_address} id="transaction_email_address" ref="transaction_email_address" />
         </div>
         <div className="form-group">
+          <label htmlFor="test_email">Test Email Address</label>
+          <p className="small">Dev/Test emails will be sent TO this address</p>
+          <input type="text" className="form-control" defaultValue={this.props.config.test_email} id="test_email" ref="test_email" />
+        </div>
+        <div className="form-group">
           <label htmlFor="new_ticket_header">New Ticket Email Header</label>
           <textarea className="form-control small" defaultValue={this.props.config.new_ticket_header} id="new_ticket_header" ref="new_ticket_header"></textarea>
         </div>
@@ -59,6 +64,7 @@ var ConfigForm = React.createClass({
         <div className="form-group">
           <label htmlFor="google_api_key">Google API Key (optional)</label>
           <input type="text" className="form-control" defaultValue={this.props.config.google_api_key} id="google_api_key" ref="google_api_key" />
+          <p className="small">This will allow shortening of attachment URLs.</p>
         </div>
         <div className="form-group">
           <label htmlFor="token">Token</label>
