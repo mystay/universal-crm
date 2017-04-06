@@ -128,27 +128,27 @@ module UniversalCrm
                   end
                 end
               end
-              #check for attachments
-              if !ticket.nil? and !params['Attachments'].blank? and !params['Attachments'].empty?
-                params['Attachments'].each do |email_attachment|
-                  filename = email_attachment['Name']
-                  body = email_attachment['Content']
-  #                 puts body
-                  begin
-                    decoded = Base64.decode64(body.to_s)
-  #                 puts decoded
-                    path = "#{Rails.root}/tmp/attachments/#{Time.now.to_i}-#{filename}"
-                    File.open(path, 'wb'){|f| f.write(decoded)}
-                    att = ticket.attachments.create file: File.open(path), name: filename
-                    logger.warn att.errors.to_json
-                    File.delete(path)
-                  rescue => error
-                    puts "Attachment error: #{error.to_s}"
-                  end
-                end              
-              end
             else
               logger.warn "To not received"
+            end
+            #check for attachments
+            if !ticket.nil? and !params['Attachments'].blank? and !params['Attachments'].empty?
+              params['Attachments'].each do |email_attachment|
+                filename = email_attachment['Name']
+                body = email_attachment['Content']
+#                 puts body
+                begin
+                  decoded = Base64.decode64(body.to_s)
+#                 puts decoded
+                  path = "#{Rails.root}/tmp/attachments/#{Time.now.to_i}-#{filename}"
+                  File.open(path, 'wb'){|f| f.write(decoded)}
+                  att = ticket.attachments.create file: File.open(path), name: filename
+                  logger.warn att.errors.to_json
+                  File.delete(path)
+                rescue => error
+                  puts "Attachment error: #{error.to_s}"
+                end
+              end              
             end
             render json: {}
           else
