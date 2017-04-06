@@ -7,7 +7,7 @@ var PageHeader = React.createClass({
       if (this.props.gs.pageTitle==null){
         return(<h1>Home</h1>);
       }else{
-        return(<h1>{this.props.gs.pageTitle}</h1>);
+        return(<h1>{this.pageIcon()}{this.props.gs.pageTitle}</h1>);
       }
     }
   },
@@ -30,5 +30,10 @@ var PageHeader = React.createClass({
         {this.pageTitle()}
       </nav>
     )
+  },
+  pageIcon: function(){
+    if (this.props.gs.pageIcon){
+      return(<i className={`fa fa-fw ${this.props.gs.pageIcon}`} style={{marginRight: '5px'}} />);
+    }
   }
 });

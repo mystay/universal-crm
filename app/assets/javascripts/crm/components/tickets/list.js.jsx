@@ -56,6 +56,7 @@ var TicketList = React.createClass({
               ticket={this.state.tickets[i]}
               _goTicket={this.props._goTicket}
               _goCustomer={this.props._goCustomer}
+              _goCompany={this.props._goCompany}
               setCustomerId={this.props.setCustomerId}
               gs={this.props.gs} sgs={this.props.sgs}
               />
@@ -103,7 +104,7 @@ var TicketList = React.createClass({
     }
   },
   pageResults: function(page){
-    this.loadTickets(this.state.status, this.state.flag, '', page);
+    this.loadTickets(this.state.status, this.state.flag, this.props.gs.searchWord, page);
     this.setState({currentPage: page});
   }
 })

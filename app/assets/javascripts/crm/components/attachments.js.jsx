@@ -8,11 +8,17 @@ var Attachments = React.createClass({
       parentId: null,
       attachments: [],
       newAttachment: false,
-      loading: false
+      loading: false,
+      uniqueId: null
     });
   },
   init: function(){
-    var input_id = `#file_input_${this.props.customerId}`;
+    var uniqueId = `${this.props.subjectType.replace('::','-')}_${this.props.subjectId||this.props.parentId}`;
+    this.setState({uniqueId: uniqueId});
+  },
+  initFileUpload: function(){
+    var uniqueId = this.state.uniqueId;
+    var input_id = `#file_input_${uniqueId}`;
     var file = $(input_id);
     var _this = this;
     $(file).fileupload({
@@ -20,15 +26,15 @@ var Attachments = React.createClass({
       url: this.url(),
       done: function (e, data) {
         _this.loadAttachments();
-        $('#progress').hide();
-        $('#progress .progress-bar').css('width', '0%');
+        $(`#progress_${uniqueId}`).hide();
+        $(`#progress_${uniqueId} .progress-bar`).css('width', '0%');
         _this.toggleNew();
       },
       progressall: function (e, data) {
-        $('#progress').show();
+        $(`#progress_${uniqueId}`).show();
         $('#file_input').blur();
         var progress = parseInt(data.loaded / data.total * 100, 10);
-        $('#progress .progress-bar').css('width', progress + '%');
+        $(`#progress_${uniqueId} .progress-bar`).css('width', progress + '%');
       }
     });
   },
@@ -37,6 +43,7 @@ var Attachments = React.createClass({
     this.init();
   },
   componentDidUpdate: function(){
+    this.initFileUpload();
     if ((this.props.subjectId != null && this.props.subjectId != this.state.subjectId && !this.state.loading) || (this.props.parentId != null && this.props.parentId != this.state.parentId && !this.state.loading)){
       this.loadAttachments();
       this.init();
@@ -50,10 +57,10 @@ var Attachments = React.createClass({
       <div>
         {this.list()}
         {this.newAttachment()}
-        <div id="new_attachment_form" style={{display: 'none'}}>
+        <div id={`new_attachment_form_${this.state.uniqueId}`} style={{display: 'none'}}>
           <div className="form-group">
-            <input id={`file_input_${this.props.customerId}`} type="file" className="form-control" ref='fileUpload' />
-            <div id="progress" className="progress" style={{display: 'none'}}>
+            <input id={`file_input_${this.state.uniqueId}`} type="file" className="form-control" ref='fileUpload' />
+            <div id={`progress_${this.state.uniqueId}`} className="progress" style={{display: 'none'}}>
               <div className="progress-bar progress-bar-primary"></div>
             </div>
           </div>
@@ -107,7 +114,7 @@ var Attachments = React.createClass({
   },
   toggleNew: function(){
     this.setState({newAttachment: true});
-    $('#new_attachment_form').show();
+    $(`#new_attachment_form_${this.state.uniqueId}`).show();
   },
   newAttachment: function(){
     if(!this.state.newAttachment && (this.props.new==undefined || this.props.new==true)){

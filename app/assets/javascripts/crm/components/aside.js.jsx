@@ -9,6 +9,14 @@ var Aside = React.createClass({
   },
   loadTickets: function(e){
     this.props._goTicketList($(e.target).attr('data-status'), null, null);
+    var title = $(e.target).attr('data-title');
+    if (title){
+      this.props.sgs('pageTitle', title);
+    }
+    var icon = $(e.target).attr('data-icon');
+    if (icon){
+      this.props.sgs('pageIcon', icon);
+    }
   },
   loadFlaggedTickets: function(e){
     this.props._goTicketList(null, $(e.target).attr('data-flag'));
@@ -26,26 +34,33 @@ var Aside = React.createClass({
               </a>
             </li>
             <li>
-              <a style={{cursor: 'pointer'}} onClick={this.loadTickets} data-status='email'>
-                <i className="fa fa-envelope fa-fw" data-status='email' />
-                Inbox
+              <a style={{cursor: 'pointer'}} onClick={this.loadTickets} data-status='email' data-title="Emails" data-icon="fa-envelope">
+                <i className="fa fa-envelope fa-fw" />
+                Emails
+              </a>
+            </li>
+            {this.tasksButton()}
+            <li>
+              <a style={{cursor: 'pointer'}} onClick={this.loadTickets} data-status='normal' data-title="Notes" data-icon="fa-sticky-note">
+                <i className="fa fa-sticky-note fa-fw" />
+                Notes
               </a>
             </li>
             <li>
-              <a style={{cursor: 'pointer'}} onClick={this.loadTickets} data-status='active'>
-                <i className="fa fa-folder-open fa-fw" data-status='active' />
-                Open
+              <a style={{cursor: 'pointer'}} onClick={this.loadTickets} data-status='active' data-title="All Open Tickets" data-icon="fa-folder-open">
+                <i className="fa fa-folder-open fa-fw" />
+                All Open Tickets
               </a>
             </li>
             <li>
-              <a style={{cursor: 'pointer'}} onClick={this.loadTickets} data-status='actioned'>
-                <i className="fa fa-exclamation-triangle fa-fw" data-status='actioned' />
+              <a style={{cursor: 'pointer'}} onClick={this.loadTickets} data-status='actioned' data-title="Follow up" data-icon="fa-exclamation-triangle">
+                <i className="fa fa-exclamation-triangle fa-fw" />
                 Follow up
               </a>
             </li>
             <li>
-              <a style={{cursor: 'pointer'}} onClick={this.loadTickets} data-status='closed'>
-                <i className="fa fa-ban fa-fw" data-status='closed' />
+              <a style={{cursor: 'pointer'}} onClick={this.loadTickets} data-status='closed' data-title="Closed" data-icon="fa-ban">
+                <i className="fa fa-ban fa-fw" />
                 Closed
               </a>
             </li>
@@ -59,11 +74,25 @@ var Aside = React.createClass({
                 New
               </a>
             </li>
+            <li>
+              <a style={{cursor: 'pointer'}} onClick={this.listCustomers}>
+                <i className="fa fa-list fa-fw" />
+                List
+              </a>
+            </li>
           </ul>
+          {this.companiesMenu()}
         </nav>
         <Modal ref='new_customer_modal' modalTitle="New Customer" modalContent={<NewCustomer />} />
+        <Modal ref='new_company_modal' modalTitle="New Company" modalContent={<NewCompany />} />
       </aside>
-    )
+    );
+  },
+  listCustomers: function(){
+    this.props._goCustomerList('','');
+  },
+  listCompanies: function(){
+    this.props._goCompanyList('');
   },
   displayNewCustomer: function(){
     var modal = ReactDOM.findDOMNode(this.refs.new_customer_modal);
@@ -71,9 +100,37 @@ var Aside = React.createClass({
       $(modal).modal('show', {backdrop: 'static'});
     }
   },
+  displayNewCompany: function(){
+    var modal = ReactDOM.findDOMNode(this.refs.new_company_modal);
+    if (modal){
+      $(modal).modal('show', {backdrop: 'static'});
+    }
+  },
+  companiesMenu: function(){
+    if (this.props.gs && this.props.gs.config && this.props.gs.config.companies){
+      return(<div>
+        <h5 className="sidebar-header">Companies</h5>
+        <ul className="nav nav-pills nav-stacked">
+          <li>
+            <a style={{cursor: 'pointer'}} onClick={this.displayNewCompany}>
+              <i className="fa fa-plus fa-fw" />
+              New
+            </a>
+          </li>
+          <li>
+            <a style={{cursor: 'pointer'}} onClick={this.listCompanies}>
+              <i className="fa fa-list fa-fw" />
+              List
+            </a>
+          </li>
+        </ul>
+        </div>
+      );
+    }
+  },
   flagLinks: function(){
     if (this.props.gs && this.props.gs.config){
-      var h = []
+      var h = [];
       for (var i=0;i<this.props.gs.config.ticket_flags.length;i++){
         var flag = this.props.gs.config.ticket_flags[i];
         h.push(
@@ -85,6 +142,18 @@ var Aside = React.createClass({
         );
       }
       return(h);
+    }
+  },
+  tasksButton: function(){
+    if (this.props.gs && this.props.gs.config && this.props.gs.config.tasks){
+      return(
+        <li>
+          <a style={{cursor: 'pointer'}} onClick={this.loadTickets} data-status='task' data-title="Tasks" data-icon="fa-check-circle">
+            <i className="fa fa-check-circle fa-fw" />
+            Tasks
+          </a>
+        </li>
+      );
     }
   }
 })

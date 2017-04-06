@@ -3,6 +3,8 @@ require_dependency "universal_crm/application_controller"
 module UniversalCrm
   class CompaniesController < ApplicationController
     
+    before_filter :find_company, only: %w(show update update_status add_employee)
+    
     def recent
       @companies = UniversalCrm::Company.order_by(created_at: :desc).limit(8)
       @companies = @companies.scoped_to(universal_scope) if !universal_scope.nil?
@@ -13,9 +15,11 @@ module UniversalCrm
       params[:page] = 1 if params[:page].blank?
       @companies = UniversalCrm::Company.all
       @companies = @companies.scoped_to(universal_scope) if !universal_scope.nil?
+      @companies = @companies.where(status: params[:status]) if !params[:status].blank?
       if !params[:q].blank?
         @companies = @companies.full_text_search(params[:q], match: :all)
       end
+      @companies = @companies.order_by(name: :asc)
       @companies = @companies.page(params[:page])
       render json: {
         pagination: {
@@ -29,9 +33,12 @@ module UniversalCrm
           name: c.name, 
           email: c.email, 
           token: c.token,
+          status: c.status,
+          tags: c.tags,
           ticket_count: c.tickets.not_closed.count,
           employee_ids: c.employee_ids.to_s,
-          employees: c.employees_json
+          employees: c.employees_json,
+          address: c.address
           }}
         }
     end
@@ -47,7 +54,6 @@ module UniversalCrm
     end
     
     def show
-      @company = UniversalCrm::Company.find(params[:id])
       if @company.nil?
         render json: {company: nil}
       else
@@ -58,6 +64,36 @@ module UniversalCrm
           }
         end
       end
+    end
+    
+    def create
+      #make sure we don't have an existing customer
+      @company = UniversalCrm::Company.find_or_create_by(scope: universal_scope, email: params[:email].strip.downcase)
+      if !@company.nil?
+        @company.update(name: params[:name].strip.downcase, status: universal_crm_config.default_customer_status)
+        #Check if we need to link this to a User model
+        render json: {name: @company.name, email: @company.email, existing: @company.created_at<1.minute.ago}
+      else
+        render json: {}
+      end
+    end
+    
+    def update
+      @company.update(params.require(:company).permit(:name, :email, :address_line_1, :address_line_2, :address_city, :address_state, :address_post_code, :country_id))
+      render json: {company: @company.to_json(universal_crm_config)}
+    end
+    
+    def add_employee
+      employee = UniversalCrm::Customer.find(params[:customer_id])
+      @company.add_employee!(employee)
+      @company.subject.add_employee!(employee.subject) if employee.subject and @company.subject
+      employee.active! if employee.draft?
+      render json: {employees: @company.employees_json}
+    end
+    
+    private
+    def find_company
+      @company = UniversalCrm::Company.find(params[:id])
     end
     
   end

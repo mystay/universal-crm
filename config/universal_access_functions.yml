@@ -1,3 +1,9 @@
 crm:
   new_ticket: Create new tickets
-  block_customers: Block customer'
+  block_customers: Block customer
+  new_note: Create new notes
+  new_task: Create new tasks
+  new_email: Create new emails
+  view_notes: View notes
+  view_tasks: View tasks
+  view_emails: View emails

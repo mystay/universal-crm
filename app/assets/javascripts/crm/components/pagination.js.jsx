@@ -1,8 +1,9 @@
+/*global React*/
 var Pagination = React.createClass({
   render: function(){
-    description = null;
+    var description = null;
     if ((this.props.displayDescription == undefined || this.props.displayDescription) && this.props.pagination){
-      description = <li className="small">Showing {this.firstNumber()} to {this.lastNumber()} of {this.props.pagination.total_count} results</li>
+      description = <li className="small">Showing {this.firstNumber()} to {this.lastNumber()} of {this.props.pagination.total_count} results</li>;
     }
     if (this.props.pagination && this.paginationRequired()){
       return(
@@ -19,28 +20,27 @@ var Pagination = React.createClass({
             </ul>
           </nav>
         </div>
-      )
+      );
     }else{
-      return(
-        null
-      )
+      return(null);
     }
   },
   paginationRequired: function(){
     return (this.props.pagination.total_count>this.props.pagination.per_page);
   },
   firstNumber: function(){
+    var n;
     if (this.props.pagination.current_page==1){
       n = 1;
     }else{
       n = ((this.props.pagination.current_page-1) * this.props.pagination.per_page)+1;
     }
-    return n
+    return n;
   },
   lastNumber: function(){
-    n = (this.props.pagination.current_page * this.props.pagination.per_page);
+    var n = (this.props.pagination.current_page * this.props.pagination.per_page);
     if(n>this.props.pagination.total_count){
-      n = this.props.pagination.total_count
+      n = this.props.pagination.total_count;
     }
     return n;
   },

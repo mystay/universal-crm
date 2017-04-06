@@ -21,6 +21,7 @@ module UniversalCrm
         store_in session: UniversalCrm::Configuration.mongoid_session_name, collection: 'crm_customers'
 
         field :n, as: :name
+        field :p, as: :position
         field :e, as: :email
         field :ph, as: :phone_home
         field :pw, as: :phone_work
@@ -29,11 +30,13 @@ module UniversalCrm
         has_many :tickets, as: :subject, class_name: 'UniversalCrm::Ticket'
         employed_by [{companies: 'UniversalCrm::Company'}]
 
-        statuses %w(active blocked), default: :active
+        statuses %w(active draft blocked), default: :active
         
         search_in :n, :e
         
-        default_scope ->(){order_by(created_at: :desc)}
+        validates :email, presence: true
+        validates_uniqueness_of :email, scope: [:scope_type, :scope_id]
+        # default_scope ->(){order_by(created_at: :desc)}
         
         def inbound_email_address(config)
           "cr-#{self.token}@#{config.inbound_domain}"
@@ -58,6 +61,7 @@ module UniversalCrm
             status: self.status,
             number: self.number.to_s, 
             name: self.name,
+            position: self.position,
             email: self.email, 
             phone_home: self.phone_home,
             phone_work: self.phone_work,
@@ -66,7 +70,10 @@ module UniversalCrm
             ticket_count: self.tickets.count, 
             token: self.token,
             inbound_email_address: self.inbound_email_address(config),
-            closed_ticket_count: self.tickets.unscoped.closed.count
+            closed_ticket_count: self.tickets.unscoped.closed.count,
+            companies: self.companies.map{|c| c.to_json(config)},
+            subject_type: self.subject_type,
+            subject_id: self.subject_id.to_s
             }
         end
         
@@ -81,6 +88,9 @@ module UniversalCrm
         end
         
       end
+      
+      private
+      
     end
   end
 end
