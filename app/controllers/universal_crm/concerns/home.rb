@@ -43,6 +43,7 @@ module UniversalCrm
             bcc = params['BccFull'][0]['Email'].downcase if !params['BccFull'].blank? and !params['BccFull'][0].blank? and !params['BccFull'][0]['Email'].blank? and params['BccFull'][0]['Email'].include?('@')
             from = params['From'].downcase
             from_name = params['FromName']
+            ticket=nil
             
             #check if the BCC is for our inbound addresses:
             if !bcc.blank?
