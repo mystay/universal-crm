@@ -25,6 +25,7 @@ module UniversalCrm
         field :cs, as: :companies, type: Boolean, default: false
         field :ecs, as: :edit_companies, type: Boolean, default: false
         field :ts, as: :tasks, type: Boolean, default: false
+        field :te, as: :test_email
         
         def to_json
           {
@@ -45,6 +46,7 @@ module UniversalCrm
             companies: self.companies,
             tasks: self.tasks,
             edit_companies: self.edit_companies
+            test_email: self.test_email
           }
         end
         

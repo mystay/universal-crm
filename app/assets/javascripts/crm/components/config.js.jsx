@@ -6,9 +6,11 @@
 var Config = React.createClass({
   
   getInitialState: function(){
-    return(
-      {config: null, signedIn: false, loading: false}
-    )
+    return({
+      config: null,
+      signedIn: false,
+      loading: false
+    });
   },
   componentDidMount: function(){
     this.init();
@@ -113,7 +115,8 @@ var Config = React.createClass({
           google_api_key: ReactDOM.findDOMNode(refs.google_api_key).value,
           companies: ReactDOM.findDOMNode(refs.companies).checked,
           edit_companies: ReactDOM.findDOMNode(refs.edit_companies).checked,
-          tasks: ReactDOM.findDOMNode(refs.tasks).checked
+          tasks: ReactDOM.findDOMNode(refs.tasks).checked,
+          test_email: ReactDOM.findDOMNode(refs.test_email).value
         }
       },
       success: (function(_this){

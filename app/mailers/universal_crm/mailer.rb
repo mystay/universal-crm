@@ -1,5 +1,6 @@
 module UniversalCrm
   class Mailer < ActionMailer::Base
+    include UniversalCrm::MailConcern
   
     def new_ticket(config, customer, ticket, sent_from_crm=true)
       if !config.transaction_email_address.blank?
@@ -7,7 +8,7 @@ module UniversalCrm
         @ticket = ticket
         @config = config
         @sent_from_crm = sent_from_crm
-        mail  to: @customer.email,
+        mail  to: to(@customer.email, config.test_email),
               from: "#{config.transaction_email_from} <#{config.transaction_email_address}>",
               reply_to: ticket.inbound_email_address(config),
               subject: "#{ticket.title}"
@@ -21,7 +22,7 @@ module UniversalCrm
         @comment = comment
         @config = config
         if !@customer.nil?
-          mail  to: @customer.email,
+          mail  to: to(@customer.email, config.test_email),
                 from: "#{config.transaction_email_from} <#{config.transaction_email_address}>",
                 reply_to: ticket.inbound_email_address(config),
                 subject: "#{ticket.title}"
@@ -34,7 +35,7 @@ module UniversalCrm
         @config = config
         @ticket = ticket
         @user = user
-        mail  to: @user.email,
+        mail  to: to(@user.emailconfig.test_email),
               from: "#{config.transaction_email_from} <#{config.transaction_email_address}>",
               subject: "#{config.system_name} Ticket assigned: #{ticket.title}"
       end      
