@@ -35,6 +35,7 @@ module UniversalCrm
         flags %w(priority)
 
         belongs_to :document, polymorphic: true #the related document that this ticket should link to.
+        belongs_to :creator, class_name: Universal::Configuration.class_name_user, foreign_key: :creator_id
         belongs_to :responsible, class_name: Universal::Configuration.class_name_user, foreign_key: :responsible_id
         
         if !UniversalCrm::Configuration.secondary_scope_class.blank?
@@ -155,6 +156,8 @@ module UniversalCrm
             incoming: self.incoming?,
             responsible_id: self.responsible_id.to_s,
             responsible_name: (self.responsible.nil? ? nil : self.responsible.name),
+            creator_id: self.creator_id.to_s,
+            creator_name: (self.creator.nil? ? nil : self.creator.name),
             referring_url: self.referring_url
           }
         end
