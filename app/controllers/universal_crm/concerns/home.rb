@@ -44,6 +44,7 @@ module UniversalCrm
             from = params['From'].downcase
             from_name = params['FromName']
             ticket=nil
+            
             #check if the BCC is for our inbound addresses:
             if !bcc.blank?
               #check if it was forwarded to the bcc address:
@@ -225,7 +226,13 @@ module UniversalCrm
               closed: ActiveSupport::NumberHelper.number_to_delimited(status_count.select{|s| s['_id']['status'] == 'closed'}.map{|s| s['value'].to_i}.sum)
               },
             flags: flags,
-            totalFlags:  flag_count.map{|a| a['value'].to_i}.sum
+            totalFlags:  flag_count.map{|a| a['value'].to_i}.sum,
+            customer_counts: {
+              draft: ActiveSupport::NumberHelper.number_to_delimited(@customers.draft.count)
+            },
+            company_counts: {
+              draft: ActiveSupport::NumberHelper.number_to_delimited(@companies.draft.count)
+            }
           }
         end
       end
