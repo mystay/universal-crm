@@ -229,6 +229,10 @@ module UniversalCrm
             totalFlags:  flag_count.map{|a| a['value'].to_i}.sum
           }
         end
+        
+        def search
+          render json: {type: params[:search_type], results: []}
+        end
       end
     end
   end

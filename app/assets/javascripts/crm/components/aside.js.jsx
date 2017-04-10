@@ -53,6 +53,12 @@ var Aside = React.createClass({
               </a>
             </li>
             <li>
+              <a style={{cursor: 'pointer'}} onClick={this.props._goSearch} data-status='active' data-title="Search" data-icon="fa-search">
+                <i className="fa fa-search fa-fw" />
+                Search
+              </a>
+            </li>
+            <li>
               <a style={{cursor: 'pointer'}} onClick={this.loadTickets} data-status='actioned' data-title="Follow up" data-icon="fa-exclamation-triangle">
                 <i className="fa fa-exclamation-triangle fa-fw" />
                 Follow up

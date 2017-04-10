@@ -28,6 +28,7 @@ var TicketList = React.createClass({
     }
   },
   loadTickets: function(status, flag, keyword, page){
+    console.log(keyword);
     if (!this.state.loading){
       this.setState({loading: true, pastProps: this.props});
       scrollTo('body');
