@@ -138,7 +138,14 @@ module UniversalCrm
       else
         @ticket.open!(universal_user)
       end
-      render json: {ticket: @ticket.to_json}
+      respond_to do |format|
+        format.json{
+          render json: {ticket: @ticket.to_json}
+        }
+        format.js{
+          render layout: false
+        }
+      end
     end
     
     def flag
