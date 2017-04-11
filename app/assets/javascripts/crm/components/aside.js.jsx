@@ -33,6 +33,7 @@ var Aside = React.createClass({
                 Dashboard
               </a>
             </li>
+            {this.newsfeedButton()}
             <li>
               <a style={{cursor: 'pointer'}} onClick={this.loadTickets} data-status='email' data-title="Emails" data-icon="fa-envelope">
                 <i className="fa fa-envelope fa-fw" />
@@ -143,6 +144,18 @@ var Aside = React.createClass({
         );
       }
       return(h);
+    }
+  },
+  newsfeedButton: function(){
+    if (this.props.gs && this.props.gs.config && this.props.gs.config.functions.indexOf('newsfeed')>-1){
+      return(
+        <li>
+          <a style={{cursor: 'pointer'}} onClick={this.props._goNewsfeed} data-status='task' data-title="newsfeed" data-icon="fa-check-circle">
+            <i className="fa fa-newspaper-o fa-fw" />
+            Newsfeed
+          </a>
+        </li>
+      );
     }
   },
   tasksButton: function(){

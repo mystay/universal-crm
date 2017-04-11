@@ -58,6 +58,7 @@ var CRM = React.createClass({
           _goCustomerList={this._goCustomerList}
           _goCompanyList={this._goCompanyList}
           _goSearch={this._goSearch}
+          _goNewsfeed={this._goNewsfeed}
           />
         <section className="main-content-wrapper">
           <PageHeader
@@ -121,6 +122,12 @@ var CRM = React.createClass({
     this.setGlobalState('pageIcon', null);
     this.handlePageHistory('Search', '/crm');
     this.setState({supportingComponent: <Search gs={this.state.gs} sgs={this.setGlobalState} _goTicketList={this._goTicketList} _goCustomerList={this._goCustomerList} _goCompanyList={this._goCompanyList} _goQuickSearch={this._goQuickSearch} />});
+  },
+  _goNewsfeed: function(){
+    this.setGlobalState('pageTitle', 'Newsfeed');
+    this.setGlobalState('pageIcon', null);
+    this.handlePageHistory('Newsfeed', '/crm');
+    this.setState({mainComponent: <Newsfeed gs={this.state.gs} sgs={this.setGlobalState} _goTicketList={this._goTicketList} _goTicket={this._goTicket} _goCustomerList={this._goCustomerList} _goCompanyList={this._goCompanyList} _goQuickSearch={this._goQuickSearch} />});
   },
   _goTicket: function(ticketId){
     this.setState({mainComponent: <TicketShowContainer ticketId={ticketId} gs={this.state.gs} sgs={this.setGlobalState} handlePageHistory={this.handlePageHistory} _goCustomer={this._goCustomer} _goCompany={this._goCompany} />});

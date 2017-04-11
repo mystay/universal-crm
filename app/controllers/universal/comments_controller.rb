@@ -31,7 +31,7 @@ module Universal
     end
 
     def recent
-      @comments = Universal::Comment.order_by(created_at: :desc)
+      @comments = Universal::Comment.unscoped.order_by(created_at: :desc)
       @comments = @comments.scoped_to(universal_scope) if !universal_scope.nil?
       @comments = @comments.page(params[:page])
       render json: {
