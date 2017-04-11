@@ -6,7 +6,9 @@ var Newsfeed = React.createClass({
   getInitialState: function(){
     return({
       comments: [],
-      loading: false
+      loading: false,
+      pagination: null,
+      pageNum: null
     });
   },
   componentDidMount: function(){
@@ -27,7 +29,12 @@ var Newsfeed = React.createClass({
           page: page
         },
         success: function(data){
-          _this.setState({comments: data.comments, loading: false});
+          _this.setState({
+            comments: data.comments,
+            loading: false,
+            pagination: data.pagination,
+            pageNum: page
+          });
         }
       });
     }
@@ -37,6 +44,12 @@ var Newsfeed = React.createClass({
       <div className="panel">
         <div className="panel-body">
           {this.commentList()}
+          <Pagination
+            pagination={this.state.pagination}
+            currentPage={this.state.pageNum}
+            pageResults={this.pageResults}
+            displayDescription={true}
+            />
         </div>
       </div>
     );
@@ -71,5 +84,9 @@ var Newsfeed = React.createClass({
   },
   goTicket: function(e){
     this.props._goTicket($(e.target).attr('data-subjectId'));
+  },
+  pageResults: function(page){
+    this.loadFeed(page);
+    this.setState({currentPage: page});
   }
 });
