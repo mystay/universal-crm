@@ -33,6 +33,7 @@ module Universal
     def recent
       @comments = Universal::Comment.unscoped.order_by(created_at: :desc)
       @comments = @comments.scoped_to(universal_scope) if !universal_scope.nil?
+      @comments = @comments.where(user_id: params[:user_id]) if !params[:user_id].blank?
       @comments = @comments.page(params[:page])
       render json: {
         pagination: {

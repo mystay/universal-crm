@@ -8,7 +8,8 @@ var Newsfeed = React.createClass({
       comments: [],
       loading: false,
       pagination: null,
-      pageNum: null
+      pageNum: null,
+      userId: null
     });
   },
   componentDidMount: function(){
@@ -17,16 +18,17 @@ var Newsfeed = React.createClass({
   init: function(){
     this.loadFeed();
   },
-  loadFeed: function(page){
+  loadFeed: function(page, userId){
     if (!this.state.loading){
       var _this=this;
-      this.setState({loading: true});
+      this.setState({loading: true, userId: userId});
       page = (page==undefined ? 1 : page);
       $.ajax({
         type: 'GET',
         url: `/universal/comments/recent.json`,
         data: {
-          page: page
+          page: page,
+          user_id: userId
         },
         success: function(data){
           _this.setState({
@@ -43,6 +45,8 @@ var Newsfeed = React.createClass({
     return(
       <div className="panel">
         <div className="panel-body">
+          {this.userList()}
+          <hr />
           {this.commentList()}
           <Pagination
             pagination={this.state.pagination}
@@ -53,6 +57,25 @@ var Newsfeed = React.createClass({
         </div>
       </div>
     );
+  },
+  userList: function(){
+    if (this.props.gs && this.props.gs.users){
+      var u = [];
+      for (var i=0;i<this.props.gs.users.length;i++){
+        var user = this.props.gs.users[i];
+        u.push(<div className="col-xs-2" key={user.id}>{this.userButton(user)}</div>);
+      }
+      return(<div className="row">{u}</div>);
+    }
+  },
+  userButton: function(user){
+    return(
+      <button className={`btn btn-${this.state.userId==user.id ? 'primary' : 'default'} btn-sm btn-block`} onClick={this.selectUser} data-id={user.id} data-name={user.name}>{user.name}</button>
+    );
+  },
+  selectUser: function(e){
+    var userId = $(e.target).attr('data-id');
+    this.loadFeed(1, userId);
   },
   commentList: function(){
     var c = [];
@@ -86,7 +109,7 @@ var Newsfeed = React.createClass({
     this.props._goTicket($(e.target).attr('data-subjectId'));
   },
   pageResults: function(page){
-    this.loadFeed(page);
+    this.loadFeed(page, this.state.userId);
     this.setState({currentPage: page});
   }
 });
