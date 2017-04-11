@@ -9,7 +9,8 @@ var Newsfeed = React.createClass({
       loading: false,
       pagination: null,
       pageNum: null,
-      userId: null
+      userId: null,
+      ticketKind: null
     });
   },
   componentDidMount: function(){
@@ -18,17 +19,18 @@ var Newsfeed = React.createClass({
   init: function(){
     this.loadFeed();
   },
-  loadFeed: function(page, userId){
+  loadFeed: function(page, userId, ticketKind){
     if (!this.state.loading){
       var _this=this;
-      this.setState({loading: true, userId: userId});
+      this.setState({loading: true, userId: userId, ticketKind: ticketKind});
       page = (page==undefined ? 1 : page);
       $.ajax({
         type: 'GET',
         url: `/universal/comments/recent.json`,
         data: {
           page: page,
-          user_id: userId
+          user_id: userId,
+          subject_kind: ticketKind
         },
         success: function(data){
           _this.setState({
@@ -45,6 +47,7 @@ var Newsfeed = React.createClass({
     return(
       <div className="panel">
         <div className="panel-body">
+          {this.ticketKindList()}
           {this.userList()}
           <hr />
           {this.commentList()}
@@ -57,6 +60,13 @@ var Newsfeed = React.createClass({
         </div>
       </div>
     );
+  },
+  ticketKindList: function(){
+    var u = [];
+    u.push(<button className={`btn btn-sm btn-${this.state.ticketKind=='email' ? 'primary' : 'default'}`} data-kind="email" onClick={this.selectTicketKind} >Emails</button>);
+    u.push(<button className={`btn btn-sm btn-${this.state.ticketKind=='task' ? 'primary' : 'default'}`} data-kind="task" onClick={this.selectTicketKind} >Tasks</button>);
+    u.push(<button className={`btn btn-sm btn-${this.state.ticketKind=='normal' ? 'primary' : 'default'}`} data-kind="normal" onClick={this.selectTicketKind} >Notes</button>);
+    return(<div className="btn-group">{u}</div>);
   },
   userList: function(){
     if (this.props.gs && this.props.gs.users){
@@ -75,7 +85,11 @@ var Newsfeed = React.createClass({
   },
   selectUser: function(e){
     var userId = $(e.target).attr('data-id');
-    this.loadFeed(1, userId);
+    this.loadFeed(1, userId, this.state.ticketKind);
+  },
+  selectTicketKind: function(e){
+    var ticketKind = $(e.target).attr('data-kind');
+    this.loadFeed(1, this.state.userId, ticketKind);
   },
   commentList: function(){
     var c = [];
@@ -109,7 +123,7 @@ var Newsfeed = React.createClass({
     this.props._goTicket($(e.target).attr('data-subjectId'));
   },
   pageResults: function(page){
-    this.loadFeed(page, this.state.userId);
+    this.loadFeed(page, this.state.userId, this.state.ticketKind);
     this.setState({currentPage: page});
   }
 });
