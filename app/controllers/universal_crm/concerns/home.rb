@@ -142,7 +142,9 @@ module UniversalCrm
                                           kind: :email,
                                           when: Time.now.utc,
                                           author: (ticket_subject.nil? ? 'Unknown' : ticket_subject.name),
-                                          incoming: true
+                                          incoming: true,
+                                          subject_name: ticket.name,
+                                          subject_kind: ticket.kind
                   
                   logger.warn comment.errors.to_json
                 end
