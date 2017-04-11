@@ -5,7 +5,7 @@
 var Newsfeed = React.createClass({
   getInitialState: function(){
     return({
-      comments: [],
+      results: [],
       loading: false,
       pagination: null,
       pageNum: null,
@@ -26,7 +26,7 @@ var Newsfeed = React.createClass({
       page = (page==undefined ? 1 : page);
       $.ajax({
         type: 'GET',
-        url: `/universal/comments/recent.json`,
+        url: `/crm/newsfeed.json`,
         data: {
           page: page,
           user_id: userId,
@@ -34,7 +34,7 @@ var Newsfeed = React.createClass({
         },
         success: function(data){
           _this.setState({
-            comments: data.comments,
+            results: data.results,
             loading: false,
             pagination: data.pagination,
             pageNum: page
@@ -50,7 +50,7 @@ var Newsfeed = React.createClass({
           {this.ticketKindList()}
           {this.userList()}
           <hr />
-          {this.commentList()}
+          {this.resultList()}
           <Pagination
             pagination={this.state.pagination}
             currentPage={this.state.pageNum}
@@ -63,9 +63,9 @@ var Newsfeed = React.createClass({
   },
   ticketKindList: function(){
     var u = [];
-    u.push(<button className={`btn btn-sm btn-${this.state.ticketKind=='email' ? 'primary' : 'default'}`} data-kind="email" onClick={this.selectTicketKind} >Emails</button>);
-    u.push(<button className={`btn btn-sm btn-${this.state.ticketKind=='task' ? 'primary' : 'default'}`} data-kind="task" onClick={this.selectTicketKind} >Tasks</button>);
-    u.push(<button className={`btn btn-sm btn-${this.state.ticketKind=='normal' ? 'primary' : 'default'}`} data-kind="normal" onClick={this.selectTicketKind} >Notes</button>);
+    u.push(<button key='email' className={`btn btn-sm btn-${this.state.ticketKind=='email' ? 'primary' : 'default'}`} data-kind="email" onClick={this.selectTicketKind} >Emails</button>);
+    u.push(<button key='task' className={`btn btn-sm btn-${this.state.ticketKind=='task' ? 'primary' : 'default'}`} data-kind="task" onClick={this.selectTicketKind} >Tasks</button>);
+    u.push(<button key='normal' className={`btn btn-sm btn-${this.state.ticketKind=='normal' ? 'primary' : 'default'}`} data-kind="normal" onClick={this.selectTicketKind} >Notes</button>);
     return(<div className="btn-group">{u}</div>);
   },
   userList: function(){
@@ -91,26 +91,49 @@ var Newsfeed = React.createClass({
     var ticketKind = $(e.target).attr('data-kind');
     this.loadFeed(1, this.state.userId, ticketKind);
   },
-  commentList: function(){
+  resultList: function(){
     var c = [];
     var pastSubjectId=null;
     var subjectTitle='';
     var commentTitle = this.commentTitle;
-    this.state.comments.forEach(function(comment){
-      if (pastSubjectId!=comment.subject_id){
-        subjectTitle=commentTitle(comment);
-      }else{
-        subjectTitle='';
+    var gs=this.props.gs;
+    var sgs=this.props.sgs;
+    var selectTicketId=this.selectTicketId;
+    this.state.results.forEach(function(result){
+      if (result.type=='ticket'){
+        c.push(
+          <li className="list-group-item" key={result.result.id}>
+            <h4>Ticket created by {result.result.creator_name}:</h4>
+            <h5 className="list-group-item-heading">
+              <TicketTitleButton 
+                ticket={result.result}
+                selectTicketId={selectTicketId}
+                gs={gs}
+                sgs={sgs}
+              />
+            </h5>
+          </li>
+        );
+      }else if (result.type=='comment'){
+        c.push(
+          <li className="list-group-item" key={result.result.id}>
+            <h4>{result.result.author} commented on:</h4>
+            <h5>
+              <TicketTitleButton 
+                ticket={result.subject}
+                selectTicketId={selectTicketId}
+                gs={gs}
+                sgs={sgs}
+              />
+            </h5>
+            <div className="chat-widget">
+              <Comment key={result.result.id} comment={result.result} />
+            </div>
+          </li>
+        );
       }
-      c.push(
-        <div key={comment.id}>
-          {subjectTitle}
-          <Comment comment={comment} fullWidth={true} />
-        </div>
-      );
-      pastSubjectId=comment.subject_id;
     });
-    return(<div className="chat-widget">{c}</div>);
+    return(<ul className="list-group">{c}</ul>);
   },
   commentTitle: function(comment){
     if (comment.subject_type=='UniversalCrm::Ticket'){
@@ -119,8 +142,8 @@ var Newsfeed = React.createClass({
       );
     }
   },
-  goTicket: function(e){
-    this.props._goTicket($(e.target).attr('data-subjectId'));
+  selectTicketId: function(ticketId){
+    this.props._goTicket(ticketId);
   },
   pageResults: function(page){
     this.loadFeed(page, this.state.userId, this.state.ticketKind);

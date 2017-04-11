@@ -235,6 +235,38 @@ module UniversalCrm
         def search
           render json: {type: params[:search_type], results: []}
         end
+        
+        def newsfeed
+          @comments = Universal::Comment.unscoped.order_by(created_at: :desc)
+          @comments = @comments.scoped_to(universal_scope) if !universal_scope.nil?
+          @comments = @comments.where(subject_type: params[:subject_type]) if !params[:subject_type].blank?
+          @comments = @comments.where(user_id: params[:user_id]) if !params[:user_id].blank?
+          @comments = @comments.where(subject_kind: params[:subject_kind]) if !params[:subject_kind].blank?
+          @tickets = UniversalCrm::Ticket.unscoped.order_by(created_at: :desc)
+          @tickets = @tickets.scoped_to(universal_scope) if !universal_scope.nil?
+          @tickets = @tickets.where(creator_id: params[:user_id]) if !params[:user_id].blank?
+          @tickets = @tickets.where(kind: params[:subject_kind]) if !params[:subject_kind].blank?
+          results = []
+          per_page=20
+          offset = (params[:page].to_i-1)*per_page
+          @comments[offset, offset+41].each do |comment|
+            results.push({type: 'comment', result: comment.to_json, subject: comment.subject.to_json})
+          end
+          @tickets[offset, offset+41].each do |ticket|
+            results.push({type: 'ticket', result: ticket.to_json})
+          end
+          results = results.sort_by{|a| a[:result][:created_at]}.reverse[0, per_page]
+          render json: {
+            pagination: {
+              total_count: @tickets.count+@comments.count,
+              page_count: (@tickets.count/per_page).to_i + (@comments.count/per_page).to_i,
+              current_page: params[:page].to_i,
+              per_page: per_page
+            },
+            results: results
+          }
+        end
+        
       end
     end
   end

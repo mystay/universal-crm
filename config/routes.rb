@@ -16,6 +16,7 @@ UniversalCrm::Engine.routes.draw do
   get '/init.json', to: 'home#init'
   get '/unload', to: 'home#unload'
   get '/dashboard', to: 'home#dashboard'
+  get '/newsfeed', to: 'home#newsfeed'
   get '/search', to: 'home#search'
   
   resource :config, controller: :config
