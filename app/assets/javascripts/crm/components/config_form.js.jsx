@@ -129,7 +129,7 @@ var ConfigForm = React.createClass({
     return(
       <div className="form-group">
         <label>
-          <input type="checkbox" data-function={func} onChange={this.changeFunction} defaultChecked={this.props.config.functions.indexOf(func)>-1} /> {title}
+          <input type="checkbox" data-function={func} onChange={this.changeFunction} defaultChecked={this.props.config.functions && this.props.config.functions.indexOf(func)>-1} /> {title}
         </label>
       </div>
     );
