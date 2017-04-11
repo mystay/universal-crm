@@ -115,7 +115,7 @@ module UniversalCrm
           if !params[:flag].blank?
             params[:flag].strip.gsub(' ','').split(',').each do |flag|
               ticket.flag!(params[:flag], universal_user)
-              ticket.save_comment!("Added flag: '#{params[:flag]}'", current_user)
+              ticket.save_comment!("Added flag: '#{params[:flag]}'", current_user, universal_scope)
             end
           end
           if ticket.email?
@@ -152,10 +152,10 @@ module UniversalCrm
       @ticket = UniversalCrm::Ticket.find(params[:id])
       if params[:add] == 'true'
         @ticket.flag!(params[:flag], universal_user)
-        @ticket.save_comment!("Added flag: '#{params[:flag]}'", current_user)
+        @ticket.save_comment!("Added flag: '#{params[:flag]}'", current_user, universal_scope)
       else
         @ticket.remove_flag!(params[:flag])
-        @ticket.save_comment!("Removed flag: '#{params[:flag]}'", current_user)
+        @ticket.save_comment!("Removed flag: '#{params[:flag]}'", current_user, universal_scope)
       end
       render json: {ticket: @ticket.to_json}
     end
@@ -165,7 +165,7 @@ module UniversalCrm
       old_customer_name = @ticket.subject.name
       customer = UniversalCrm::Customer.find(params[:customer_id])
       @ticket.update(subject: customer, from_email: customer.email)
-      @ticket.save_comment!("Customer changed from: '#{old_customer_name}'", current_user)
+      @ticket.save_comment!("Customer changed from: '#{old_customer_name}'", current_user, universal_scope)
       render json: {ticket: @ticket.to_json}
     end
     
@@ -174,7 +174,7 @@ module UniversalCrm
       if !@user.nil?
         @ticket = UniversalCrm::Ticket.find(params[:id])
         @ticket.update(responsible: @user)
-        @ticket.save_comment!("Ticket assigned to: #{@user.name}", universal_user)
+        @ticket.save_comment!("Ticket assigned to: #{@user.name}", universal_user, universal_scope)
         begin
           UniversalCrm::Mailer.assign_ticket(universal_crm_config, @ticket, @user).deliver_now
         rescue
