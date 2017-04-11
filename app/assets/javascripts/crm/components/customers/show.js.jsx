@@ -150,7 +150,7 @@ var CustomerShow = React.createClass({
     }
   },
   companies: function(){
-    if (this.props.gs && this.props.gs.config && this.props.gs.config.companies && this.props.customer.companies.length>0){
+    if (this.props.gs && this.props.gs.config && this.props.gs.config.functions.indexOf('companies')>-1 && this.props.customer.companies.length>0){
       var rows = [];
       var goCompany = this.clickCompany;
       this.props.customer.companies.forEach(function(company){

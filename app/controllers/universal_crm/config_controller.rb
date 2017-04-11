@@ -11,6 +11,7 @@ module UniversalCrm
     end
     
     def update
+      params[:config][:functions] = [] if params[:config][:functions].blank?
       p = params.require(:config).permit(
         :system_name,
         :url,
@@ -27,7 +28,8 @@ module UniversalCrm
         :tasks,
         :companies,
         :edit_companies,
-        :default_customer_status
+        :default_customer_status,
+        functions: []
       )
       p[:ticket_flags] = p[:ticket_flags].to_s.gsub('\r','').split("\n").map{|p| {label: p.split('|')[0], color: p.split('|')[1]}}
       p[:inbound_email_addresses] = p[:inbound_email_addresses].downcase.gsub(' ','').split(',')

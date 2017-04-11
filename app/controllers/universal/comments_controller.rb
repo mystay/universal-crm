@@ -12,7 +12,7 @@ module Universal
     
     def create
       @model = find_model
-      @comment = @model.comments.new content: params[:content], kind: params[:kind]
+      @comment = @model.comments.new content: params[:content], kind: params[:kind], scope: universal_scope
       @comment.when = Time.now.utc
       @comment.user = current_user
       if @comment.save
@@ -28,6 +28,21 @@ module Universal
       end
       comments = load_comments
       render json: comments.map{|c| c.to_json}
+    end
+
+    def recent
+      @comments = Universal::Comment.order_by(created_at: :desc)
+      @comments = @comments.scoped_to(universal_scope) if !universal_scope.nil?
+      @comments = @comments.page(params[:page])
+      render json: {
+        pagination: {
+          total_count: @comments.total_count,
+          page_count: @comments.total_pages,
+          current_page: params[:page].to_i,
+          per_page: 20
+        },
+        comments: @comments.map{|c| c.to_json}
+      }
     end
 
     private

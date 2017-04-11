@@ -49,9 +49,9 @@ var Search = React.createClass({
   },
   searchTypeButton: function(title, type){
     var displayButton=true;
-    if (type=='task' && this.props.gs && this.props.gs.config && !this.props.gs.config.tasks){
+    if (type=='task' && this.props.gs && this.props.gs.config && !this.props.gs.config.functions.indexOf('tasks')>-1){
       displayButton=false;
-    }else if (type=='company' && this.props.gs && this.props.gs.config && !this.props.gs.config.companies){
+    }else if (type=='company' && this.props.gs && this.props.gs.config && !this.props.gs.config.functions.indexOf('companies')>-1){
       displayButton=false;
     }
     if (displayButton){

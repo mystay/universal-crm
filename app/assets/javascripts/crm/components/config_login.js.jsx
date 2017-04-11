@@ -1,6 +1,9 @@
+/*
+  global React
+*/
 var ConfigLogin = React.createClass({
   getInitialState: function(){
-    return({password: null})
+    return({password: null});
   },
   render: function(){
     return(
@@ -8,10 +11,10 @@ var ConfigLogin = React.createClass({
         {this.setPassword()}
         {this.enterPassword()}
       </div>
-    )
+    );
   },
   passwordField: function(){
-    return(<input type="password" className="form-control" ref="password" onChange={this.changePassword} />)
+    return(<input type="password" className="form-control" ref="password" onChange={this.changePassword} />);
   },
   changePassword: function(e){
     this.setState({password: e.target.value});
@@ -29,7 +32,7 @@ var ConfigLogin = React.createClass({
             {this.submitButton('Save Password', this.submitNewPassword)}
           </div>
         </form>
-      )
+      );
     }
   },
   enterPassword: function(){
@@ -44,17 +47,17 @@ var ConfigLogin = React.createClass({
             {this.submitButton('Sign in', this.signIn)}
           </div>
         </form>
-      )
+      );
     }
   },
   submitButton: function(label, method){
     if (this.props.loading){
-      label = 'Loading...'
+      label = 'Loading...';
     }
     if (this.state.password && this.state.password.length>=6){
-      return(<button className="btn btn-primary btn-block" onClick={method}>{label}</button>)
+      return(<button className="btn btn-primary btn-block" onClick={method}>{label}</button>);
     }else{
-      return(<button className="btn btn-primary btn-block" disabled="disabled">{label}</button>)
+      return(<button className="btn btn-primary btn-block" disabled="disabled">{label}</button>);
     }
   },
   submitNewPassword: function(e){
@@ -67,4 +70,4 @@ var ConfigLogin = React.createClass({
     this.setState({loading: true});
     this.props.signIn(this.state.password);
   }
-})
+});

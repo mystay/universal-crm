@@ -7,6 +7,7 @@ module UniversalCrm
         include Mongoid::Document
         include Universal::Concerns::Scoped
         include Universal::Concerns::Tokened
+        include Universal::Concerns::Functional
         
         store_in session: UniversalCrm::Configuration.mongoid_session_name, collection: 'crm_configs'
 
@@ -44,11 +45,9 @@ module UniversalCrm
             new_reply_header: self.new_reply_header,
             email_footer: self.email_footer,
             google_api_key: self.google_api_key,
-            companies: self.companies,
-            tasks: self.tasks,
-            edit_companies: self.edit_companies,
             test_email: self.test_email,
-            default_customer_status: self.default_customer_status
+            default_customer_status: self.default_customer_status,
+            functions: self.functions
           }
         end
         

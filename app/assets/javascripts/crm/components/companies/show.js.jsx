@@ -146,7 +146,7 @@ var CompanyShow = React.createClass({
     }
   },
   renderEditButton: function(){
-    if (this.props.gs.config.edit_companies){
+    if (this.props.gs.config.functions.indexOf('edit_companies')>-1){
       return(
         <div className="text-right">
           <button className="btn btn-warning btn-xs m-0" onClick={this.props.handleEdit}>
