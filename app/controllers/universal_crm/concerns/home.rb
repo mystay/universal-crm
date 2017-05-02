@@ -99,7 +99,7 @@ module UniversalCrm
                   ticket_subject = UniversalCrm::Customer.find_by(scope: config.scope, email: /^#{forwarded_from||to}$/i)
                   ticket_subject ||= UniversalCrm::Company.find_by(scope: config.scope, email: /^#{forwarded_from||to}$/i) #check if there's a company now
                   ticket_subject ||= UniversalCrm::Customer.create(scope: config.scope, email: (forwarded_from||to), status: config.default_customer_status)
-                  ticket_subject.update(name: from_name) if ticket_subject.name.blank?
+                  ticket_subject.update(name: (from_name.blank? ? forwarded_from : from_name)) if ticket_subject.name.blank?
                 else
                   ticket_subject = UniversalCrm::Customer.find_by(scope: config.scope, email: /^#{forwarded_from||from}$/i)
                   ticket_subject ||= UniversalCrm::Company.find_by(scope: config.scope, email: /^#{forwarded_from||from}$/i) #check if there's a company now
@@ -228,7 +228,13 @@ module UniversalCrm
               closed: ActiveSupport::NumberHelper.number_to_delimited(status_count.select{|s| s['_id']['status'] == 'closed'}.map{|s| s['value'].to_i}.sum)
               },
             flags: flags,
-            totalFlags:  flag_count.map{|a| a['value'].to_i}.sum
+            totalFlags:  flag_count.map{|a| a['value'].to_i}.sum,
+            customer_counts: {
+              draft: ActiveSupport::NumberHelper.number_to_delimited(@customers.draft.count)
+            },
+            company_counts: {
+              draft: ActiveSupport::NumberHelper.number_to_delimited(@companies.draft.count)
+            }
           }
         end
         

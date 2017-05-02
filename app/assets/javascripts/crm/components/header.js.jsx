@@ -1,11 +1,14 @@
 var Header = React.createClass({
   componentDidMount: function(){
-    
   },
   systemName: function(){
     if (this.props.gs && this.props.gs.config){
       return(this.props.gs.config.system_name);
     }
+  },
+  toggleSidebar: function(e){
+    var bodyEl = $('#main-wrapper');
+    ($(window).width() > 767) ? $(bodyEl).toggleClass('sidebar-mini'): $(bodyEl).toggleClass('sidebar-opened');
   },
   render: function(){
     return(
@@ -14,7 +17,7 @@ var Header = React.createClass({
         <BrandLogo system_name={this.systemName()} />
         <ul className="nav navbar-nav navbar-left">
           <li className="toggle-navigation toggle-left">
-            <button className="sidebar-toggle" id="toggle-left">
+            <button className="sidebar-toggle" id="toggle-left" onClick={this.toggleSidebar}>
               <i className="fa fa-bars"></i>
             </button>
           </li>

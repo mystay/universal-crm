@@ -39,7 +39,7 @@ UniversalCrm::Engine.routes.draw do
       get :autocomplete, :recent
     end
     member do
-      patch :add_employee
+      patch :add_employee, :update_status
     end
   end
   resources :tickets do
