@@ -41,7 +41,7 @@ var CompanyShow = React.createClass({
                   <ul className="nav nav-tabs">
                     <li className="active"><a data-toggle="tab" href="#tab-notes">Notes</a></li>
                     <li><a data-toggle="tab" href="#tab-employees">Employees{this.employeeCount()}</a></li>
-                    <li><a data-toggle="tab" href="#tab-attachments">Attachments</a></li>
+                    <li><a data-toggle="tab" href="#tab-attachments">Files</a></li>
                     <li><a data-toggle="tab" href="#tab-settings">Settings</a></li>
                   </ul>
                   <div className="tab-content">

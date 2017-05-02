@@ -44,7 +44,7 @@ var CustomerShow = React.createClass({
                 <div className="tab-wrapper tab-primary">
                   <ul className="nav nav-tabs">
                     <li className="active"><a data-toggle="tab" href="#tab-notes">Notes</a></li>
-                    <li><a data-toggle="tab" href="#tab-attachments">Attachments</a></li>
+                    <li><a data-toggle="tab" href="#tab-attachments">Files</a></li>
                     <li><a data-toggle="tab" href="#tab-settings">Settings</a></li>
                   </ul>
                   <div className="tab-content">
