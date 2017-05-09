@@ -55,12 +55,8 @@ var TicketFunctions = React.createClass({
     var b = [];
     if (this.props.status == 'closed'){
       b.push(<li key='reopen'>{this.reopenButton()}</li>);
-    }else if (this.props.status == 'active'){
+    }else if (this.props.status == 'active' || this.props.status == 'actioned'){
       b.push(<li key='assign'>{this.assignUserButton()}</li>);
-      b.push(<li key='change'>{this.customerChangeButton()}</li>);
-      b.push(<li key='actioned'>{this.actionedButton()}</li>);
-      b.push(<li key='close'>{this.closeButton()}</li>);
-    }else if (this.props.status == 'actioned'){
       b.push(<li key='change'>{this.customerChangeButton()}</li>);
       b.push(<li key='actioned'>{this.actionedButton()}</li>);
       b.push(<li key='close'>{this.closeButton()}</li>);
