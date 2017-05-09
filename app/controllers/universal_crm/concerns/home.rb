@@ -11,13 +11,14 @@ module UniversalCrm
         end
         
         def init          
-          users = Universal::Configuration.class_name_user.classify.constantize.where('_ugf.crm.0' => {'$exists' => true})
+          users = Universal::Configuration.class_name_user.classify.constantize.where('_ugf.crm' => {'$ne' => nil})
+          puts users.length
           users = users.where(Universal::Configuration.user_scope_field => universal_scope.id) if !universal_scope.nil? and !Universal::Configuration.user_scope_field.blank?
           users = users.sort_by{|a| a.name}.map{|u| {name: u.name, 
               email: u.email, 
               first_name: u.name.split(' ')[0].titleize, 
               id: u.id.to_s, 
-              functions: (u.universal_user_group_functions.blank? ? [] : u.universal_user_group_functions['crm'])}}
+              functions: u.scoped_universal_user_group_functions(universal_scope)['crm']}}
           
           json = {config: universal_crm_config.to_json, user_count: users.length, users: users}
 
@@ -26,7 +27,7 @@ module UniversalCrm
               id: universal_user.id.to_s,
               name: universal_user.name,
               email: universal_user.email,
-              functions: (universal_user.universal_user_group_functions.blank? ? [] : universal_user.universal_user_group_functions['crm'])
+              functions: (universal_scope.nil? ? universal_user.unscoped_user_group_functions : universal_user.scoped_universal_user_group_functions(universal_scope)['crm'])
             }})
           end
           render json: json
