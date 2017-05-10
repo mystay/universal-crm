@@ -18,7 +18,7 @@ module UniversalCrm
               email: u.email, 
               first_name: u.name.split(' ')[0].titleize, 
               id: u.id.to_s, 
-              functions: u.scoped_universal_user_group_functions(universal_scope)['crm']}}
+              functions: (u.universal_user_group_functions.blank? ? [] : (UniversalAccess::Configuration.scoped_user_groups ? u.universal_user_group_functions['crm'][universal_scope.id.to_s] : u.universal_user_group_functions['crm']))}}
           
           json = {config: universal_crm_config.to_json, user_count: users.length, users: users}
 
@@ -27,7 +27,7 @@ module UniversalCrm
               id: universal_user.id.to_s,
               name: universal_user.name,
               email: universal_user.email,
-              functions: (universal_scope.nil? ? universal_user.unscoped_user_group_functions : universal_user.scoped_universal_user_group_functions(universal_scope)['crm'])
+              functions: (universal_user.universal_user_group_functions.blank? ? [] : (UniversalAccess::Configuration.scoped_user_groups ? universal_user.universal_user_group_functions['crm'][universal_scope.id.to_s] : universal_user.universal_user_group_functions['crm']))
             }})
           end
           render json: json
