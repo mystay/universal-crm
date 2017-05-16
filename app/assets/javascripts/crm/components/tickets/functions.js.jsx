@@ -15,7 +15,6 @@ var TicketFunctions = React.createClass({
   },
   ticketFlags: function(){
     var btns = [];
-    btns.push(<i className="fa fa-fw fa-flag text-info" key="flag_icon" style={{marginRight: '5px'}} />);
     for (var i=0;i<this.props.ticketFlags.length;i++){
       var flag = this.props.ticketFlags[i];
       var flagStyle = this.flagButtonStyle(flag.label, `#${flag.color}`);
@@ -56,13 +55,10 @@ var TicketFunctions = React.createClass({
     var b = [];
     if (this.props.status == 'closed'){
       b.push(<li key='reopen'>{this.reopenButton()}</li>);
-    }else if (this.props.status == 'active'){
+    }else if (this.props.status == 'active' || this.props.status == 'actioned'){
       b.push(<li key='assign'>{this.assignUserButton()}</li>);
       b.push(<li key='change'>{this.customerChangeButton()}</li>);
       b.push(<li key='actioned'>{this.actionedButton()}</li>);
-      b.push(<li key='close'>{this.closeButton()}</li>);
-    }else if (this.props.status == 'actioned'){
-      b.push(<li key='change'>{this.customerChangeButton()}</li>);
       b.push(<li key='close'>{this.closeButton()}</li>);
     }
     return(<ul className="list-inline">{b}</ul>);
@@ -81,11 +77,25 @@ var TicketFunctions = React.createClass({
     return(<ChangeCustomerButton ticket={this.props.ticket} />);
   },
   actionedButton: function(){
-    return(
-      <button className="btn no-margin btn-warning btn-xs" onClick={this.props.changeTicketStatusActioned} disabled={this.props.replyCount==0}>
-        <i className="fa fa-exclamation-triangle" /> Follow up
-      </button>
-    );
+    if (this.props.status == 'actioned'){
+      return(
+        <button className="btn no-margin btn-warning btn-xs" onClick={this.props.changeTicketStatusActive} disabled={this.props.replyCount==0}>
+          <i className="fa fa-exclamation-triangle" /> Remove Follow up
+        </button>
+      );
+    }else{
+      return(
+        <button className="btn no-margin btn-warning btn-xs" onClick={this.props.changeTicketStatusActioned} disabled={this.props.replyCount==0}>
+          <i className="fa fa-exclamation-triangle" /> Follow up
+          {this.notesRequired()}
+        </button>
+      );
+    }
+  },
+  notesRequired: function(){
+    if (this.props.replyCount==0){
+      return(<em> (Notes required)</em>);
+    }
   },
   closeButton: function(){
     return(

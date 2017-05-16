@@ -135,7 +135,8 @@ var Helpdesk = React.createClass({
           content: ReactDOM.findDOMNode(this.refs.content).value,
           email: true,
           url: this.props.referrer,
-          flag: 'helpdesk'
+          flag: 'helpdesk',
+          kind: 'email'
         },
         success: function(data){
           _this.setState({loading: false, submitted: true, title: null, content: null, ticket: data.ticket});

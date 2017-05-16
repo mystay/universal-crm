@@ -36,7 +36,7 @@ var CustomerShowContainer = React.createClass({
   },
   setCustomer: function(customer){
     this.setState({customer: customer, customerId: customer.id, edit: false, loading: false});
-    this.props.handlePageHistory(`${customer.name}`, `/crm/customer/${customer.id}`);
+    this.props.handlePageHistory(`${customer.name||customer.email}`, `/crm/customer/${customer.id}`);
   },
   handleEdit: function(){
     this.setState({edit: !this.state.edit})
@@ -52,6 +52,7 @@ var CustomerShowContainer = React.createClass({
           setCustomer={this.setCustomer}
           _goTicket={this.props._goTicket}
           _goCustomer={this.props._goCustomer}
+          _goCompany={this.props._goCompany}
           gs={this.props.gs} sgs={this.props.sgs}
         />
       );

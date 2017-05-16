@@ -6,8 +6,9 @@ module UniversalCrm
     
     def index
       params[:page] = 1 if params[:page].blank?
-      @customers = UniversalCrm::Customer.all
+      @customers = UniversalCrm::Customer.order_by(name: :asc)
       @customers = @customers.scoped_to(universal_scope) if !universal_scope.nil?
+      @customers = @customers.where(status: params[:status]) if !params[:status].blank?
       if !params[:q].blank?
         @customers = @customers.full_text_search(params[:q], match: :all)
       end
@@ -20,11 +21,13 @@ module UniversalCrm
           per_page: 20
         },
         customers: @customers.map{|c| {id: c.id.to_s,
-          number: c.number.to_s, 
-          name: c.name, 
-          email: c.email, 
+          number: c.number.to_s,
+          name: c.name,
+          position: c.position,
+          email: c.email,
           token: c.token,
-          ticket_count: c.tickets.not_closed.count
+          ticket_count: c.tickets.not_closed.count,
+          status: c.status
           }}
         }
     end
@@ -53,19 +56,17 @@ module UniversalCrm
     
     def create
       #make sure we don't have an existing customer
-      @customer = UniversalCrm::Customer.find_or_create_by(scope: universal_scope, email: params[:email].strip)
+      @customer = UniversalCrm::Customer.find_or_create_by(scope: universal_scope, email: params[:email].strip.downcase)
       if !@customer.nil?
-        @customer.update(name: params[:name].strip)
-        #Check if we need to link this to a User model
-        @customer.assign_user_subject!(universal_scope)        
-        render json: {name: @customer.name, email: @customer.email}
+        @customer.update(name: params[:name].strip, status: universal_crm_config.default_customer_status)    
+        render json: {name: @customer.name, email: @customer.email, existing: @customer.created_at<1.minute.ago}
       else
         render json: {}
       end
     end
     
     def update
-      @customer.update(params.require(:customer).permit(:name, :email, :phone_home, :phone_work, :phone_mobile))
+      @customer.update(params.require(:customer).permit(:name, :position, :email, :phone_home, :phone_work, :phone_mobile))
       render json: {customer: @customer.to_json(universal_crm_config)}
     end
     

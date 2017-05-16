@@ -1,3 +1,7 @@
+/*
+  global React
+  global $
+*/
 var TicketShowContainer = React.createClass({
   getInitialState: function(){
     return ({
@@ -6,7 +10,7 @@ var TicketShowContainer = React.createClass({
       ticket: null,
       loading: null,
       pastProps: null
-    })
+    });
   },
   init: function(){
     this.loadTicket(this.props.ticketId);
@@ -30,6 +34,13 @@ var TicketShowContainer = React.createClass({
           if (data.ticket){
             _this.setState({ticketId: data.ticket.id, ticket: data.ticket, loading: false});
             _this.props.handlePageHistory(`${data.ticket.number}: ${data.ticket.title}`, `/crm/ticket/${id}`);
+            if (data.ticket.kind=='email'){
+              _this.props.sgs('pageIcon', 'fa-envelope');
+            }else if (data.ticket.kind=='normal'){
+              _this.props.sgs('pageIcon', 'fa-sticky-note');
+            }else if (data.ticket.kind=='task'){
+              _this.props.sgs('pageIcon', 'fa-check-circle');
+            }
           }
         }
       });
@@ -45,7 +56,7 @@ var TicketShowContainer = React.createClass({
       success: (function(_this){
         return function(data){
           _this.setState({ticket: data.ticket});
-        }
+        };
       })(this)
     });
   },
@@ -53,10 +64,10 @@ var TicketShowContainer = React.createClass({
     this.changeTicketStatus('active');
   },    
   changeTicketStatusClosed: function(){
-    this.changeTicketStatus('closed')
+    this.changeTicketStatus('closed');
   },  
   changeTicketStatusActioned: function(){
-    this.changeTicketStatus('actioned')
+    this.changeTicketStatus('actioned');
   },
   changeTicketStatus: function(s, add){
     $.ajax({
@@ -65,7 +76,7 @@ var TicketShowContainer = React.createClass({
       success: (function(_this){
         return function(data){
           _this.setState({ticket: data.ticket});
-        }
+        };
       })(this)
     });
   },
@@ -76,9 +87,9 @@ var TicketShowContainer = React.createClass({
   },
   fromTo: function(){
     if (this.state.ticket.incoming){
-      return 'From:'
+      return 'For:';
     }else{
-      return 'To:'
+      return 'For:';
     }
   },
   render: function(){
@@ -92,9 +103,13 @@ var TicketShowContainer = React.createClass({
                 <div className="pull-right text-muted">{this.state.ticket.from_email || this.state.ticket.subject_email}</div>
                 {this.fromTo()} <TicketCustomerName 
                   name={this.state.ticket.subject_name}
+                  email={this.state.ticket.subject_email}
+                  status={this.state.ticket.subject_status}
+                  subject_type={this.state.ticket.subject_type}
                   id={this.state.ticket.subject_id}
                   _goCustomer={this.props._goCustomer}
-                /> - <span className="text-muted">{this.state.ticket.created_at}</span>
+                  _goCompany={this.props._goCompany}
+                /> <span className="text-muted"> {this.subjectEmail()} - {this.state.ticket.created_at}</span>
               </h3>
             </div>
             <div className="panel-body">
@@ -114,9 +129,14 @@ var TicketShowContainer = React.createClass({
             </div>
           </div>
         </div>
-      )
+      );
     }else{
       return(null);
+    }
+  },
+  subjectEmail: function(){
+    if (this.state.ticket.subject_email){
+      return(<small className="text-muted">({this.state.ticket.subject_email})</small>);
     }
   },
   emailAddressConflict: function(){

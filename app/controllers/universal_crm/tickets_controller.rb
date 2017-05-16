@@ -12,16 +12,32 @@ module UniversalCrm
       if !params[:q].blank? and params[:q].to_s != 'undefined'
         conditions = []
         params[:q].split(' ').each do |keyword|
-          conditions.push({'$or' => [{title: /#{keyword}/i}, {number: /#{keyword}/i}, {content: /#{keyword}/i}]})
+          conditions.push({'$or' => [
+            {title: /#{keyword}/i},
+            {number: /#{keyword}/i},
+            {html_body: /#{keyword}/i},
+            {tags: keyword}
+          ]})
         end
         @tickets = @tickets.where('$and' => conditions)
       else
         if !params[:subject_id].blank? and params[:subject_id].to_s!='undefined' and !params[:subject_type].blank? and params[:subject_type].to_s!='undefined'
-            @tickets = @tickets.where(subject_id: params[:subject_id], subject_type: params[:subject_type])
+          conditions = [{'$and' => [{subject_id: params[:subject_id], subject_type: params[:subject_type]}]}]
+          if params[:subject_type]=='UniversalCrm::Company'
+            company = UniversalCrm::Company.find(params[:subject_id])
+            company.employees.each do |employee|
+              conditions.push({'$and' => [{subject_id: employee.id.to_s, subject_type: 'UniversalCrm::Customer'}]})
+            end
+          end
+          @tickets = @tickets.where('$or' => conditions)
         elsif !params[:flag].blank? and params[:flag]!='null' and params[:flag]!='undefined'
           @tickets = @tickets.flagged_with(params[:flag])        
         elsif params[:status] == 'email'
           @tickets = @tickets.email.active
+        elsif params[:status] == 'normal'
+          @tickets = @tickets.normal.active
+        elsif params[:status] == 'task'
+          @tickets = @tickets.task.active
         elsif !params[:status].blank? and params[:status] != 'priority' and params[:status] != 'all' and params[:status] != 'null'
           @tickets = @tickets.for_status(params[:status])
         elsif params[:status] == 'priority'
@@ -67,7 +83,7 @@ module UniversalCrm
     def create
       if !params[:subject_id].blank? and !params[:subject_type].blank?
         subject = params[:subject_type].classify.constantize.find params[:subject_id]
-        kind = (params[:email].to_s == 'true' ? :email : :normal)
+        kind = (params[:kind].to_s=='note' ? 'normal' : params[:kind])
         sent_from_crm=true
       elsif !params[:customer_name].blank? and !params[:customer_email].blank?
         #find a customer by this email
@@ -86,7 +102,10 @@ module UniversalCrm
                                         content: params[:content],
                                         scope: universal_scope,
                                         referring_url: params[:url],
-                                        document: document
+                                        document: document,
+                                        due_on: params[:due_on],
+                                        creator: universal_user,
+                                        responsible_id: params[:responsible_id]
                                         
         if !document.nil? and !UniversalCrm::Configuration.secondary_scope_class.blank?
           ticket.secondary_scope = document.crm_secondary_scope
@@ -96,7 +115,7 @@ module UniversalCrm
           if !params[:flag].blank?
             params[:flag].strip.gsub(' ','').split(',').each do |flag|
               ticket.flag!(params[:flag], universal_user)
-              ticket.save_comment!("Added flag: '#{params[:flag]}'", current_user)
+              ticket.save_comment!("Added flag: '#{params[:flag]}'", current_user, universal_scope)
             end
           end
           if ticket.email?
@@ -119,17 +138,35 @@ module UniversalCrm
       else
         @ticket.open!(universal_user)
       end
-      render json: {ticket: @ticket.to_json}
+      respond_to do |format|
+        format.json{
+          render json: {ticket: @ticket.to_json}
+        }
+        format.js{
+          render layout: false
+        }
+      end
+    end
+    
+    def update_due_on
+      @ticket = UniversalCrm::Ticket.find(params[:id])
+      if @ticket
+        @ticket.update(due_on: params[:due_on])
+        @ticket.save_comment!("Updated due date: #{params[:due_on].to_date.strftime('%b %d, %Y')}", current_user, universal_scope)
+        render json: {ticket: @ticket.to_json}
+      else
+        render json: {}
+      end
     end
     
     def flag
       @ticket = UniversalCrm::Ticket.find(params[:id])
       if params[:add] == 'true'
         @ticket.flag!(params[:flag], universal_user)
-        @ticket.save_comment!("Added flag: '#{params[:flag]}'", current_user)
+        @ticket.save_comment!("Added flag: '#{params[:flag]}'", current_user, universal_scope)
       else
         @ticket.remove_flag!(params[:flag])
-        @ticket.save_comment!("Removed flag: '#{params[:flag]}'", current_user)
+        @ticket.save_comment!("Removed flag: '#{params[:flag]}'", current_user, universal_scope)
       end
       render json: {ticket: @ticket.to_json}
     end
@@ -139,7 +176,7 @@ module UniversalCrm
       old_customer_name = @ticket.subject.name
       customer = UniversalCrm::Customer.find(params[:customer_id])
       @ticket.update(subject: customer, from_email: customer.email)
-      @ticket.save_comment!("Customer changed from: '#{old_customer_name}'", current_user)
+      @ticket.save_comment!("Customer changed from: '#{old_customer_name}'", current_user, universal_scope)
       render json: {ticket: @ticket.to_json}
     end
     
@@ -148,7 +185,7 @@ module UniversalCrm
       if !@user.nil?
         @ticket = UniversalCrm::Ticket.find(params[:id])
         @ticket.update(responsible: @user)
-        @ticket.save_comment!("Ticket assigned to: #{@user.name}", universal_user)
+        @ticket.save_comment!("Ticket assigned to: #{@user.name}", universal_user, universal_scope)
         begin
           UniversalCrm::Mailer.assign_ticket(universal_crm_config, @ticket, @user).deliver_now
         rescue

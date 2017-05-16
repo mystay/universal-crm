@@ -9,7 +9,8 @@ var Config = React.createClass({
     return({
       config: null,
       signedIn: false,
-      loading: false
+      loading: false,
+      functions: []
     });
   },
   componentDidMount: function(){
@@ -21,7 +22,7 @@ var Config = React.createClass({
       url: `/crm/config.json`,
       success: (function(_this){
         return function(data){
-          _this.setState({config: data});
+          _this.setState({config: data, functions: data.functions});
         };
       })(this)
     });
@@ -43,7 +44,7 @@ var Config = React.createClass({
   },
   configForm: function(){
     if (this.state.signedIn){
-      return(<ConfigForm config={this.state.config} updateChanges={this.updateChanges} loading={this.state.loading} />);
+      return(<ConfigForm config={this.state.config} updateChanges={this.updateChanges} loading={this.state.loading} updateFunctions={this.updateFunctions} />);
     }else{
       return(<ConfigLogin config={this.state.config} submitNewPassword={this.submitNewPassword} signIn={this.signIn} loading={this.state.loading} />);
     }
@@ -113,7 +114,9 @@ var Config = React.createClass({
           ticket_flags: ReactDOM.findDOMNode(refs.ticket_flags).value,
           url: ReactDOM.findDOMNode(refs.url).value,
           google_api_key: ReactDOM.findDOMNode(refs.google_api_key).value,
-          test_email: ReactDOM.findDOMNode(refs.test_email).value
+          test_email: ReactDOM.findDOMNode(refs.test_email).value,
+          default_customer_status: ReactDOM.findDOMNode(refs.default_customer_status).value,
+          functions: this.state.functions
         }
       },
       success: (function(_this){
@@ -124,5 +127,14 @@ var Config = React.createClass({
         };
       })(this)
     });
+  },
+  updateFunctions: function(f, checked){
+    var functions = this.state.functions;
+    if (checked){
+      functions.push(f);
+    }else{
+      functions.splice(functions.indexOf(f),1);
+    }
+    this.setState({functions: functions});
   }
 });

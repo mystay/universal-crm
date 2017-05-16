@@ -1,6 +1,13 @@
+/*
+  global React
+  global $
+*/
 var ConfigForm = React.createClass({
   getInitialState: function(){
-    return({inbound_domain: this.props.config.inbound_domain});
+    return({
+      inbound_domain: this.props.config.inbound_domain,
+      functions: this.props.config.functions
+    });
   },
   submitForm: function(e){
     e.preventDefault();
@@ -67,22 +74,39 @@ var ConfigForm = React.createClass({
           <p className="small">This will allow shortening of attachment URLs.</p>
         </div>
         <div className="form-group">
+          <label htmlFor="default_customer_status">Default new customer/company status</label>
+          <p>
+            <select id="default_customer_status" ref="default_customer_status" defaultValue={this.props.config.default_customer_status} className="form-control">
+              <option>active</option>
+              <option>draft</option>
+            </select>
+          </p>
+        </div>
+        <div className="form-group">
           <label htmlFor="token">Token</label>
           <input type="text" className="form-control" defaultValue={this.props.config.token} id="token" disabled="disabled"/>
         </div>
+        <fieldset>
+          <legend>Functions</legend>
+          {this.functionCheckbox('advanced_search', 'Advanced search')}
+          {this.functionCheckbox('tasks', 'Tasks')}
+          {this.functionCheckbox('companies', 'Companies')}
+          {this.functionCheckbox('edit_companies', 'Edit Companies')}
+          {this.functionCheckbox('newsfeed', 'Newsfeed (Recent comments/notes)')}
+        </fieldset>
         <div className="form-group">
           {this.submitButton('Save Changes')}
         </div>
       </form>
-    )
+    );
   },
   submitButton: function(label){
     if (this.props.loading){
-      label = 'Loading...'
+      label = 'Loading...';
     }
     return(
       <button className="btn btn-primary btn-block">{label}</button>
-    )
+    );
   },
   supportEmailsTo: function(){
     if (this.state.inbound_domain){
@@ -90,17 +114,28 @@ var ConfigForm = React.createClass({
         <div className="alert alert-sm alert-info">
           Forward support emails to: <a href={`mailto:${this.props.config.token}@${this.state.inbound_domain}`} target="_blank" style={{fontWeight: 'bold'}}>{this.props.config.token}@{this.state.inbound_domain}</a>
         </div>
-      )
-    }else{
-      return(null)
+      );
     }
   },
   parseFlags: function(flags){
-    f = [];
+    var f = [];
     for(var i=0;i<flags.length;i++){
-      flag = flags[i];
+      var flag = flags[i];
       f.push(flag['label'] + '|' + flag['color']);
     }
-    return f.join("\r\n")
+    return(f.join("\r\n"));
+  },
+  functionCheckbox: function(func, title){
+    return(
+      <div className="form-group">
+        <label>
+          <input type="checkbox" data-function={func} onChange={this.changeFunction} defaultChecked={this.props.config.functions && this.props.config.functions.indexOf(func)>-1} /> {title}
+        </label>
+      </div>
+    );
+  },
+  changeFunction: function(e){
+    var f = $(e.target).attr('data-function');
+    this.props.updateFunctions(f, e.target.checked);
   }
-})
+});

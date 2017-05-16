@@ -16,6 +16,8 @@ UniversalCrm::Engine.routes.draw do
   get '/init.json', to: 'home#init'
   get '/unload', to: 'home#unload'
   get '/dashboard', to: 'home#dashboard'
+  get '/newsfeed', to: 'home#newsfeed'
+  get '/search', to: 'home#search'
   
   resource :config, controller: :config
   
@@ -36,10 +38,13 @@ UniversalCrm::Engine.routes.draw do
     collection do
       get :autocomplete, :recent
     end
+    member do
+      patch :add_employee, :update_status
+    end
   end
   resources :tickets do
     member do
-      patch :update_status, :flag, :update_customer, :assign_user, :editing
+      patch :update_status, :flag, :update_customer, :assign_user, :editing, :update_due_on
     end
   end
   resources :comments
