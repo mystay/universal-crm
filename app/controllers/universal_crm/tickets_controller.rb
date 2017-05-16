@@ -148,6 +148,17 @@ module UniversalCrm
       end
     end
     
+    def update_due_on
+      @ticket = UniversalCrm::Ticket.find(params[:id])
+      if @ticket
+        @ticket.update(due_on: params[:due_on])
+        @ticket.save_comment!("Updated due date: #{params[:due_on].to_date.strftime('%b %d, %Y')}", current_user, universal_scope)
+        render json: {ticket: @ticket.to_json}
+      else
+        render json: {}
+      end
+    end
+    
     def flag
       @ticket = UniversalCrm::Ticket.find(params[:id])
       if params[:add] == 'true'
