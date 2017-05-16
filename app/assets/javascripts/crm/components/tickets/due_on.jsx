@@ -24,7 +24,7 @@ var TicketDueOn = React.createClass({
     }
   },
   render: function(){
-    if (this.props.ticket){
+    if (this.props.ticket && this.props.ticket.kind=='task'){
       return(
         <div>
           {this.displayDate()}
