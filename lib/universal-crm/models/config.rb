@@ -22,7 +22,11 @@ module UniversalCrm
         field :nrh, as: :new_reply_header
         field :ef, as: :email_footer
         field :gak, as: :google_api_key
+        field :cs, as: :companies, type: Boolean, default: false
+        field :ecs, as: :edit_companies, type: Boolean, default: false
+        field :ts, as: :tasks, type: Boolean, default: false
         field :te, as: :test_email
+        field :dcs, as: :default_customer_status, type: :string, default: :draft
         
         def to_json
           {
@@ -40,7 +44,11 @@ module UniversalCrm
             new_reply_header: self.new_reply_header,
             email_footer: self.email_footer,
             google_api_key: self.google_api_key,
-            test_email: self.test_email
+            companies: self.companies,
+            tasks: self.tasks,
+            edit_companies: self.edit_companies,
+            test_email: self.test_email,
+            default_customer_status: self.default_customer_status
           }
         end
         

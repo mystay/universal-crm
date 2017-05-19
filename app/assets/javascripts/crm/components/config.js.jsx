@@ -113,7 +113,11 @@ var Config = React.createClass({
           ticket_flags: ReactDOM.findDOMNode(refs.ticket_flags).value,
           url: ReactDOM.findDOMNode(refs.url).value,
           google_api_key: ReactDOM.findDOMNode(refs.google_api_key).value,
-          test_email: ReactDOM.findDOMNode(refs.test_email).value
+          companies: ReactDOM.findDOMNode(refs.companies).checked,
+          edit_companies: (ReactDOM.findDOMNode(refs.edit_companies)==undefined ? false : ReactDOM.findDOMNode(refs.edit_companies).checked),
+          tasks: ReactDOM.findDOMNode(refs.tasks).checked,
+          test_email: ReactDOM.findDOMNode(refs.test_email).value,
+          default_customer_status: ReactDOM.findDOMNode(refs.default_customer_status).value
         }
       },
       success: (function(_this){

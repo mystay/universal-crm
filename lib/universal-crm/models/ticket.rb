@@ -26,11 +26,13 @@ module UniversalCrm
         field :te, as: :to_email
         field :fe, as: :from_email
         field :url, as: :referring_url
+        field :do, as: :due_on, type: Date
+        field :su, as: :snooze_until, type: Date
         field :vids, as: :viewer_ids, type: Array, default: [] #an array of universal users who are viewing this ticket
         field :eids, as: :editor_ids, type: Array, default: [] #an array of universal users who are editing this ticket (replying)
 
         statuses %w(active actioned closed), default: :active
-        kinds %w(normal email), :normal
+        kinds %w(normal email task), :normal
 
         flags %w(priority)
 
@@ -43,6 +45,8 @@ module UniversalCrm
         end
 
         default_scope ->(){order_by(status: :asc, updated_at: :desc)}
+        scope :due_today, ->(date=Time.zone.now.to_date){where(due_on: date)}
+        scope :overdue, ->(date=Time.zone.now.to_date){where(due_on.lt => date)}
         
         search_in :t, :c, :te, :fe
         
@@ -129,9 +133,11 @@ module UniversalCrm
             numbered_title: self.numbered_title,
             status: self.status, 
             kind: self.kind.to_s,
-            subject_name: self.subject.name,
+            subject_type: self.subject_type,
+            subject_name: (self.subject.nil? ? nil : self.subject.name),
             subject_id: self.subject_id.to_s,
             subject_email: (self.subject.nil? ? nil : self.subject.email),
+            subject_status: (self.subject.nil? ? nil : self.subject.status),
             document_name: self.document_name,
             document_type: self.document_type,
             document_id: self.document_id.to_s,
@@ -152,6 +158,8 @@ module UniversalCrm
             token: self.token,
             flags: self.flags,
             tags: self.tags,
+            due_on: (self.due_on.blank? ? nil : self.due_on.strftime('%b %d, %Y')),
+            snooze_until: (self.snooze_until.blank? ? nil : self.snooze_until.strftime('%b %d, %Y')),
             attachments: self.attachments.map{|a| {name: a.name, url: a.file.url, filename: a.file_filename}},
             incoming: self.incoming?,
             responsible_id: self.responsible_id.to_s,

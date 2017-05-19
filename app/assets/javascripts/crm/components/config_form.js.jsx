@@ -1,6 +1,9 @@
 var ConfigForm = React.createClass({
   getInitialState: function(){
-    return({inbound_domain: this.props.config.inbound_domain});
+    return({
+      inbound_domain: this.props.config.inbound_domain,
+      companiesChecked: this.props.config.companies
+    });
   },
   submitForm: function(e){
     e.preventDefault();
@@ -66,6 +69,32 @@ var ConfigForm = React.createClass({
           <input type="text" className="form-control" defaultValue={this.props.config.google_api_key} id="google_api_key" ref="google_api_key" />
           <p className="small">This will allow shortening of attachment URLs.</p>
         </div>
+        <div className="row">
+          <div className="col-xs-6">
+            <div className="form-group">
+              <label htmlFor="companies">Companies</label>
+              <p>
+                <input type="checkbox" defaultChecked={this.props.config.companies} id="companies" ref="companies" onChange={this.selectCompanies}/> Use Companies within the CRM
+              </p>
+            </div>
+          </div>
+          {this.editCompanies()}
+        </div>
+        <div className="form-group">
+          <label htmlFor="default_customer_status">Default new customer/company status</label>
+          <p>
+            <select id="default_customer_status" ref="default_customer_status" defaultValue={this.props.config.default_customer_status} className="form-control">
+              <option>active</option>
+              <option>draft</option>
+            </select>
+          </p>
+        </div>
+        <div className="form-group">
+          <label htmlFor="tasks">Tasks</label>
+          <p>
+            <input type="checkbox" defaultChecked={this.props.config.tasks} id="tasks" ref="tasks" /> Use Tasks system within the CRM
+          </p>
+        </div>
         <div className="form-group">
           <label htmlFor="token">Token</label>
           <input type="text" className="form-control" defaultValue={this.props.config.token} id="token" disabled="disabled"/>
@@ -74,15 +103,15 @@ var ConfigForm = React.createClass({
           {this.submitButton('Save Changes')}
         </div>
       </form>
-    )
+    );
   },
   submitButton: function(label){
     if (this.props.loading){
-      label = 'Loading...'
+      label = 'Loading...';
     }
     return(
       <button className="btn btn-primary btn-block">{label}</button>
-    )
+    );
   },
   supportEmailsTo: function(){
     if (this.state.inbound_domain){
@@ -90,17 +119,32 @@ var ConfigForm = React.createClass({
         <div className="alert alert-sm alert-info">
           Forward support emails to: <a href={`mailto:${this.props.config.token}@${this.state.inbound_domain}`} target="_blank" style={{fontWeight: 'bold'}}>{this.props.config.token}@{this.state.inbound_domain}</a>
         </div>
-      )
-    }else{
-      return(null)
+      );
     }
   },
   parseFlags: function(flags){
-    f = [];
+    var f = [];
     for(var i=0;i<flags.length;i++){
-      flag = flags[i];
+      var flag = flags[i];
       f.push(flag['label'] + '|' + flag['color']);
     }
-    return f.join("\r\n")
+    return(f.join("\r\n"));
+  },
+  selectCompanies: function(e){
+    this.setState({companiesChecked: e.target.checked});
+  },
+  editCompanies: function(){
+    if (this.state.companiesChecked){
+      return(
+        <div className="col-xs-6">
+          <div className="form-group">
+            <label htmlFor="edit_companies">Edit Companies</label>
+            <p>
+              <input type="checkbox" defaultChecked={this.props.config.edit_companies} id="edit_companies" ref="edit_companies" /> Edit Companies within the CRM
+            </p>
+          </div>
+        </div>
+      );
+    }
   }
-})
+});

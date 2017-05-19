@@ -6,6 +6,8 @@ var Dashboard = React.createClass({
   getInitialState: function(){
     return({
       ticketCounts: null,
+      customerCounts: null,
+      companyCounts: null,
       flagCounts: null,
       totalFlags: 0,
       timer: null,
@@ -27,7 +29,7 @@ var Dashboard = React.createClass({
         type: 'GET',
         url: '/crm/dashboard',
         success: function(data){
-          _this.setState({ticketCounts: data.ticket_counts, flagCounts: data.flags, totalFlags: data.totalFlags, loading: false});
+          _this.setState({ticketCounts: data.ticket_counts, customerCounts: data.customer_counts, companyCounts: data.company_counts, flagCounts: data.flags, totalFlags: data.totalFlags, loading: false});
           _this.setState({timer: window.setTimeout(_this.init, 120000)});
         }
       });
@@ -48,19 +50,27 @@ var Dashboard = React.createClass({
   ticketCountTiles: function(){
     if (this.state.ticketCounts){
       return(
-        <div className="row">
-          <div className="col-sm-6">{this.dashboardTile('envelope', this.state.ticketCounts.inbox, 'Inbox', 'success', 'email')}</div>
-          <div className="col-sm-6">{this.dashboardTile('folder-open', this.state.ticketCounts.open, 'Open Tickets', 'primary', 'active')}</div>
-          <div className="col-sm-6">{this.dashboardTile('exclamation-triangle', this.state.ticketCounts.actioned, 'Follow up', 'warning', 'actioned')}</div>
-          <div className="col-sm-6">{this.dashboardTile('ban', this.state.ticketCounts.closed, 'Closed Tickets', 'default', 'closed')}</div>
+        <div>
+          <div className="row">
+            <div className="col-sm-4 col-xs-6">{this.dashboardTile('envelope', this.state.ticketCounts.inbox, 'Emails', 'primary', 'email', this.goTicketList)}</div>
+            {this.tasksTile()}
+            <div className="col-sm-4 col-xs-6">{this.dashboardTile('sticky-note', this.state.ticketCounts.notes, 'Notes', 'primary', 'normal', this.goTicketList)}</div>
+            <div className="col-sm-4 col-xs-6">{this.dashboardTile('folder-open', this.state.ticketCounts.open, 'Open Tickets', 'success', 'active', this.goTicketList)}</div>
+            <div className="col-sm-4 col-xs-6">{this.dashboardTile('exclamation-triangle', this.state.ticketCounts.actioned, 'Follow up', 'warning', 'actioned', this.goTicketList)}</div>
+            <div className="col-sm-4 col-xs-6">{this.dashboardTile('ban', this.state.ticketCounts.closed, 'Closed Tickets', 'default', 'closed', this.goTicketList)}</div>
+          </div>
+          <div className="row">
+            {this.draftCustomers()}
+            {this.draftCompanies()}
+          </div>
         </div>
       );
     }
   },
-  dashboardTile: function(icon, count, label, css, link){
+  dashboardTile: function(icon, count, label, css, link, func){
     return(
       <div className={`panel panel-solid-${css} widget-mini`}>
-        <div className="panel-body" onClick={this.goTicketList} data-link={link} style={{cursor: 'pointer'}}>
+        <div className="panel-body" onClick={func} data-link={link} style={{cursor: 'pointer'}}>
          <i className={`fa fa-${icon}`} data-link={link} />
          <span className="total text-center" data-link={link}>{count}</span>
          <span className="title text-center" data-link={link}>{label}</span>
@@ -68,8 +78,21 @@ var Dashboard = React.createClass({
       </div>
     );
   },
+  tasksTile: function(){
+    if (this.props.gs && this.props.gs.config && this.props.gs.config.tasks){
+      return(
+        <div className="col-sm-4 col-xs-6">{this.dashboardTile('check-circle', this.state.ticketCounts.tasks, 'Tasks', 'primary', 'task', this.goTicketList)}</div>
+      );
+    }
+  },
   goTicketList: function(e){
     this.props._goTicketList($(e.target).attr('data-link'));
+  },
+  goCustomerList: function(e){
+    this.props._goCustomerList('', $(e.target).attr('data-link'));
+  },
+  goCompanyList: function(e){
+    this.props._goCompanyList('', $(e.target).attr('data-link'));
   },
   flagCounts: function(){
     var f = [];
@@ -101,5 +124,15 @@ var Dashboard = React.createClass({
         </div>
       </div>
     );
+  },
+  draftCustomers: function(){
+    if (can(this.props.gs, 'approve_draft_customers') && this.state.customerCounts.draft>0){
+      return(<div className="col-xs-6">{this.dashboardTile('user', this.state.customerCounts.draft, 'Draft Customers', 'danger', 'draft', this.goCustomerList)}</div>);
+    }
+  },
+  draftCompanies: function(){
+    if (this.props.gs && this.props.gs.config && this.props.gs.config.companies && can(this.props.gs, 'approve_draft_companies') && this.state.companyCounts.draft>0){
+      return(<div className="col-xs-6">{this.dashboardTile('building', this.state.companyCounts.draft, 'Draft Companies', 'danger', 'draft', this.goCompanyList)}</div>);
+    }
   }
 });

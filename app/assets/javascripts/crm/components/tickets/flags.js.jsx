@@ -1,7 +1,7 @@
 var Flags = React.createClass({
   
   render: function(){
-    var labels = []
+    var labels = [];
     for (var i=0;i<this.props.flags.length;i++){
       var flag_label = this.props.flags[i];
       labels.push(<span className="badge" key={i} style={{background: this.labelColor(flag_label), marginRight: '2px'}}>{flag_label}</span>);      
