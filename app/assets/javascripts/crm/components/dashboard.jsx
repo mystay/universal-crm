@@ -79,7 +79,7 @@ var Dashboard = React.createClass({
     );
   },
   tasksTile: function(){
-    if (this.props.gs && this.props.gs.config && this.props.gs.config.tasks){
+    if (this.props.gs && this.props.gs.config && this.props.gs.config.functions.indexOf('tasks')>-1){
       return(
         <div className="col-sm-4 col-xs-6">{this.dashboardTile('check-circle', this.state.ticketCounts.tasks, 'Tasks', 'primary', 'task', this.goTicketList)}</div>
       );
@@ -131,7 +131,7 @@ var Dashboard = React.createClass({
     }
   },
   draftCompanies: function(){
-    if (this.props.gs && this.props.gs.config && this.props.gs.config.companies && can(this.props.gs, 'approve_draft_companies') && this.state.companyCounts.draft>0){
+    if (this.props.gs && this.props.gs.config && this.props.gs.config.functions.indexOf('companies')>-1 && can(this.props.gs, 'approve_draft_companies') && this.state.companyCounts.draft>0){
       return(<div className="col-xs-6">{this.dashboardTile('building', this.state.companyCounts.draft, 'Draft Companies', 'danger', 'draft', this.goCompanyList)}</div>);
     }
   }

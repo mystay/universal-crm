@@ -30,7 +30,7 @@ var ExpandedTicket = React.createClass({
             <div style={{marginTop: '2px'}}><Tags subjectType="UniversalCrm::Ticket" subjectId={this.props.ticket.id} tags={this.props.ticket.tags} /></div>
             <hr />
           </div>
-          <TicketDueOn dueOn={this.props.ticket.due_on} />
+          <TicketDueOn ticket={this.props.ticket} editable={true} />
           {this.actionedStatus()}
           {this.ticketDocument()}
           {this.referringUrl()}

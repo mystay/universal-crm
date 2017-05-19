@@ -42,7 +42,7 @@ var CompanySettings = React.createClass({
     );
   },
   hasAccess: function(){
-    return can(this.props.gs, 'block_companies')
+    return can(this.props.gs, 'block_customers')
   },
   noAccess: function(){
     if (!this.hasAccess()){

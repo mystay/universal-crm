@@ -1,4 +1,8 @@
-var SearchInput = React.createClass({
+/*
+  global React
+  global ReactDOM
+*/
+var QuickSearch = React.createClass({
   getInitialState: function(){
     return({
       searchWord: null,
@@ -19,7 +23,7 @@ var SearchInput = React.createClass({
     this.props.sgs('searchWord', e.target.value);
   },
   loadSearch: function(){
-    this.props._goSearch(this.state.searchWord);
+    this.props._goQuickSearch(this.state.searchWord);
     this.setState({searchTimer: null});
   },
   render: function(){
@@ -28,13 +32,13 @@ var SearchInput = React.createClass({
         <input type="text" placeholder='Quick Search...' className="search" onChange={this.handleSearchWord} ref="search_input" />
         <button type="submit" className="btn btn-sm btn-search"><i className={this.icon()}></i></button>
       </form>
-    )
+    );
   },
   icon: function(){
     if (this.props.gs.searching){
-      return 'fa fa-refresh fa-spin'
+      return('fa fa-refresh fa-spin');
     }else{
-      return 'fa fa-search'
+      return('fa fa-search');
     }
   }
 });

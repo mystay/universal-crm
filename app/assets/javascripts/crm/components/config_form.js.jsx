@@ -1,8 +1,12 @@
+/*
+  global React
+  global $
+*/
 var ConfigForm = React.createClass({
   getInitialState: function(){
     return({
       inbound_domain: this.props.config.inbound_domain,
-      companiesChecked: this.props.config.companies
+      functions: this.props.config.functions
     });
   },
   submitForm: function(e){
@@ -69,17 +73,6 @@ var ConfigForm = React.createClass({
           <input type="text" className="form-control" defaultValue={this.props.config.google_api_key} id="google_api_key" ref="google_api_key" />
           <p className="small">This will allow shortening of attachment URLs.</p>
         </div>
-        <div className="row">
-          <div className="col-xs-6">
-            <div className="form-group">
-              <label htmlFor="companies">Companies</label>
-              <p>
-                <input type="checkbox" defaultChecked={this.props.config.companies} id="companies" ref="companies" onChange={this.selectCompanies}/> Use Companies within the CRM
-              </p>
-            </div>
-          </div>
-          {this.editCompanies()}
-        </div>
         <div className="form-group">
           <label htmlFor="default_customer_status">Default new customer/company status</label>
           <p>
@@ -90,15 +83,17 @@ var ConfigForm = React.createClass({
           </p>
         </div>
         <div className="form-group">
-          <label htmlFor="tasks">Tasks</label>
-          <p>
-            <input type="checkbox" defaultChecked={this.props.config.tasks} id="tasks" ref="tasks" /> Use Tasks system within the CRM
-          </p>
-        </div>
-        <div className="form-group">
           <label htmlFor="token">Token</label>
           <input type="text" className="form-control" defaultValue={this.props.config.token} id="token" disabled="disabled"/>
         </div>
+        <fieldset>
+          <legend>Functions</legend>
+          {this.functionCheckbox('advanced_search', 'Advanced search')}
+          {this.functionCheckbox('tasks', 'Tasks')}
+          {this.functionCheckbox('companies', 'Companies')}
+          {this.functionCheckbox('edit_companies', 'Edit Companies')}
+          {this.functionCheckbox('newsfeed', 'Newsfeed (Recent comments/notes)')}
+        </fieldset>
         <div className="form-group">
           {this.submitButton('Save Changes')}
         </div>
@@ -130,21 +125,17 @@ var ConfigForm = React.createClass({
     }
     return(f.join("\r\n"));
   },
-  selectCompanies: function(e){
-    this.setState({companiesChecked: e.target.checked});
+  functionCheckbox: function(func, title){
+    return(
+      <div className="form-group">
+        <label>
+          <input type="checkbox" data-function={func} onChange={this.changeFunction} defaultChecked={this.props.config.functions && this.props.config.functions.indexOf(func)>-1} /> {title}
+        </label>
+      </div>
+    );
   },
-  editCompanies: function(){
-    if (this.state.companiesChecked){
-      return(
-        <div className="col-xs-6">
-          <div className="form-group">
-            <label htmlFor="edit_companies">Edit Companies</label>
-            <p>
-              <input type="checkbox" defaultChecked={this.props.config.edit_companies} id="edit_companies" ref="edit_companies" /> Edit Companies within the CRM
-            </p>
-          </div>
-        </div>
-      );
-    }
+  changeFunction: function(e){
+    var f = $(e.target).attr('data-function');
+    this.props.updateFunctions(f, e.target.checked);
   }
 });

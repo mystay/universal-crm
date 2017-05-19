@@ -101,7 +101,7 @@ module UniversalCrm
                   ticket_subject = UniversalCrm::Customer.find_by(scope: config.scope, email: /^#{forwarded_from||to}$/i)
                   ticket_subject ||= UniversalCrm::Company.find_by(scope: config.scope, email: /^#{forwarded_from||to}$/i) #check if there's a company now
                   ticket_subject ||= UniversalCrm::Customer.create(scope: config.scope, email: (forwarded_from||to), status: config.default_customer_status)
-                  ticket_subject.update(name: from_name) if ticket_subject.name.blank?
+                  ticket_subject.update(name: (from_name.blank? ? forwarded_from : from_name)) if ticket_subject.name.blank?
                 else
                   ticket_subject = UniversalCrm::Customer.find_by(scope: config.scope, email: /^#{forwarded_from||from}$/i)
                   ticket_subject ||= UniversalCrm::Company.find_by(scope: config.scope, email: /^#{forwarded_from||from}$/i) #check if there's a company now
@@ -144,7 +144,9 @@ module UniversalCrm
                                           kind: :email,
                                           when: Time.now.utc,
                                           author: (ticket_subject.nil? ? 'Unknown' : ticket_subject.name),
-                                          incoming: true
+                                          incoming: true,
+                                          subject_name: ticket.name,
+                                          subject_kind: ticket.kind
                   
                   logger.warn comment.errors.to_json
                 end
@@ -228,9 +230,51 @@ module UniversalCrm
               closed: ActiveSupport::NumberHelper.number_to_delimited(status_count.select{|s| s['_id']['status'] == 'closed'}.map{|s| s['value'].to_i}.sum)
               },
             flags: flags,
-            totalFlags:  flag_count.map{|a| a['value'].to_i}.sum
+            totalFlags:  flag_count.map{|a| a['value'].to_i}.sum,
+            customer_counts: {
+              draft: ActiveSupport::NumberHelper.number_to_delimited(@customers.draft.count)
+            },
+            company_counts: {
+              draft: ActiveSupport::NumberHelper.number_to_delimited(@companies.draft.count)
+            }
           }
         end
+        
+        def search
+          render json: {type: params[:search_type], results: []}
+        end
+        
+        def newsfeed
+          @comments = Universal::Comment.unscoped.order_by(created_at: :desc)
+          @comments = @comments.scoped_to(universal_scope) if !universal_scope.nil?
+          @comments = @comments.where(subject_type: params[:subject_type]) if !params[:subject_type].blank?
+          @comments = @comments.where(user_id: params[:user_id]) if !params[:user_id].blank?
+          @comments = @comments.where(subject_kind: params[:subject_kind]) if !params[:subject_kind].blank?
+          @tickets = UniversalCrm::Ticket.unscoped.order_by(created_at: :desc)
+          @tickets = @tickets.scoped_to(universal_scope) if !universal_scope.nil?
+          @tickets = @tickets.where(creator_id: params[:user_id]) if !params[:user_id].blank?
+          @tickets = @tickets.where(kind: params[:subject_kind]) if !params[:subject_kind].blank?
+          results = []
+          per_page=20
+          offset = ((params[:page].blank? ? 1 : params[:page].to_i)-1)*per_page
+          @comments[offset, offset+41].each do |comment|
+            results.push({type: 'comment', result: comment.to_json, subject: comment.subject.to_json})
+          end
+          @tickets[offset, offset+41].each do |ticket|
+            results.push({type: 'ticket', result: ticket.to_json})
+          end
+          results = results.sort_by{|a| a[:result][:created_at]}.reverse[0, per_page]
+          render json: {
+            pagination: {
+              total_count: @tickets.count+@comments.count,
+              page_count: (@tickets.count/per_page).to_i + (@comments.count/per_page).to_i,
+              current_page: params[:page].to_i,
+              per_page: per_page
+            },
+            results: results
+          }
+        end
+        
       end
     end
   end

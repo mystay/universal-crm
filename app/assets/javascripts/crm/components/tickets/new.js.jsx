@@ -54,7 +54,7 @@ var NewTicket = React.createClass({
         <i className="fa fa-sticky-note" onClick={this.selectKind} data-kind="note" /> New Note
       </button>
     );
-    if (this.props.gs && this.props.gs.config && this.props.gs.config.tasks){
+    if (this.props.gs && this.props.gs.config && this.props.gs.config.functions.indexOf('tasks')>-1){
       buttons.push(
         <button key="btn-task" className="btn btn-info btn-sm" disabled={this.isTask()} data-kind="task" onClick={this.selectKind}>
           <i className="fa fa-check-circle" onClick={this.selectKind} data-kind="task" /> New Task
