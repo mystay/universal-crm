@@ -48,7 +48,7 @@ var CRM = React.createClass({
           username={this.props.username}
           loadCustomers={this.loadCustomers}
           handleSearch={this.handleSearch}
-          _goSearch={this._goSearch}
+          _goQuickSearch={this._goQuickSearch}
           />
         <Aside
           gs={this.state.gs} sgs={this.setGlobalState}
@@ -57,6 +57,8 @@ var CRM = React.createClass({
           _goTicketList={this._goTicketList}
           _goCustomerList={this._goCustomerList}
           _goCompanyList={this._goCompanyList}
+          _goSearch={this._goSearch}
+          _goNewsfeed={this._goNewsfeed}
           />
         <section className="main-content-wrapper">
           <PageHeader
@@ -64,6 +66,7 @@ var CRM = React.createClass({
             _goHome={this._goHome}
             />
           <section id="main-content">
+            {this.state.supportingComponent}
             <div className="row">
               <div className="col-sm-12">
                 {this.state.subComponent}
@@ -110,8 +113,21 @@ var CRM = React.createClass({
   },
   _goDashboard: function(){
     this.setGlobalState('pageTitle', 'Dashboard');
+    this.setGlobalState('pageIcon', null);
     this.handlePageHistory('Dashboard', '/crm');
     this.setState({mainComponent: <Dashboard gs={this.state.gs} sgs={this.setGlobalState} _goTicketList={this._goTicketList} _goCustomerList={this._goCustomerList} _goCompanyList={this._goCompanyList} />});
+  },
+  _goSearch: function(){
+    this.setGlobalState('pageTitle', 'Search');
+    this.setGlobalState('pageIcon', null);
+    this.handlePageHistory('Search', '/crm');
+    this.setState({supportingComponent: <Search gs={this.state.gs} sgs={this.setGlobalState} _goTicketList={this._goTicketList} _goCustomerList={this._goCustomerList} _goCompanyList={this._goCompanyList} _goQuickSearch={this._goQuickSearch} />});
+  },
+  _goNewsfeed: function(){
+    this.setGlobalState('pageTitle', 'Newsfeed');
+    this.setGlobalState('pageIcon', null);
+    this.handlePageHistory('Newsfeed', '/crm');
+    this.setState({mainComponent: <Newsfeed gs={this.state.gs} sgs={this.setGlobalState} _goTicketList={this._goTicketList} _goTicket={this._goTicket} _goCustomerList={this._goCustomerList} _goCompanyList={this._goCompanyList} _goQuickSearch={this._goQuickSearch} />});
   },
   _goTicket: function(ticketId){
     this.setState({mainComponent: <TicketShowContainer ticketId={ticketId} gs={this.state.gs} sgs={this.setGlobalState} handlePageHistory={this.handlePageHistory} _goCustomer={this._goCustomer} _goCompany={this._goCompany} />});
@@ -132,7 +148,7 @@ var CRM = React.createClass({
     this.setGlobalState('companyStatus', status);
     this.setState({mainComponent: <CompanyList _goCustomer={this._goCustomer} _goCompany={this._goCompany} gs={this.state.gs} sgs={this.setGlobalState} />});
   },
-  _goSearch: function(searchWord){
+  _goQuickSearch: function(searchWord){
     var h = (
       <div>
         <CustomerList _goCustomer={this._goCustomer} gs={this.state.gs} sgs={this.setGlobalState} />

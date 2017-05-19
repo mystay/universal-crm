@@ -1,11 +1,14 @@
+/*
+  global React
+*/
 var Comment = React.createClass({
   
   render: function(){
     var commentClass;
     if (this.props.comment.system_generated){
-      commentClass = 'post system_generated'
+      commentClass = 'post system_generated';
     } else if (this.props.comment.incoming){
-      commentClass = 'post primary'
+      commentClass = 'post primary';
     }else if (this.props.comment.kind=='normal'){
       commentClass = 'post system_generated';
     }else{
@@ -25,7 +28,7 @@ var Comment = React.createClass({
             {this.author()}
           </div>
         </div>
-      )
+      );
     }else{
       return(
         <div className="row wrapper animated fadeInRight">
@@ -40,7 +43,7 @@ var Comment = React.createClass({
             </div>
           </div>
         </div>
-      )
+      );
     }
   },
   column: function(span){
@@ -62,7 +65,7 @@ var Comment = React.createClass({
     }
   },
   author: function(){
-    var timeago
+    var timeago;
     if (this.props.comment.when){
        timeago = jQuery.timeago(this.props.comment.when);
     }
@@ -72,14 +75,14 @@ var Comment = React.createClass({
           <small className='pull-right'>{timeago}</small>
           <span>{this.props.comment.author}</span>
         </div>
-      )
+      );
     }else{
       return(
         <div>
           <span>{this.props.comment.author}</span>
           <div className="small">{timeago}</div>
         </div>
-      )
+      );
     }
   },
   content: function(){

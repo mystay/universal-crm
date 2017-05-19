@@ -70,7 +70,7 @@ module UniversalCrm
       #make sure we don't have an existing customer
       @company = UniversalCrm::Company.find_or_create_by(scope: universal_scope, email: params[:email].strip.downcase)
       if !@company.nil?
-        @company.update(name: params[:name].strip.downcase, status: universal_crm_config.default_customer_status)
+        @company.update(name: params[:name].strip, status: universal_crm_config.default_customer_status)
         #Check if we need to link this to a User model
         render json: {name: @company.name, email: @company.email, existing: @company.created_at<1.minute.ago}
       else
@@ -81,6 +81,15 @@ module UniversalCrm
     def update
       @company.update(params.require(:company).permit(:name, :email, :address_line_1, :address_line_2, :address_city, :address_state, :address_post_code, :country_id))
       render json: {company: @company.to_json(universal_crm_config)}
+    end
+    
+    def update_status
+      if params[:status] == 'blocked'
+        @company.block!(universal_user)
+      elsif params[:status] == 'active'
+        @company.unblock!(universal_user)
+      end
+      render json: {customer: @customer.to_json(universal_crm_config)}
     end
     
     def add_employee

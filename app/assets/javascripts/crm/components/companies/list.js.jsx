@@ -7,8 +7,8 @@ var CompanyList = React.createClass({
     return({
       companies: null,
       loading: false,
-      companyPagination: null,
-      companyPage: null,
+      pagination: null,
+      pageNum: null,
       pastProps: null,
       companyStatus: null
     });
@@ -41,8 +41,8 @@ var CompanyList = React.createClass({
           _this.setState({
             loading: false,
             companies: data.companies,
-            companyPagination: data.pagination,
-            companyPage: page
+            pagination: data.pagination,
+            pageNum: page
           });
           _this.props.sgs('searching', false);
         }
@@ -88,7 +88,7 @@ var CompanyList = React.createClass({
     return rows;
   },
   pageResults: function(page){
-    this.props.loadCompanies(this.state.searchWord, this.state.companyStatus, page);
+    this.loadCompanies(this.state.searchWord, this.state.companyStatus, page);
     this.setState({currentPage: page});
   },
   render: function(){
@@ -114,10 +114,10 @@ var CompanyList = React.createClass({
               </tbody>
             </table>
             <Pagination
-              pagination={this.props.pagination}
-              currentPage={this.props.currentPage}
+              pagination={this.state.pagination}
+              currentPage={this.state.pageNum}
               pageResults={this.pageResults}
-              displayDescription={false} />
+              displayDescription={true} />
           </div>
         </div>
       );

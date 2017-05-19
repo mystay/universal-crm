@@ -44,7 +44,7 @@ var CustomerShow = React.createClass({
                 <div className="tab-wrapper tab-primary">
                   <ul className="nav nav-tabs">
                     <li className="active"><a data-toggle="tab" href="#tab-notes">Notes</a></li>
-                    <li><a data-toggle="tab" href="#tab-attachments">Attachments</a></li>
+                    <li><a data-toggle="tab" href="#tab-attachments">Files</a></li>
                     <li><a data-toggle="tab" href="#tab-settings">Settings</a></li>
                   </ul>
                   <div className="tab-content">
@@ -150,7 +150,7 @@ var CustomerShow = React.createClass({
     }
   },
   companies: function(){
-    if (this.props.gs && this.props.gs.config && this.props.gs.config.companies && this.props.customer.companies.length>0){
+    if (this.props.gs && this.props.gs.config && this.props.gs.config.functions.indexOf('companies')>-1 && this.props.customer.companies.length>0){
       var rows = [];
       var goCompany = this.clickCompany;
       this.props.customer.companies.forEach(function(company){

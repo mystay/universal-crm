@@ -15,7 +15,7 @@ var TicketTitleButton = React.createClass({
           {this.statusLabel()}
           {this.ticketIcon()}
           {this.props.ticket.title}
-          <TicketDueOn dueOn={this.props.ticket.due_on} margin={true} />
+          <TicketDueOn ticket={this.props.ticket} margin={true} editable={false} />
           <Flags flags={this.props.ticket.flags} gs={this.props.gs} />
           {this.tags()}
         </div>  
@@ -39,7 +39,7 @@ var TicketTitleButton = React.createClass({
     if (this.props.ticket && this.props.ticket.status == 'closed'){
       return(<span className='label label-default' style={{marginRight: '5px'}}>Closed</span>);
     }else if (this.props.ticket && this.props.ticket.status == 'actioned'){
-      return <span className='label label-warning' style={{marginRight: '5px'}}>Follow up</span>
+      return(<span className='label label-warning' style={{marginRight: '5px'}}>Follow up</span>);
     }
   },
   tags: function(){

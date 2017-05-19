@@ -115,7 +115,7 @@ module UniversalCrm
           if !params[:flag].blank?
             params[:flag].strip.gsub(' ','').split(',').each do |flag|
               ticket.flag!(params[:flag], universal_user)
-              ticket.save_comment!("Added flag: '#{params[:flag]}'", current_user)
+              ticket.save_comment!("Added flag: '#{params[:flag]}'", current_user, universal_scope)
             end
           end
           if ticket.email?
@@ -138,17 +138,35 @@ module UniversalCrm
       else
         @ticket.open!(universal_user)
       end
-      render json: {ticket: @ticket.to_json}
+      respond_to do |format|
+        format.json{
+          render json: {ticket: @ticket.to_json}
+        }
+        format.js{
+          render layout: false
+        }
+      end
+    end
+    
+    def update_due_on
+      @ticket = UniversalCrm::Ticket.find(params[:id])
+      if @ticket
+        @ticket.update(due_on: params[:due_on])
+        @ticket.save_comment!("Updated due date: #{params[:due_on].to_date.strftime('%b %d, %Y')}", current_user, universal_scope)
+        render json: {ticket: @ticket.to_json}
+      else
+        render json: {}
+      end
     end
     
     def flag
       @ticket = UniversalCrm::Ticket.find(params[:id])
       if params[:add] == 'true'
         @ticket.flag!(params[:flag], universal_user)
-        @ticket.save_comment!("Added flag: '#{params[:flag]}'", current_user)
+        @ticket.save_comment!("Added flag: '#{params[:flag]}'", current_user, universal_scope)
       else
         @ticket.remove_flag!(params[:flag])
-        @ticket.save_comment!("Removed flag: '#{params[:flag]}'", current_user)
+        @ticket.save_comment!("Removed flag: '#{params[:flag]}'", current_user, universal_scope)
       end
       render json: {ticket: @ticket.to_json}
     end
@@ -158,7 +176,7 @@ module UniversalCrm
       old_customer_name = @ticket.subject.name
       customer = UniversalCrm::Customer.find(params[:customer_id])
       @ticket.update(subject: customer, from_email: customer.email)
-      @ticket.save_comment!("Customer changed from: '#{old_customer_name}'", current_user)
+      @ticket.save_comment!("Customer changed from: '#{old_customer_name}'", current_user, universal_scope)
       render json: {ticket: @ticket.to_json}
     end
     
@@ -167,7 +185,7 @@ module UniversalCrm
       if !@user.nil?
         @ticket = UniversalCrm::Ticket.find(params[:id])
         @ticket.update(responsible: @user)
-        @ticket.save_comment!("Ticket assigned to: #{@user.name}", universal_user)
+        @ticket.save_comment!("Ticket assigned to: #{@user.name}", universal_user, universal_scope)
         begin
           UniversalCrm::Mailer.assign_ticket(universal_crm_config, @ticket, @user).deliver_now
         rescue

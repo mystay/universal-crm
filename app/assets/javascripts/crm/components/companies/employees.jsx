@@ -48,7 +48,7 @@ var Employees = React.createClass({
       rows.push(
         <tr key={employee.id}>
           <td><a id={employee.id} onClick={clickCustomer} style={{cursor: 'pointer'}}>{employee.name}</a></td>
-          <td className="small">{employee.email}</td>
+          <td className="small"><a id={employee.id} onClick={clickCustomer} style={{cursor: 'pointer'}}>{employee.email}</a></td>
           <td className="text-center">{ticketCount(employee.open_ticket_count)}</td>
         </tr>
         );

@@ -76,6 +76,16 @@ module UniversalCrm
           return a
         end
         
+        def block!(user)
+          self.comments.create content: 'Company blocked', author: user.name, when: Time.now.utc
+          self.blocked!
+        end
+        
+        def unblock!(user)
+          self.comments.create content: 'Company unblocked', author: user.name, when: Time.now.utc
+          self.active!
+        end
+        
       end
     end
   end
