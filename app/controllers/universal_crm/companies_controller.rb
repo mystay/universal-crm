@@ -45,11 +45,11 @@ module UniversalCrm
     
     def autocomplete
       @companies = UniversalCrm::Company.all
+      @companies = @companies.scoped_to(universal_scope) if !universal_scope.nil?
       if !params[:term].blank?
         @companies = @companies.full_text_search(params[:term], match: :all)
       end
-      json = @companies.map{|c| {label: c.name, value: c.id.to_s}}
-      puts json
+      json = @companies.map{|c| {label: [c.name, c.email].join(' - '), value: c.id.to_s}}
       render json: json.to_json
     end
     
@@ -68,13 +68,13 @@ module UniversalCrm
     
     def create
       #make sure we don't have an existing customer
-      @company = UniversalCrm::Company.find_or_create_by(scope: universal_scope, email: params[:email].strip.downcase)
-      if !@company.nil?
-        @company.update(name: params[:name].strip, status: universal_crm_config.default_customer_status)
+      @company = UniversalCrm::Company.find_by(scope: universal_scope, email: params[:email].strip.downcase)
+      if @company.nil?
+        @company = UniversalCrm::Company.create(scope: universal_scope, email: params[:email].strip.downcase, name: params[:name].strip, status: universal_crm_config.default_customer_status)
         #Check if we need to link this to a User model
-        render json: {name: @company.name, email: @company.email, existing: @company.created_at<1.minute.ago}
+        render json: {id: @company.id.to_s, name: @company.name, email: @company.email, existing: false}
       else
-        render json: {}
+        render json: {id: @company.id.to_s, name: @company.name, email: @company.email, existing: @company.created_at<1.minute.ago}
       end
     end
     

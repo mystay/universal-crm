@@ -86,7 +86,7 @@ var Aside = React.createClass({
           {this.companiesMenu()}
         </nav>
         <Modal ref='new_customer_modal' modalTitle="New Customer" modalContent={<NewCustomer />} />
-        <Modal ref='new_company_modal' modalTitle="New Company" modalContent={<NewCompany />} />
+        <Modal ref='new_company_modal' modalTitle="New Company" id="new_company_modal" modalContent={<NewCompany _goCompany={this.props._goCompany} />} />
       </aside>
     );
   },
