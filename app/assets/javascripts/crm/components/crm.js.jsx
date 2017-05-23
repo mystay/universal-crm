@@ -55,6 +55,7 @@ var CRM = React.createClass({
           gs={this.state.gs} sgs={this.setGlobalState}
           _goDashboard={this._goDashboard}
           _goCompany={this._goCompany}
+          _goCustomer={this._goCustomer}
           _goTicketList={this._goTicketList}
           _goCustomerList={this._goCustomerList}
           _goCompanyList={this._goCompanyList}
