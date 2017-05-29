@@ -31,8 +31,8 @@ module UniversalCrm
 
         statuses %w(active draft blocked), default: :active
         
-        validates :name, presence: true
-        validates_uniqueness_of :email, allow_blank: true, scope: [:scope_type, :scope_id]
+        validates :name, :email, presence: true
+        validates_uniqueness_of :email, scope: [:scope_type, :scope_id]
 #         numbered_prefix 'CP'
         
         # default_scope ->(){order_by(created_at: :desc)}
