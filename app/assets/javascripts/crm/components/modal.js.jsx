@@ -1,8 +1,9 @@
 var Modal = React.createClass({
   
   render: function(){
+    
     return(
-      <div className="modal fade" id={this.props.id}>
+      <div className="modal fade">
         <div className="modal-dialog">
           <div className="modal-content">
             <div className="modal-header">
