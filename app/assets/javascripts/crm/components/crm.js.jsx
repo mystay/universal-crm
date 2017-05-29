@@ -134,9 +134,11 @@ var CRM = React.createClass({
     this.setState({mainComponent: <TicketShowContainer ticketId={ticketId} gs={this.state.gs} sgs={this.setGlobalState} handlePageHistory={this.handlePageHistory} _goCustomer={this._goCustomer} _goCompany={this._goCompany} />});
   },
   _goCompany: function(companyId){
+    this.setGlobalState('searchWord', '');
     this.setState({mainComponent: <CompanyShowContainer companyId={companyId} gs={this.state.gs} sgs={this.setGlobalState} handlePageHistory={this.handlePageHistory} _goTicket={this._goTicket} _goCompany={this._goCompany} _goCustomer={this._goCustomer} />});
   },
   _goCustomer: function(customerId){
+    this.setGlobalState('searchWord', '');
     this.setState({mainComponent: <CustomerShowContainer customerId={customerId} gs={this.state.gs} sgs={this.setGlobalState} handlePageHistory={this.handlePageHistory} _goTicket={this._goTicket} _goCompany={this._goCompany} _goCustomer={this._goCustomer} />});
   },
   _goCustomerList: function(searchWord, status){
