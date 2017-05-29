@@ -78,7 +78,7 @@ var Search = React.createClass({
         },
         success: function(data){
           _this.setState({loading: false});
-          console.log(data);
+          // console.log(data);
           if (data.type=='email'||data.type=='task'||data.type=='normal'){
             _this.props._goQuickSearch();
           }
