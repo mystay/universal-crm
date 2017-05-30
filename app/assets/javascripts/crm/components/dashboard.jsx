@@ -52,8 +52,8 @@ var Dashboard = React.createClass({
     if (this.props.gs && this.props.gs.config && this.props.gs.config.functions.indexOf('tasks')>-1){
       return(
         <NewTicket key="new_task"
-          subjectId={this.props.gs.user.id}
-          subjectType='Padlock::User'
+          subjectId={this.props.gs.user_customer.id}
+          subjectType='UniversalCrm::Customer'
           subject={this.props.gs.user}
           loadTickets={this.props.loadTickets}
           gs={this.props.gs}

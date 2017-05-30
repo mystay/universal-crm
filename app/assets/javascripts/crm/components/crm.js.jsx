@@ -19,6 +19,7 @@ var CRM = React.createClass({
         document.title = data.config.system_name;
         _this.setGlobalState('config', data.config);
         _this.setGlobalState('user', data.universal_user);
+        _this.setGlobalState('user_customer', data.customer);
         _this.setGlobalState('users', data.users);
         _this.init(_this);
       })
