@@ -33,7 +33,6 @@ module UniversalCrm
       )
       p[:ticket_flags] = p[:ticket_flags].to_s.gsub('\r','').split("\n").map{|p| {label: p.split('|')[0], color: p.split('|')[1]}}
       p[:inbound_email_addresses] = p[:inbound_email_addresses].downcase.gsub(' ','').split(',')
-      puts p
       universal_crm_config.update(p)
       render json: universal_crm_config.to_json
     end

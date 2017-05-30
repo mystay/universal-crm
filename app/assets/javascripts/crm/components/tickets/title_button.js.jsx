@@ -15,7 +15,7 @@ var TicketTitleButton = React.createClass({
           {this.statusLabel()}
           {this.ticketIcon()}
           {this.props.ticket.title}
-          <TicketDueOn ticket={this.props.ticket} margin={true} editable={false} />
+          <TicketDueOn ticket={this.props.ticket} margin={false} editable={false} />
           <Flags flags={this.props.ticket.flags} gs={this.props.gs} />
           {this.tags()}
         </div>  

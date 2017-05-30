@@ -28,6 +28,13 @@ module UniversalCrm
               email: universal_user.email,
               functions: (universal_user.universal_user_group_functions.blank? ? [] : universal_user.universal_user_group_functions['crm'])
             }})
+            customer = universal_user.crm_customer(universal_scope)
+            if customer
+              json.merge!({customer: {
+                id: customer.id.to_s,
+                name: customer.name
+              }})
+            end
           end
           render json: json
         end
