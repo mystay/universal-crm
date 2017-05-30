@@ -8,7 +8,7 @@ var NewTicket = React.createClass({
     return({
       title: '',
       content: '',
-      dueOn: new Date().toISOString().slice(0,10),
+      dueOn: null,
       data: '',
       loading: false,
       kind: null,
@@ -207,7 +207,7 @@ var NewTicket = React.createClass({
       return(
         <div className="panel-footer">
           <div className="form-group m-0">
-            <button className='btn btn-success upcase' onClick={this.handleSubmit}>
+            <button className='btn btn-success upcase m-0' onClick={this.handleSubmit}>
               <i className={this.loadingIcon()} /> {action} {this.state.kind}
             </button>
           </div>
