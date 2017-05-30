@@ -85,8 +85,8 @@ var Aside = React.createClass({
           </ul>
           {this.companiesMenu()}
         </nav>
-        <Modal ref='new_customer_modal' modalTitle="New Customer" id="new_customer_modal" modalContent={<NewCustomer _goCustomer={this.props._goCustomer} />} />
-        <Modal ref='new_company_modal' modalTitle="New Company" id="new_company_modal" modalContent={<NewCompany _goCompany={this.props._goCompany} />} />
+        <Modal ref='new_customer_modal' modalTitle="New Customer" modalContent={<NewCustomer />} />
+        <Modal ref='new_company_modal' modalTitle="New Company" modalContent={<NewCompany />} />
       </aside>
     );
   },
@@ -109,7 +109,7 @@ var Aside = React.createClass({
     }
   },
   companiesMenu: function(){
-    if (this.props.gs && this.props.gs.config && this.props.gs.config.functions.indexOf('companies')>-1){
+    if (this.props.gs && this.props.gs.config && this.props.gs.config.functions && this.props.gs.config.functions.indexOf('companies')>-1){
       return(<div>
         <h5 className="sidebar-header">Companies</h5>
         <ul className="nav nav-pills nav-stacked">
@@ -147,7 +147,7 @@ var Aside = React.createClass({
     }
   },
   newsfeedButton: function(){
-    if (this.props.gs && this.props.gs.config && this.props.gs.config.functions.indexOf('newsfeed')>-1){
+    if (this.props.gs && this.props.gs.config && this.props.gs.config.functions && this.props.gs.config.functions.indexOf('newsfeed')>-1){
       return(
         <li>
           <a style={{cursor: 'pointer'}} onClick={this.props._goNewsfeed} data-status='task' data-title="newsfeed" data-icon="fa-check-circle">
@@ -159,7 +159,7 @@ var Aside = React.createClass({
     }
   },
   tasksButton: function(){
-    if (this.props.gs && this.props.gs.config && this.props.gs.config.functions.indexOf('tasks')>-1){
+    if (this.props.gs && this.props.gs.config && this.props.gs.config.functions && this.props.gs.config.functions.indexOf('tasks')>-1){
       return(
         <li>
           <a style={{cursor: 'pointer'}} onClick={this.loadTickets} data-status='task' data-title="Tasks" data-icon="fa-check-circle">
@@ -171,7 +171,7 @@ var Aside = React.createClass({
     }
   },
   searchButton: function(){
-    if (this.props.gs && this.props.gs.config && this.props.gs.config.functions.indexOf('advanced_search')>-1){
+    if (this.props.gs && this.props.gs.config && this.props.gs.config.functions && this.props.gs.config.functions.indexOf('advanced_search')>-1){
       return(
         <li>
           <a style={{cursor: 'pointer'}} onClick={this.props._goSearch} data-status='active' data-title="Search" data-icon="fa-search">

@@ -32,6 +32,7 @@ module UniversalCrm
         def to_json
           {
             scope_id: self.scope_id.to_s,
+            scope_type: self.scope_type.to_s,
             system_name: self.system_name,
             url: self.url,
             ticket_flags: self.ticket_flags,

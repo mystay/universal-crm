@@ -11,7 +11,6 @@ var NewCustomer = React.createClass({
     })
   },
   handleSubmit: function(e){
-    var modal = $('#new_customer_modal');
     e.preventDefault();
     $.ajax({
       method: 'POST',
@@ -30,8 +29,6 @@ var NewCustomer = React.createClass({
               showErrorMessage('Customer already exists: ' + data.email);
             }else{
               showSuccess('Customer created: ' + data.email);
-              modal.modal('hide');
-              _this.props._goCustomer(data.id);
             }
           }
         };

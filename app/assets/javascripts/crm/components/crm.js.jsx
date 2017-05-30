@@ -54,7 +54,6 @@ var CRM = React.createClass({
           gs={this.state.gs} sgs={this.setGlobalState}
           _goDashboard={this._goDashboard}
           _goCompany={this._goCompany}
-          _goCustomer={this._goCustomer}
           _goTicketList={this._goTicketList}
           _goCustomerList={this._goCustomerList}
           _goCompanyList={this._goCompanyList}
@@ -116,7 +115,7 @@ var CRM = React.createClass({
     this.setGlobalState('pageTitle', 'Dashboard');
     this.setGlobalState('pageIcon', null);
     this.handlePageHistory('Dashboard', '/crm');
-    this.setState({mainComponent: <Dashboard gs={this.state.gs} sgs={this.setGlobalState} _goTicketList={this._goTicketList} _goCustomerList={this._goCustomerList} _goCompanyList={this._goCompanyList} />});
+    this.setState({mainComponent: <Dashboard gs={this.state.gs} sgs={this.setGlobalState} _goTicketList={this._goTicketList} _goCustomerList={this._goCustomerList} _goCompanyList={this._goCompanyList} _goTicket={this._goTicket} _goCompany={this._goCompany} _goCustomer={this._goCustomer} />});
   },
   _goSearch: function(){
     this.setGlobalState('pageTitle', 'Search');

@@ -105,7 +105,8 @@ module UniversalCrm
                                         document: document,
                                         due_on: params[:due_on],
                                         creator: universal_user,
-                                        responsible_id: params[:responsible_id]
+                                        responsible_id: params[:responsible_id],
+                                        subject: subject
                                         
         if !document.nil? and !UniversalCrm::Configuration.secondary_scope_class.blank?
           ticket.secondary_scope = document.crm_secondary_scope
