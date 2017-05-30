@@ -43,9 +43,27 @@ var Dashboard = React.createClass({
         </div>
         <div className="col-sm-6">
           {this.flagCounts()}
+          {this.newTask()}
         </div>
       </div>
     );
+  },
+  newTask: function(){
+    if (this.props.gs && this.props.gs.config && this.props.gs.config.functions.indexOf('tasks')>-1){
+      return(
+        <NewTicket key="new_task"
+          subjectId={this.props.gs.user.id}
+          subjectType='Padlock::User'
+          subject={this.props.gs.user}
+          loadTickets={this.props.loadTickets}
+          gs={this.props.gs}
+          sgs={this.props.sgs}
+          _goTicket={this.props._goTicket}
+          kind='task'
+          hideButtonList={true}
+          />
+        );
+    }
   },
   ticketCountTiles: function(){
     if (this.state.ticketCounts){
@@ -134,5 +152,5 @@ var Dashboard = React.createClass({
     if (this.props.gs && this.props.gs.config && this.props.gs.config.functions.indexOf('companies')>-1 && can(this.props.gs, 'approve_draft_companies') && this.state.companyCounts.draft>0){
       return(<div className="col-xs-6">{this.dashboardTile('building', this.state.companyCounts.draft, 'Draft Companies', 'danger', 'draft', this.goCompanyList)}</div>);
     }
-  }
+  },
 });
