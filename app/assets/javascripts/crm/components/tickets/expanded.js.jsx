@@ -27,6 +27,7 @@ var ExpandedTicket = React.createClass({
               ticketFlags={this.props.ticketFlags}
               replyCount={this.state.replyCount}
               />
+            <div style={{marginTop: '2px'}}><Labels subjectType="UniversalCrm::Ticket" subjectId={this.props.ticket.id} labels={this.props.ticket.flags} type={this.props.ticket.kind} gs={this.props.gs} /></div>
             <div style={{marginTop: '2px'}}><Tags subjectType="UniversalCrm::Ticket" subjectId={this.props.ticket.id} tags={this.props.ticket.tags} /></div>
             <hr />
           </div>

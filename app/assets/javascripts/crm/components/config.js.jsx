@@ -4,27 +4,26 @@
   global $
 */
 var Config = React.createClass({
-  
   getInitialState: function(){
     return({
       config: null,
       signedIn: false,
       loading: false,
-      functions: []
+      functions: [],
+      labels: {}
     });
   },
   componentDidMount: function(){
     this.init();
   },
   init: function(){
+    var _this=this;
     $.ajax({
       method: 'GET',
       url: `/crm/config.json`,
-      success: (function(_this){
-        return function(data){
-          _this.setState({config: data, functions: data.functions});
-        };
-      })(this)
+      success: function(data){
+        _this.setState({config: data, functions: data.functions, labels: data.labels});
+      }
     });
   },
   render: function(){
@@ -44,7 +43,7 @@ var Config = React.createClass({
   },
   configForm: function(){
     if (this.state.signedIn){
-      return(<ConfigForm config={this.state.config} updateChanges={this.updateChanges} loading={this.state.loading} updateFunctions={this.updateFunctions} />);
+      return(<ConfigForm config={this.state.config} updateChanges={this.updateChanges} loading={this.state.loading} updateFunctions={this.updateFunctions} updateLabels={this.updateLabels} />);
     }else{
       return(<ConfigLogin config={this.state.config} submitNewPassword={this.submitNewPassword} signIn={this.signIn} loading={this.state.loading} />);
     }
@@ -116,6 +115,7 @@ var Config = React.createClass({
           google_api_key: ReactDOM.findDOMNode(refs.google_api_key).value,
           test_email: ReactDOM.findDOMNode(refs.test_email).value,
           default_customer_status: ReactDOM.findDOMNode(refs.default_customer_status).value,
+          labels: this.state.labels,
           functions: this.state.functions
         }
       },
@@ -136,5 +136,16 @@ var Config = React.createClass({
       functions.splice(functions.indexOf(f),1);
     }
     this.setState({functions: functions});
+  },
+  updateLabels: function(e){
+    var tag_name = e.target.name;
+    var labels = e.target.value;
+    var new_labels = this.state.labels;
+    if (labels==''){
+      new_labels[tag_name] = [];
+    }else{
+      new_labels[tag_name] = labels.split(",");
+    }
+    this.setState({labels: new_labels});
   }
 });
