@@ -17,7 +17,6 @@ var Labels = React.createClass({
   render: function(){
     if (this.state.labels){
       var btns = [];
-      console.log('render');
       for (var i=0;i<this.state.labels.length;i++){
         var label = this.state.labels[i];
         var btn = [];
