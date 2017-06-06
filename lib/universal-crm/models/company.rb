@@ -11,6 +11,7 @@ module UniversalCrm
         include Universal::Concerns::Kind
         include Universal::Concerns::Numbered
         include Universal::Concerns::Taggable
+        include Universal::Concerns::Flaggable
         include Universal::Concerns::Scoped
         include Universal::Concerns::Polymorphic
         include Universal::Concerns::Commentable
@@ -50,6 +51,7 @@ module UniversalCrm
             email: self.email, 
             phone: self.phone,
             tags: self.tags,
+            flags: self.flags,
             ticket_count: self.tickets.count, 
             token: self.token,
             inbound_email_address: self.inbound_email_address(config),

@@ -138,6 +138,8 @@ var CustomerShow = React.createClass({
               {this.companies()}
               <dt>Tags:</dt>
               <dd><Tags subjectType="UniversalCrm::Customer" subjectId={this.props.customer.id} tags={this.props.customer.tags} /></dd>
+              <dt>Labels:</dt>
+              <dd><Labels subjectType="UniversalCrm::Customer" subjectId={this.props.customer.id} labels={this.props.customer.flags} type='customer' gs={this.props.gs} /></dd>
             </dl>
           </div>
         </div>

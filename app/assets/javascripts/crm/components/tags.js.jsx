@@ -46,7 +46,7 @@ var Tags = React.createClass({
     e.target.className = 'fa fa-fw fa-pencil';
   },
   offIcon: function(e){
-    e.target.className = 'fa fa-fw fa-tags';
+    e.target.className = 'fa fa-fw fa-tag';
   },
   listTags: function(){
     var tags = []

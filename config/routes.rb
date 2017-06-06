@@ -26,6 +26,11 @@ UniversalCrm::Engine.routes.draw do
       get :shorten_url
     end
   end
+  resources :flags do
+    collection do
+      post :toggle
+    end
+  end
   resources :customers do
     collection do
       get :autocomplete
