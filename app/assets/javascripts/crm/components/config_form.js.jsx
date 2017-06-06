@@ -99,8 +99,8 @@ var ConfigForm = React.createClass({
           {this.labelsTextbox('customer')}
           {this.labelsTextbox('company')}
           {this.labelsTextbox('email')}
-          {this.labelsTextbox('note')}
           {this.labelsTextbox('task')}
+          {this.labelsTextbox('normal')}
         </fieldset>
         <div className="form-group">
           {this.submitButton('Save Changes')}

@@ -43,7 +43,7 @@ var Labels = React.createClass({
     this.toggleLabel(label);
   },
   labelButtonClass: function(label){
-    return `btn btn-xs ${this.labeled(label) ? 'btn-info' : 'btn-default'}`;
+    return `btn btn-xs${this.labeled(label) ? ' btn-info' : ''}`;
   },
   labeled: function(label){
     return this.state.selectedLabels.indexOf(label.toString())>-1;
