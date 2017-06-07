@@ -13,12 +13,13 @@ var NewTicket = React.createClass({
       loading: false,
       kind: null,
       datepickerLoaded: false,
-      responsibleId: null
+      responsibleId: null,
+      parentTicketId: null
     });
   },
   componentDidMount: function(){
     if (this.props.kind){
-      this.setState({kind: this.props.kind});
+      this.setState({kind: this.props.kind, parentTicketId: this.props.parentTicketId});
     }
   },
   componentDidUpdate: function(){
@@ -100,7 +101,8 @@ var NewTicket = React.createClass({
           subject_id: this.props.subjectId,
           subject_type: this.props.subjectType,
           kind: this.state.kind,
-          responsible_id: this.state.responsibleId
+          responsible_id: this.state.responsibleId,
+          parent_ticket_id: this.state.parentTicketId
         },
         success: function(data){
           _this.setState({title: '', content: '', loading: false, kind: null, dueOn: null});

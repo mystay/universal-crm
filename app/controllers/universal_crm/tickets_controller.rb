@@ -106,7 +106,8 @@ module UniversalCrm
                                         due_on: params[:due_on],
                                         creator: universal_user,
                                         responsible_id: params[:responsible_id],
-                                        subject: subject
+                                        subject: subject,
+                                        parent_ticket_id: params[:parent_ticket_id]
                                         
         if !document.nil? and !UniversalCrm::Configuration.secondary_scope_class.blank?
           ticket.secondary_scope = document.crm_secondary_scope
@@ -122,6 +123,11 @@ module UniversalCrm
           if ticket.email?
             #Send the contact form to the customer for their reference
             UniversalCrm::Mailer.new_ticket(universal_crm_config, subject, ticket, sent_from_crm).deliver_now
+          end
+          if !params[:parent_ticket_id].blank?
+            parent_ticket = UniversalCrm::Ticket.find(params[:parent_ticket_id])
+            parent_ticket.push(child_ticket_ids: ticket.id.to_s) if !parent_ticket.nil?
+            parent_ticket.save_comment!("Related task created: '#{ticket.name}'", current_user, universal_scope)
           end
         end
         render json: {ticket: ticket.to_json}
@@ -194,6 +200,28 @@ module UniversalCrm
       end
       render json: {user: {name: @user.name, email: @user.email}}
         
+    end
+    
+    def create_related_task
+      @ticket = UniversalCrm::Ticket.find(params[:id])
+      if !@ticket.nil?
+        child_ticket = @ticket.subject.tickets.new  kind: 'task',
+                                                    title: 'Matching task',
+                                                    content: 'Task content',
+                                                    scope: universal_scope,
+                                                    due_on: 1.week.from_now,
+                                                    creator: universal_user,
+                                                    responsible_id: @ticket.responsible,
+                                                    parent_ticket: @ticket
+        if child_ticket.save
+          @ticket.push(child_ticket_ids: child_ticket.id.to_json)
+          render json: {ticket: child_ticket.to_json}
+        else
+          render json: {}
+        end
+      else
+        render json: {}
+      end
     end
     
     def editing
