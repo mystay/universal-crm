@@ -14,6 +14,7 @@ var ExpandedTicket = React.createClass({
     if (this.props.ticketId == this.props.ticket.id){
       return(
         <div>
+          <ParentTicket ticket={this.props.ticket.parent_ticket} _goTicket={this.props._goTicket} />
           <div className="">
             <TicketFunctions
               gs={this.props.gs}
@@ -35,6 +36,7 @@ var ExpandedTicket = React.createClass({
           {this.ticketDocument()}
           {this.referringUrl()}
           {this.ticketNotes()}
+          <RelatedTask ticket={this.props.ticket} gs={this.props.gs} sgs={this.props.sgs} _goTicket={this.props._goTicket} />
           <div className="panel">
             <div className="panel-body">
               <Attachments subjectId={this.props.ticket.id} subjectType='UniversalCrm::Ticket' gs={this.props.gs} />
@@ -139,5 +141,6 @@ var ExpandedTicket = React.createClass({
       }
     });
     this.setState({replyCount: replyCount});
-  }
+  },
+
 });

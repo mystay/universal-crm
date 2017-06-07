@@ -131,7 +131,7 @@ var CRM = React.createClass({
     this.setState({mainComponent: <Newsfeed gs={this.state.gs} sgs={this.setGlobalState} _goTicketList={this._goTicketList} _goTicket={this._goTicket} _goCustomerList={this._goCustomerList} _goCompanyList={this._goCompanyList} _goQuickSearch={this._goQuickSearch} />});
   },
   _goTicket: function(ticketId){
-    this.setState({mainComponent: <TicketShowContainer ticketId={ticketId} gs={this.state.gs} sgs={this.setGlobalState} handlePageHistory={this.handlePageHistory} _goCustomer={this._goCustomer} _goCompany={this._goCompany} />});
+    this.setState({mainComponent: <TicketShowContainer ticketId={ticketId} gs={this.state.gs} sgs={this.setGlobalState} handlePageHistory={this.handlePageHistory} _goCustomer={this._goCustomer} _goCompany={this._goCompany} _goTicket={this._goTicket} />});
   },
   _goCompany: function(companyId){
     this.setState({mainComponent: <CompanyShowContainer companyId={companyId} gs={this.state.gs} sgs={this.setGlobalState} handlePageHistory={this.handlePageHistory} _goTicket={this._goTicket} _goCompany={this._goCompany} _goCustomer={this._goCustomer} />});
