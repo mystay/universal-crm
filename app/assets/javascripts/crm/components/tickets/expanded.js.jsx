@@ -49,7 +49,7 @@ var ExpandedTicket = React.createClass({
             openComments={this.ticketOpen()}
             newCommentPlaceholder={this.newCommentPlaceholder()}
             fullWidth={false}
-            allowEmail={this.props.ticket.subject_email!=undefined}
+            allowEmail={this.props.ticket.kind=='email'}
             newCommentReceived={this.newCommentReceived}
             />
           {this.emailWarning()}
