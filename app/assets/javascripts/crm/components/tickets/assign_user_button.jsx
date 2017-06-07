@@ -26,7 +26,7 @@ var AssignUserButton = React.createClass({
   }, 
   buttonText: function(){
     if (this.props.ticket.responsible_name){
-      return(`Assigned to ${this.props.ticket.responsible_name}`);
+      return(`${this.props.ticket.responsible_name}`);
     }else{
       return 'Assign to'
     }

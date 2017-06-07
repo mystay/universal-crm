@@ -5,7 +5,7 @@
 var Labels = React.createClass({
   getInitialState: function(){
     return({
-      labels: {},
+      labels: null,
       selectedLabels: []
     });
   },
@@ -15,7 +15,7 @@ var Labels = React.createClass({
     }
   },
   render: function(){
-    if (this.state.labels){
+    if (this.state.labels && this.state.labels.length>0){
       var btns = [];
       for (var i=0;i<this.state.labels.length;i++){
         var label = this.state.labels[i];
