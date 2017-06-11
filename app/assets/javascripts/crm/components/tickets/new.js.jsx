@@ -88,6 +88,9 @@ var NewTicket = React.createClass({
   handleSubmit: function(e){
     e.preventDefault();
     var _this=this;
+    if (this.props.hideModalId){
+      var modal = $(`#${this.props.hideModalId}`);
+    }
     if (!this.state.loading){
       this.setState({loading: true});
       $.ajax({
@@ -106,6 +109,9 @@ var NewTicket = React.createClass({
         },
         success: function(data){
           _this.setState({title: '', content: '', loading: false, kind: null, dueOn: null});
+          if (modal){
+            modal.modal('hide');
+          }
           _this.props._goTicket(data.ticket.id);
         }
       });

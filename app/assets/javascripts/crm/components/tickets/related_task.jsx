@@ -36,12 +36,13 @@ var RelatedTask = React.createClass({
           _goTicket={this.props._goTicket}
           kind='task'
           hideButtonList={true}
+          hideModalId='related_task_modal'
           />
     );
   },
   childTickets: function(){
     var goTicket=this.goTicket;
-    if (this.props.ticket.child_tickets.length>0){
+    if (this.props.ticket.child_tickets && this.props.ticket.child_tickets.length>0){
       var h=[];
       for (var i=0;i<this.props.ticket.child_tickets.length;i++){
         var ticket = this.props.ticket.child_tickets[i];
