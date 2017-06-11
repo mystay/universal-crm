@@ -5,7 +5,7 @@
 */
 var RelatedTask = React.createClass({
   render: function(){
-    if (this.props.ticket.kind=='email'){
+    if (this.props.gs && this.props.gs.config && this.props.gs.config.functions.indexOf('tasks')>-1 && this.props.ticket.kind=='email'){
       return(
         <div className="well well-sm">
           {this.childTickets()}
@@ -45,7 +45,7 @@ var RelatedTask = React.createClass({
       var h=[];
       for (var i=0;i<this.props.ticket.child_tickets.length;i++){
         var ticket = this.props.ticket.child_tickets[i];
-        h.push(<li><a onClick={goTicket} data-id={ticket.id} style={{cursor: 'pointer'}}>{ticket.name}</a></li>)
+        h.push(<li key={`related_${ticket.id}`}><a onClick={goTicket} data-id={ticket.id} style={{cursor: 'pointer'}}>{ticket.name}</a></li>);
       }
       return(
         <div>
