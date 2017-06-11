@@ -132,7 +132,7 @@ module UniversalCrm
           UniversalCrm::Ticket.in(id: self.child_ticket_ids)
         end
         
-        def to_json
+        def to_json(config=nil)
           {
             id: self.id.to_s,
             number: self.number.to_s,
