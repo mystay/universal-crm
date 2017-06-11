@@ -123,7 +123,7 @@ var CompanyShow = React.createClass({
               <dt>Tags:</dt>
               <dd><Tags subjectType="UniversalCrm::Company" subjectId={this.props.company.id} tags={this.props.company.tags} /></dd>
               <dt>Labels:</dt>
-              <dd><Labels subjectType="UniversalCrm::Company" subjectId={this.props.customer.id} labels={this.props.customer.flags} type='company' gs={this.props.gs} /></dd>
+              <dd><Labels subjectType="UniversalCrm::Company" subjectId={this.props.company.id} labels={this.props.company.flags} type='company' gs={this.props.gs} /></dd>
             </dl>
           </div>
         </div>
