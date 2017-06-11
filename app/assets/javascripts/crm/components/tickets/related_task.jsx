@@ -12,7 +12,7 @@ var RelatedTask = React.createClass({
           <button onClick={this.displayModal} className="btn btn-sm btn-warning">
             <i className="fa fa-plus-circle" /> New related task
           </button>
-          <Modal ref='related_task_modal' modalTitle="Add a task" modalContent={this.form()} />
+          <Modal ref='related_task_modal' id='related_task_modal' modalTitle="Add a task" modalContent={this.form()} />
         </div>
       );
     }else{
