@@ -34,17 +34,17 @@ var HelpdeskPreview = React.createClass({
     }
   },
   ticketList: function(){
-    h = []
+    var h = [];
     if (this.state.tickets){
       for (var i=0;i<this.state.tickets.length;i++){
-        ticket = this.state.tickets[i];
+        var ticket = this.state.tickets[i];
         h.push(
           <li className="list-group-item" key={ticket.id}>
             <div className="text-mtued small">{ticket.updated_at}</div>
             <a style={{cursor: 'pointer'}} onClick={this.selectTicket} data-id={ticket.id}>{ticket.title}</a>
             {this.statusLabel(ticket.status)}
           </li>
-        )
+        );
       }
      return(<ul className="list-group">{h}</ul>);
     }else{

@@ -6,7 +6,7 @@ var ConfigForm = React.createClass({
   getInitialState: function(){
     return({
       inbound_domain: this.props.config.inbound_domain,
-      functions: this.props.config.functions
+      functions: this.props.config.functions,
     });
   },
   submitForm: function(e){
@@ -64,11 +64,6 @@ var ConfigForm = React.createClass({
           <textarea className="form-control small" defaultValue={this.props.config.email_footer} id="email_footer" ref="email_footer"></textarea>
         </div>
         <div className="form-group">
-          <label htmlFor="ticket_flags">Ticket Flags</label>
-          <p className="small">label|color</p>
-          <textarea className="form-control small" defaultValue={this.parseFlags(this.props.config.ticket_flags)} id="ticket_flags" ref="ticket_flags" style={{height: '100px'}}></textarea>
-        </div>
-        <div className="form-group">
           <label htmlFor="google_api_key">Google API Key (optional)</label>
           <input type="text" className="form-control" defaultValue={this.props.config.google_api_key} id="google_api_key" ref="google_api_key" />
           <p className="small">This will allow shortening of attachment URLs.</p>
@@ -93,6 +88,19 @@ var ConfigForm = React.createClass({
           {this.functionCheckbox('companies', 'Companies')}
           {this.functionCheckbox('edit_companies', 'Edit Companies')}
           {this.functionCheckbox('newsfeed', 'Newsfeed (Recent comments/notes)')}
+        </fieldset>
+        <fieldset>
+          <legend>Labels</legend>
+          <div className="form-group">
+            <label htmlFor="ticket_flags">General Ticket Labels (displayed in menu)</label>
+            <p className="small">label|color</p>
+            <textarea className="form-control small" defaultValue={this.parseFlags(this.props.config.ticket_flags)} id="ticket_flags" ref="ticket_flags" style={{height: '100px'}}></textarea>
+          </div>
+          {this.labelsTextbox('customer')}
+          {this.labelsTextbox('company')}
+          {this.labelsTextbox('email')}
+          {this.labelsTextbox('task')}
+          {this.labelsTextbox('normal')}
         </fieldset>
         <div className="form-group">
           {this.submitButton('Save Changes')}
@@ -134,8 +142,20 @@ var ConfigForm = React.createClass({
       </div>
     );
   },
+  labelsTextbox: function(name){
+    if (this.props.config.labels){
+      return(
+        <div className="form-group">
+          <label>{name}</label>
+          <input defaultValue={this.props.config.labels[name]} className='form-control' onChange={this.props.updateLabels} name={name} />
+          <div className="small">Separate with a comma</div>
+        </div>
+      );
+    }
+  },
   changeFunction: function(e){
     var f = $(e.target).attr('data-function');
     this.props.updateFunctions(f, e.target.checked);
+    
   }
 });

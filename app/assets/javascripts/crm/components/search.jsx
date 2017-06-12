@@ -19,29 +19,22 @@ var Search = React.createClass({
     return(
       <div className="well well-sm">
         <form onSubmit={this.doSearch}>
-          <div className="form-group">
-            <div className="row">
-              <div className="col-sm-6">
-                <input type="text" className="form-control" placeholder="Keyword..." ref="keyword" required="true" onChange={this.handleSearchWord} />
+          <div className="row">
+            <div className="col-sm-6">
+              <div className="form-group">
+                <input type="text" className="form-control" placeholder="Keyword..." ref="keyword" onChange={this.handleSearchWord} />
               </div>
-              <div className="col-sm-6">
-                <fieldset>
-                  <legend>Options</legend>
-                  <div className="btn-group">
-                    {this.searchTypeButton('Emails', 'email')}
-                    {this.searchTypeButton('Tasks', 'task')}
-                    {this.searchTypeButton('Notes', 'normal')}
-                    {this.searchTypeButton('Customers', 'customer')}
-                    {this.searchTypeButton('Companies', 'company')}
-                  </div>
-                </fieldset>
+              <div className="form-group">
+                <div className="btn-group">
+                  {this.searchTypeButton('Emails', 'email')}
+                  {this.searchTypeButton('Tasks', 'task')}
+                  {this.searchTypeButton('Notes', 'normal')}
+                  {this.searchTypeButton('Customers', 'customer')}
+                  {this.searchTypeButton('Companies', 'company')}
+                </div>
               </div>
+              {this.searchButton()}
             </div>
-          </div>
-          <div className="form-group no-margin">
-            <button className="btn btn-primary">
-              <i className={`fa fa-fw fa-${this.loadingIcon()}`} /> Search
-            </button>
           </div>
         </form>
       </div>
@@ -49,9 +42,10 @@ var Search = React.createClass({
   },
   searchTypeButton: function(title, type){
     var displayButton=true;
-    if (type=='task' && this.props.gs && this.props.gs.config && !this.props.gs.config.functions.indexOf('tasks')>-1){
+    console.log(this.props.gs.config.functions.indexOf('companies'))
+    if (type=='task' && this.props.gs && this.props.gs.config && this.props.gs.config.functions.indexOf('tasks')<=-1){
       displayButton=false;
-    }else if (type=='company' && this.props.gs && this.props.gs.config && !this.props.gs.config.functions.indexOf('companies')>-1){
+    }else if (type=='company' && this.props.gs && this.props.gs.config && this.props.gs.config.functions.indexOf('companies')<=-1){
       displayButton=false;
     }
     if (displayButton){
@@ -60,14 +54,26 @@ var Search = React.createClass({
       );
     }
   },
+  searchButton: function(){
+    if (this.state.searchWord){
+      return(
+        <div className="form-group no-margin">
+          <button className="btn btn-primary">
+            <i className={`fa fa-fw fa-${this.loadingIcon()}`} /> Search
+          </button>
+        </div>
+      );
+    }
+  },
   changeSearchType: function(e){
     this.setState({searchType: $(e.target).attr('data-type')});
   },
   doSearch: function(e){
     e.preventDefault();
+    var _this=this;
     var keyword = ReactDOM.findDOMNode(this.refs.keyword).value;
     if (keyword){
-      var _this=this;
+      this.props.sgs('searchWord', keyword);
       this.setState({loading: true});
       $.ajax({
         type: 'GET',
@@ -78,9 +84,12 @@ var Search = React.createClass({
         },
         success: function(data){
           _this.setState({loading: false});
-          console.log(data);
           if (data.type=='email'||data.type=='task'||data.type=='normal'){
-            _this.props._goQuickSearch();
+            _this.props._goTicketSearch(data.type, '');
+          }else if (data.type=='customer'){
+            _this.props._goCustomerSearch();
+          }else if (data.type=='company'){
+            _this.props._goCompanySearch();
           }
         }
       });

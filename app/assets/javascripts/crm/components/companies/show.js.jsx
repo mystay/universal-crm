@@ -6,17 +6,15 @@ var CompanyShow = React.createClass({
   render: function(){
     if (this.props.company.id && this.props.company){
       var newTicket = null;
-      if (this.props.company.status=='active'){
-        newTicket = <NewTicket key="new_ticket"
-            subjectId={this.props.company.id}
-            subjectType='UniversalCrm::Company'
-            subject={this.props.company}
-            loadTickets={this.props.loadTickets}
-            gs={this.props.gs}
-            sgs={this.props.sgs}
-            _goTicket={this.props._goTicket}
-            />;
-      }
+      newTicket = <NewTicket key="new_ticket"
+          subjectId={this.props.company.id}
+          subjectType='UniversalCrm::Company'
+          subject={this.props.company}
+          loadTickets={this.props.loadTickets}
+          gs={this.props.gs}
+          sgs={this.props.sgs}
+          _goTicket={this.props._goTicket}
+          />;
       return(
         <div className="row">
           <div className="col-sm-6">
@@ -29,7 +27,6 @@ var CompanyShow = React.createClass({
                 {this.renderEditButton()}
               </div>
             </div>
-            {newTicket}
           </div>
           <div className="col-sm-6">
             <div className="panel panel-default">
@@ -69,6 +66,9 @@ var CompanyShow = React.createClass({
                 </div>
               </div>
             </div>
+          </div>
+          <div className="col-sm-12 text-center">
+            {newTicket}
           </div>
           <div className="col-sm-12">
             <div className="tab-wrapper tab-primary">
@@ -122,6 +122,8 @@ var CompanyShow = React.createClass({
               <dd className="small">{this.props.company.address.formatted}</dd>
               <dt>Tags:</dt>
               <dd><Tags subjectType="UniversalCrm::Company" subjectId={this.props.company.id} tags={this.props.company.tags} /></dd>
+              <dt>Labels:</dt>
+              <dd><Labels subjectType="UniversalCrm::Company" subjectId={this.props.company.id} labels={this.props.company.flags} type='company' gs={this.props.gs} /></dd>
             </dl>
           </div>
         </div>

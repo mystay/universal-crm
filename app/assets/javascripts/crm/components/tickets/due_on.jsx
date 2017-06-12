@@ -54,7 +54,7 @@ var TicketDueOn = React.createClass({
     this.setState({editing: !this.state.editing});
   },
   editButton: function(){
-    if (this.props.editable){
+    if (this.props.editable && this.props.ticket.status=='active'){
       return(
         <i className="fa fa-pencil" onClick={this.editDate} style={{marginLeft: '10px', cursor: 'pointer'}} />
       );

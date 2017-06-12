@@ -30,6 +30,7 @@ module UniversalCrm
         field :su, as: :snooze_until, type: Date
         field :vids, as: :viewer_ids, type: Array, default: [] #an array of universal users who are viewing this ticket
         field :eids, as: :editor_ids, type: Array, default: [] #an array of universal users who are editing this ticket (replying)
+        field :cids, as: :child_ticket_ids, type: Array, default: []
 
         statuses %w(active actioned closed), default: :active
         kinds %w(normal email task), :normal
@@ -39,6 +40,7 @@ module UniversalCrm
         belongs_to :document, polymorphic: true #the related document that this ticket should link to.
         belongs_to :creator, class_name: Universal::Configuration.class_name_user, foreign_key: :creator_id
         belongs_to :responsible, class_name: Universal::Configuration.class_name_user, foreign_key: :responsible_id
+        belongs_to :parent_ticket, class_name: 'UniversalCrm::Ticket', foreign_key: 'parent_ticket_id'
         
         if !UniversalCrm::Configuration.secondary_scope_class.blank?
           belongs_to :secondary_scope, polymorphic: true
@@ -126,7 +128,11 @@ module UniversalCrm
           self.pull(editor_ids: user.id.to_s)
         end
         
-        def to_json
+        def child_tickets
+          UniversalCrm::Ticket.in(id: self.child_ticket_ids)
+        end
+        
+        def to_json(config=nil)
           {
             id: self.id.to_s,
             number: self.number.to_s,
@@ -166,7 +172,9 @@ module UniversalCrm
             responsible_name: (self.responsible.nil? ? nil : self.responsible.name),
             creator_id: self.creator_id.to_s,
             creator_name: (self.creator.nil? ? nil : self.creator.name),
-            referring_url: self.referring_url
+            referring_url: self.referring_url,
+            parent_ticket: (self.parent_ticket_id.blank? ? nil : {id: self.parent_ticket_id.to_s, name: self.parent_ticket.name}),
+            child_tickets: self.child_tickets.map{|c| {id: c.id.to_s, name: c.name}}
           }
         end
         

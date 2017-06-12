@@ -14,6 +14,7 @@ var ExpandedTicket = React.createClass({
     if (this.props.ticketId == this.props.ticket.id){
       return(
         <div>
+          <ParentTicket ticket={this.props.ticket.parent_ticket} _goTicket={this.props._goTicket} />
           <div className="">
             <TicketFunctions
               gs={this.props.gs}
@@ -27,6 +28,7 @@ var ExpandedTicket = React.createClass({
               ticketFlags={this.props.ticketFlags}
               replyCount={this.state.replyCount}
               />
+            <div style={{marginTop: '2px'}}><Labels subjectType="UniversalCrm::Ticket" subjectId={this.props.ticket.id} labels={this.props.ticket.flags} type={this.props.ticket.kind} gs={this.props.gs} /></div>
             <div style={{marginTop: '2px'}}><Tags subjectType="UniversalCrm::Ticket" subjectId={this.props.ticket.id} tags={this.props.ticket.tags} /></div>
             <hr />
           </div>
@@ -35,6 +37,7 @@ var ExpandedTicket = React.createClass({
           {this.ticketDocument()}
           {this.referringUrl()}
           {this.ticketNotes()}
+          <RelatedTask ticket={this.props.ticket} gs={this.props.gs} sgs={this.props.sgs} _goTicket={this.props._goTicket} />
           <div className="panel">
             <div className="panel-body">
               <Attachments subjectId={this.props.ticket.id} subjectType='UniversalCrm::Ticket' gs={this.props.gs} />
@@ -48,7 +51,7 @@ var ExpandedTicket = React.createClass({
             openComments={this.ticketOpen()}
             newCommentPlaceholder={this.newCommentPlaceholder()}
             fullWidth={false}
-            allowEmail={this.props.ticket.subject_email!=undefined}
+            allowEmail={this.props.ticket.kind=='email'}
             newCommentReceived={this.newCommentReceived}
             />
           {this.emailWarning()}
@@ -99,7 +102,7 @@ var ExpandedTicket = React.createClass({
     return ((this.props.ticket.status == 'active' || this.actioned()) && (this.props.gs.config.inbound_email_addresses.indexOf(this.props.ticket.from_email)<0));
   },
   email: function(){
-    return this.props.ticket.kind.toString() == 'email';
+    return this.props.ticket.kind && this.props.ticket.kind.toString() == 'email';
   },
   emailWarning: function(){
     if (this.email() && this.ticketOpen()){
@@ -139,5 +142,6 @@ var ExpandedTicket = React.createClass({
       }
     });
     this.setState({replyCount: replyCount});
-  }
+  },
+
 });

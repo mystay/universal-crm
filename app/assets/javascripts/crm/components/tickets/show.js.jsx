@@ -125,6 +125,7 @@ var TicketShowContainer = React.createClass({
                 countComments={this.countComments}
                 ticketFlags={this.props.gs.config.ticket_flags}
                 gs={this.props.gs}
+                _goTicket={this.props._goTicket}
                 />
             </div>
           </div>

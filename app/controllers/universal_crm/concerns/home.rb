@@ -28,6 +28,13 @@ module UniversalCrm
               email: universal_user.email,
               functions: (universal_user.universal_user_group_functions.blank? ? [] : universal_user.universal_user_group_functions['crm'])
             }})
+            customer = universal_user.crm_customer(universal_scope)
+            if customer
+              json.merge!({customer: {
+                id: customer.id.to_s,
+                name: customer.name
+              }})
+            end
           end
           render json: json
         end
@@ -256,7 +263,7 @@ module UniversalCrm
           per_page=20
           offset = ((params[:page].blank? ? 1 : params[:page].to_i)-1)*per_page
           @comments[offset, offset+41].each do |comment|
-            results.push({type: 'comment', result: comment.to_json, subject: comment.subject.to_json})
+            results.push({type: 'comment', result: comment.to_json, subject: comment.subject.to_json(universal_crm_config)})
           end
           @tickets[offset, offset+41].each do |ticket|
             results.push({type: 'ticket', result: ticket.to_json})

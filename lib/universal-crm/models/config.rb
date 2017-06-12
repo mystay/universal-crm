@@ -12,6 +12,7 @@ module UniversalCrm
         store_in session: UniversalCrm::Configuration.mongoid_session_name, collection: 'crm_configs'
 
         field :tf, as: :ticket_flags, type: Array, default: [{label: 'priority', color: 'e25d5d'}, {label: 'general', color: '27b6af'}]
+        field :lb, as: :labels, type: Hash, default: {customer: [], company: [], task: [], email: [], normal: []}
         field :system_name
         field :url
         field :hp, as: :hashed_password
@@ -32,9 +33,11 @@ module UniversalCrm
         def to_json
           {
             scope_id: self.scope_id.to_s,
+            scope_type: self.scope_type.to_s,
             system_name: self.system_name,
             url: self.url,
             ticket_flags: self.ticket_flags,
+            labels: self.labels,
             hashed_password: self.hashed_password,
             inbound_domain: inbound_domain,
             inbound_email_addresses: inbound_email_addresses,

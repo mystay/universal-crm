@@ -15,7 +15,7 @@ var TicketTitleButton = React.createClass({
           {this.statusLabel()}
           {this.ticketIcon()}
           {this.props.ticket.title}
-          <TicketDueOn ticket={this.props.ticket} margin={true} editable={false} />
+          <TicketDueOn ticket={this.props.ticket} margin={false} editable={false} />
           <Flags flags={this.props.ticket.flags} gs={this.props.gs} />
           {this.tags()}
         </div>  
@@ -25,15 +25,17 @@ var TicketTitleButton = React.createClass({
     }
   },
   ticketIcon: function(){
-    var icon;
-    if (this.props.ticket.kind.toString()=='email'){
-      icon = 'fa-envelope text-info';
-    }else if (this.props.ticket.kind.toString()=='normal'){
-      icon = 'fa-sticky-note text-warning';
-    } else if (this.props.ticket.kind.toString()=='task'){
-      icon = 'fa-check-circle text-success';
+    if (this.props.ticket.kind){
+      var icon;
+      if (this.props.ticket.kind.toString()=='email'){
+        icon = 'fa-envelope text-info';
+      }else if (this.props.ticket.kind.toString()=='normal'){
+        icon = 'fa-sticky-note text-warning';
+      } else if (this.props.ticket.kind.toString()=='task'){
+        icon = 'fa-check-circle text-success';
+      }
+      return(<i className={`fa fa-fw ${icon}`} style={{marginRight: '5px'}} />);
     }
-    return(<i className={`fa fa-fw ${icon}`} style={{marginRight: '5px'}} />);
   },
   statusLabel: function(){
     if (this.props.ticket && this.props.ticket.status == 'closed'){

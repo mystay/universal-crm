@@ -11,6 +11,7 @@ module UniversalCrm
         include Universal::Concerns::Kind
         include Universal::Concerns::Numbered
         include Universal::Concerns::Taggable
+        include Universal::Concerns::Flaggable
         include Universal::Concerns::Scoped
         include Universal::Concerns::Polymorphic
         include Universal::Concerns::Commentable
@@ -31,8 +32,8 @@ module UniversalCrm
 
         statuses %w(active draft blocked), default: :active
         
-        validates :name, :email, presence: true
-        validates_uniqueness_of :email, scope: [:scope_type, :scope_id]
+        validates :name, presence: true
+        validates_uniqueness_of :email, allow_blank: true, scope: [:scope_type, :scope_id]
 #         numbered_prefix 'CP'
         
         # default_scope ->(){order_by(created_at: :desc)}
@@ -50,6 +51,7 @@ module UniversalCrm
             email: self.email, 
             phone: self.phone,
             tags: self.tags,
+            flags: self.flags,
             ticket_count: self.tickets.count, 
             token: self.token,
             inbound_email_address: self.inbound_email_address(config),

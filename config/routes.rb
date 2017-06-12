@@ -26,6 +26,11 @@ UniversalCrm::Engine.routes.draw do
       get :shorten_url
     end
   end
+  resources :flags do
+    collection do
+      post :toggle
+    end
+  end
   resources :customers do
     collection do
       get :autocomplete
@@ -45,6 +50,7 @@ UniversalCrm::Engine.routes.draw do
   resources :tickets do
     member do
       patch :update_status, :flag, :update_customer, :assign_user, :editing, :update_due_on
+      post :create_related_task
     end
   end
   resources :comments

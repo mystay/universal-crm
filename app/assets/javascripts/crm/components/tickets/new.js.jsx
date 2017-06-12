@@ -13,8 +13,14 @@ var NewTicket = React.createClass({
       loading: false,
       kind: null,
       datepickerLoaded: false,
-      responsibleId: null
+      responsibleId: null,
+      parentTicketId: null
     });
+  },
+  componentDidMount: function(){
+    if (this.props.kind){
+      this.setState({kind: this.props.kind, parentTicketId: this.props.parentTicketId});
+    }
   },
   componentDidUpdate: function(){
     if (this.isTask() && this.state.title && !this.state.datepickerLoaded){
@@ -48,26 +54,28 @@ var NewTicket = React.createClass({
     return(this.state.kind=='email');
   },
   buttonList: function(){
-    var buttons = [];
-    buttons.push(
-      <button key="btn-note" className="btn btn-info btn-sm" disabled={this.isNote()} data-kind="note" onClick={this.selectKind}>
-        <i className="fa fa-sticky-note" onClick={this.selectKind} data-kind="note" /> New Note
-      </button>
-    );
-    if (this.props.gs && this.props.gs.config && this.props.gs.config.functions.indexOf('tasks')>-1){
+    if (!this.props.hideButtonList){
+      var buttons = [];
       buttons.push(
-        <button key="btn-task" className="btn btn-info btn-sm" disabled={this.isTask()} data-kind="task" onClick={this.selectKind}>
-          <i className="fa fa-check-circle" onClick={this.selectKind} data-kind="task" /> New Task
+        <button key="btn-note" className="btn btn-info btn-sm" disabled={this.isNote()} data-kind="note" onClick={this.selectKind}>
+          <i className="fa fa-sticky-note" onClick={this.selectKind} data-kind="note" /> New Note
         </button>
       );
+      if (this.props.gs && this.props.gs.config && this.props.gs.config.functions.indexOf('tasks')>-1){
+        buttons.push(
+          <button key="btn-task" className="btn btn-info btn-sm" disabled={this.isTask()} data-kind="task" onClick={this.selectKind}>
+            <i className="fa fa-check-circle" onClick={this.selectKind} data-kind="task" /> New Task
+          </button>
+        );
+      }
+      if (this.props.gs.config && this.props.gs.config.transaction_email_address && this.props.subject.email){
+        buttons.push(
+          <button key="btn-email" className="btn btn-info btn-sm" disabled={this.isEmail()} data-kind="email" onClick={this.selectKind}>
+            <i className="fa fa-envelope" onClick={this.selectKind} data-kind="email" /> New Email
+          </button>);
+      }
+      return(<div className="form-group"><div className="btn-group">{buttons}</div></div>);
     }
-    if (this.props.gs.config && this.props.gs.config.transaction_email_address && this.props.subject.email){
-      buttons.push(
-        <button key="btn-email" className="btn btn-info btn-sm" disabled={this.isEmail()} data-kind="email" onClick={this.selectKind}>
-          <i className="fa fa-envelope" onClick={this.selectKind} data-kind="email" /> New Email
-        </button>);
-    }
-    return(<div className="form-group"><div className="btn-group">{buttons}</div></div>);
   },
   render: function(){
     return(
@@ -80,6 +88,9 @@ var NewTicket = React.createClass({
   handleSubmit: function(e){
     e.preventDefault();
     var _this=this;
+    if (this.props.hideModalId){
+      var modal = $(`#${this.props.hideModalId}`);
+    }
     if (!this.state.loading){
       this.setState({loading: true});
       $.ajax({
@@ -93,10 +104,14 @@ var NewTicket = React.createClass({
           subject_id: this.props.subjectId,
           subject_type: this.props.subjectType,
           kind: this.state.kind,
-          responsible_id: this.state.responsibleId
+          responsible_id: this.state.responsibleId,
+          parent_ticket_id: this.state.parentTicketId
         },
         success: function(data){
           _this.setState({title: '', content: '', loading: false, kind: null, dueOn: null});
+          if (modal){
+            modal.modal('hide');
+          }
           _this.props._goTicket(data.ticket.id);
         }
       });
@@ -127,7 +142,7 @@ var NewTicket = React.createClass({
           <div className="panel-body">
             {form}
           </div>
-          <div className="panel-footer">{this.submitButton()}</div>
+          {this.submitButton()}
         </div>
       );
     }
@@ -198,10 +213,12 @@ var NewTicket = React.createClass({
     }
     if (formValid){
       return(
-        <div className="form-group m-0">
-          <button className='btn btn-success upcase' onClick={this.handleSubmit}>
-            <i className={this.loadingIcon()} /> {action} {this.state.kind}
-          </button>
+        <div className="panel-footer">
+          <div className="form-group m-0">
+            <button className='btn btn-success upcase m-0' onClick={this.handleSubmit}>
+              <i className={this.loadingIcon()} /> {action} {this.state.kind}
+            </button>
+          </div>
         </div>
       );
     }
@@ -214,16 +231,23 @@ var NewTicket = React.createClass({
             <div className="col-sm-4 col-xs-6">
               <label>
                 Due date:
-                <input type="text" className="datepicker form-control" placeholder="DD-MM-YYYY"/>
+                <input type="text" className="datepicker form-control" placeholder="DD-MM-YYYY" defaultValue={this.state.dueOn} />
               </label>
             </div>
-            <div className="col-sm-8 col-xs-12">
-              <label>
-                Assign to:
-                {this.users()}
-              </label>
-            </div>
+            {this.assignUsers()}
           </div>
+        </div>
+      );
+    }
+  },
+  assignUsers: function(){
+    if (this.props.allowAssignTicket==undefined || this.props.allowAssignTicket){
+      return(
+        <div className="col-sm-8 col-xs-12">
+          <label>
+            Assign to:
+            {this.users()}
+          </label>
         </div>
       );
     }
