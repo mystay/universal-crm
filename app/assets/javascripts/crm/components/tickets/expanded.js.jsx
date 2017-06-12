@@ -102,7 +102,7 @@ var ExpandedTicket = React.createClass({
     return ((this.props.ticket.status == 'active' || this.actioned()) && (this.props.gs.config.inbound_email_addresses.indexOf(this.props.ticket.from_email)<0));
   },
   email: function(){
-    return this.props.ticket.kind.toString() == 'email';
+    return this.props.ticket.kind && this.props.ticket.kind.toString() == 'email';
   },
   emailWarning: function(){
     if (this.email() && this.ticketOpen()){
