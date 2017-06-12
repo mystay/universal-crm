@@ -9,6 +9,7 @@ module UniversalCrm
       params[:page] = 1 if params[:page].blank?
       @tickets = UniversalCrm::Ticket.all
       @tickets = @tickets.scoped_to(universal_scope) if !universal_scope.nil?
+      @tickets = @tickets.for_kind(params[:kind]) if !params[:kind].blank? and params[:kind] != 'undefined'
       if !params[:q].blank? and params[:q].to_s != 'undefined'
         conditions = []
         params[:q].split(' ').each do |keyword|

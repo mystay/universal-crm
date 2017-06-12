@@ -95,25 +95,21 @@ var CRM = React.createClass({
     }
     this.setState({gs: globalState});
   },
+  closeSupportingComponent: function(){
+    this.setState({supportingComponent: null});
+  },
   //Faux Routing
   _setMainComponent: function(comp){
     this.setState({mainComponent: comp});
   },
   _goHome: function(){
-    this._goTicketList('active');
+    this.closeSupportingComponent();
+    this._goTicketList('email', 'active');
     this.setGlobalState('pageIcon', null);
     this.handlePageHistory('Home', '/crm');
-  },
-  _goTicketList: function(status, flag){
-    this.setGlobalState('ticketStatus', status);
-    this.setGlobalState('ticketFlag', flag);
-    this.setGlobalState('searchWord', '');
-    this.setGlobalState('pageIcon', null);
-    this.setGlobalState('pageTitle', null);
-    this.handlePageHistory('Home', '/crm');
-    this.setState({mainComponent: <TicketList _goTicket={this._goTicket} gs={this.state.gs} sgs={this.setGlobalState} status={status} flag={flag} _goCustomer={this._goCustomer} _goCompany={this._goCompany} />});
   },
   _goDashboard: function(){
+    this.closeSupportingComponent();
     this.setGlobalState('pageTitle', 'Dashboard');
     this.setGlobalState('pageIcon', null);
     this.handlePageHistory('Dashboard', '/crm');
@@ -123,22 +119,36 @@ var CRM = React.createClass({
     this.setGlobalState('pageTitle', 'Search');
     this.setGlobalState('pageIcon', null);
     this.handlePageHistory('Search', '/crm');
-    this.setState({supportingComponent: <Search gs={this.state.gs} sgs={this.setGlobalState} _goTicketList={this._goTicketList} _goCustomerList={this._goCustomerList} _goCompanyList={this._goCompanyList} _goQuickSearch={this._goQuickSearch} />});
+    this.setState({supportingComponent: <Search gs={this.state.gs} sgs={this.setGlobalState} _goTicketList={this._goTicketList} _goCustomerList={this._goCustomerList} _goCompanyList={this._goCompanyList}  _goTicketSearch={this._goTicketSearch} _goCustomerSearch={this._goCustomerSearch} _goCompanySearch={this._goCompanySearch} />});
   },
   _goNewsfeed: function(){
+    this.closeSupportingComponent();
     this.setGlobalState('pageTitle', 'Newsfeed');
     this.setGlobalState('pageIcon', null);
     this.handlePageHistory('Newsfeed', '/crm');
     this.setState({mainComponent: <Newsfeed gs={this.state.gs} sgs={this.setGlobalState} _goTicketList={this._goTicketList} _goTicket={this._goTicket} _goCustomerList={this._goCustomerList} _goCompanyList={this._goCompanyList} _goQuickSearch={this._goQuickSearch} />});
   },
+  _goTicketList: function(kind, status, flag){
+    this.setGlobalState('ticketKind', kind);
+    this.setGlobalState('ticketStatus', status);
+    this.setGlobalState('ticketFlag', flag);
+    this.setGlobalState('searchWord', '');
+    this.setGlobalState('pageIcon', null);
+    this.setGlobalState('pageTitle', null);
+    this.handlePageHistory('Home', '/crm');
+    this.setState({mainComponent: <TicketList _goTicket={this._goTicket} gs={this.state.gs} sgs={this.setGlobalState} kind={kind} status={status} flag={flag} _goCustomer={this._goCustomer} _goCompany={this._goCompany} />});
+  },
   _goTicket: function(ticketId){
+    this.closeSupportingComponent();
     this.setState({mainComponent: <TicketShowContainer ticketId={ticketId} gs={this.state.gs} sgs={this.setGlobalState} handlePageHistory={this.handlePageHistory} _goCustomer={this._goCustomer} _goCompany={this._goCompany} _goTicket={this._goTicket} />});
   },
   _goCompany: function(companyId){
+    this.closeSupportingComponent();
     this.setGlobalState('searchWord', '');
     this.setState({mainComponent: <CompanyShowContainer companyId={companyId} gs={this.state.gs} sgs={this.setGlobalState} handlePageHistory={this.handlePageHistory} _goTicket={this._goTicket} _goCompany={this._goCompany} _goCustomer={this._goCustomer} />});
   },
   _goCustomer: function(customerId){
+    this.closeSupportingComponent();
     this.setGlobalState('searchWord', '');
     this.setState({mainComponent: <CustomerShowContainer customerId={customerId} gs={this.state.gs} sgs={this.setGlobalState} handlePageHistory={this.handlePageHistory} _goTicket={this._goTicket} _goCompany={this._goCompany} _goCustomer={this._goCustomer} />});
   },
@@ -152,14 +162,23 @@ var CRM = React.createClass({
     this.setGlobalState('companyStatus', status);
     this.setState({mainComponent: <CompanyList _goCustomer={this._goCustomer} _goCompany={this._goCompany} gs={this.state.gs} sgs={this.setGlobalState} />});
   },
-  _goQuickSearch: function(searchWord){
+  _goQuickSearch: function(searchWord, ticketStatus, ticketKind){
     var h = (
       <div>
         <CustomerList _goCustomer={this._goCustomer} gs={this.state.gs} sgs={this.setGlobalState} />
         <CompanyList _goCustomer={this._goCustomer} _goCompany={this._goCompany} gs={this.state.gs} sgs={this.setGlobalState} />
-        <TicketList _goTicket={this._goTicket} gs={this.state.gs} sgs={this.setGlobalState} _goCustomer={this._goCustomer} _goCompany={this._goCompany} />
+        <TicketList _goTicket={this._goTicket} gs={this.state.gs} sgs={this.setGlobalState} _goCustomer={this._goCustomer} _goCompany={this._goCompany} status={ticketStatus} kind={ticketKind} />
       </div>
     );
     this.setState({mainComponent: h});
   },
+  _goTicketSearch: function(kind, status){
+    this.setState({mainComponent: <TicketList _goTicket={this._goTicket} gs={this.state.gs} sgs={this.setGlobalState} _goCustomer={this._goCustomer} _goCompany={this._goCompany} kind={kind} status={status} />});
+  },
+  _goCustomerSearch: function(){
+    this.setState({mainComponent: <CustomerList _goCustomer={this._goCustomer} gs={this.state.gs} sgs={this.setGlobalState} />});
+  },
+  _goCompanySearch: function(){
+    this.setState({mainComponent: <CompanyList _goCustomer={this._goCustomer} _goCompany={this._goCompany} gs={this.state.gs} sgs={this.setGlobalState} />});
+  }
 });

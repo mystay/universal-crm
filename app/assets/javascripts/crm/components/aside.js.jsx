@@ -8,7 +8,7 @@ var Aside = React.createClass({
     this.props._goDashboard();
   },
   loadTickets: function(e){
-    this.props._goTicketList($(e.target).attr('data-status'), null, null);
+    this.props._goTicketList($(e.target).attr('data-kind'), $(e.target).attr('data-status'), null, null);
     var title = $(e.target).attr('data-title');
     if (title){
       this.props.sgs('pageTitle', title);
@@ -19,7 +19,7 @@ var Aside = React.createClass({
     }
   },
   loadFlaggedTickets: function(e){
-    this.props._goTicketList(null, $(e.target).attr('data-flag'));
+    this.props._goTicketList('', '', $(e.target).attr('data-flag'));
   },
   render: function(){
     return(
@@ -35,33 +35,33 @@ var Aside = React.createClass({
             </li>
             {this.newsfeedButton()}
             <li>
-              <a style={{cursor: 'pointer'}} onClick={this.loadTickets} data-status='email' data-title="Emails" data-icon="fa-envelope">
+              <a style={{cursor: 'pointer'}} onClick={this.loadTickets} data-kind='email' data-status='active' data-title="Emails" data-icon="fa-envelope">
                 <i className="fa fa-envelope fa-fw" />
                 Emails
               </a>
             </li>
             {this.tasksButton()}
             <li>
-              <a style={{cursor: 'pointer'}} onClick={this.loadTickets} data-status='normal' data-title="Notes" data-icon="fa-sticky-note">
+              <a style={{cursor: 'pointer'}} onClick={this.loadTickets} data-kind='normal' data-status='active' data-title="Notes" data-icon="fa-sticky-note">
                 <i className="fa fa-sticky-note fa-fw" />
                 Notes
               </a>
             </li>
             <li>
-              <a style={{cursor: 'pointer'}} onClick={this.loadTickets} data-status='active' data-title="All Open Tickets" data-icon="fa-folder-open">
+              <a style={{cursor: 'pointer'}} onClick={this.loadTickets} data-kind='' data-status='active' data-title="All Open Tickets" data-icon="fa-folder-open">
                 <i className="fa fa-folder-open fa-fw" />
                 All Open Tickets
               </a>
             </li>
             {this.searchButton()}
             <li>
-              <a style={{cursor: 'pointer'}} onClick={this.loadTickets} data-status='actioned' data-title="Follow up" data-icon="fa-exclamation-triangle">
+              <a style={{cursor: 'pointer'}} onClick={this.loadTickets} data-kind='' data-status='actioned' data-title="Follow up" data-icon="fa-exclamation-triangle">
                 <i className="fa fa-exclamation-triangle fa-fw" />
                 Follow up
               </a>
             </li>
             <li>
-              <a style={{cursor: 'pointer'}} onClick={this.loadTickets} data-status='closed' data-title="Closed" data-icon="fa-ban">
+              <a style={{cursor: 'pointer'}} onClick={this.loadTickets} data-kind='' data-status='closed' data-title="Closed" data-icon="fa-ban">
                 <i className="fa fa-ban fa-fw" />
                 Closed
               </a>
@@ -150,7 +150,7 @@ var Aside = React.createClass({
     if (this.props.gs && this.props.gs.config && this.props.gs.config.functions && this.props.gs.config.functions.indexOf('newsfeed')>-1){
       return(
         <li>
-          <a style={{cursor: 'pointer'}} onClick={this.props._goNewsfeed} data-status='task' data-title="newsfeed" data-icon="fa-check-circle">
+          <a style={{cursor: 'pointer'}} onClick={this.props._goNewsfeed} data-title="newsfeed" data-icon="fa-check-circle">
             <i className="fa fa-newspaper-o fa-fw" />
             Newsfeed
           </a>
@@ -162,7 +162,7 @@ var Aside = React.createClass({
     if (this.props.gs && this.props.gs.config && this.props.gs.config.functions && this.props.gs.config.functions.indexOf('tasks')>-1){
       return(
         <li>
-          <a style={{cursor: 'pointer'}} onClick={this.loadTickets} data-status='task' data-title="Tasks" data-icon="fa-check-circle">
+          <a style={{cursor: 'pointer'}} onClick={this.loadTickets} data-kind='task' data-status='active' data-title="Tasks" data-icon="fa-check-circle">
             <i className="fa fa-check-circle fa-fw" />
             Tasks
           </a>
@@ -174,7 +174,7 @@ var Aside = React.createClass({
     if (this.props.gs && this.props.gs.config && this.props.gs.config.functions && this.props.gs.config.functions.indexOf('advanced_search')>-1){
       return(
         <li>
-          <a style={{cursor: 'pointer'}} onClick={this.props._goSearch} data-status='active' data-title="Search" data-icon="fa-search">
+          <a style={{cursor: 'pointer'}} onClick={this.props._goSearch} data-title="Search" data-icon="fa-search">
             <i className="fa fa-search fa-fw" />
             Search
           </a>

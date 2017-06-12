@@ -7,6 +7,7 @@ var TicketList = React.createClass({
       subjectType: null,
       tickets: null,
       selectedTicketId: null,
+      kind: null,
       status: null,
       flag: null,
       loading: false,
@@ -16,8 +17,8 @@ var TicketList = React.createClass({
     });
   },
   init: function(){
-    this.setState({status: this.props.status, flag: this.props.flag, subjectId: this.props.subjectId, subjectType: this.props.subjectType});
-    this.loadTickets(this.props.status, this.props.flag, this.props.gs.searchWord);
+    this.setState({kind: this.props.kind, status: this.props.status, flag: this.props.flag, subjectId: this.props.subjectId, subjectType: this.props.subjectType});
+    this.loadTickets(this.props.kind, this.props.status, this.props.flag, this.props.gs.searchWord);
   },
   componentDidMount: function(){
     this.init();
@@ -27,7 +28,7 @@ var TicketList = React.createClass({
       this.init();
     }
   },
-  loadTickets: function(status, flag, keyword, page){
+  loadTickets: function(kind, status, flag, keyword, page){
     if (!this.state.loading){
       this.setState({loading: true, pastProps: this.props});
       scrollTo('body');
@@ -35,7 +36,7 @@ var TicketList = React.createClass({
       var _this = this;
       $.ajax({
         method: 'GET',
-        url: `/crm/tickets?q=${keyword}&status=${this.props.gs.ticketStatus}&subject_id=${this.props.subjectId}&subject_type=${this.props.subjectType}&flag=${this.props.gs.ticketFlag}&page=${page}`,
+        url: `/crm/tickets?q=${keyword}&kind=${kind}&status=${this.props.gs.ticketStatus}&subject_id=${this.props.subjectId}&subject_type=${this.props.subjectType}&flag=${this.props.gs.ticketFlag}&page=${page}`,
         success: function(data){
           _this.setState({
             loading: false,
@@ -104,7 +105,7 @@ var TicketList = React.createClass({
     }
   },
   pageResults: function(page){
-    this.loadTickets(this.state.status, this.state.flag, this.props.gs.searchWord, page);
+    this.loadTickets(this.state.kind, this.state.status, this.state.flag, this.props.gs.searchWord, page);
     this.setState({currentPage: page});
   }
 })
