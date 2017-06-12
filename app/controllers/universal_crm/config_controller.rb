@@ -12,6 +12,7 @@ module UniversalCrm
     
     def update
       params[:config][:functions] = [] if params[:config][:functions].blank?
+      params[:config][:labels] = {} if params[:config][:labels].blank?
       p = params.require(:config).permit(
         :system_name,
         :url,
@@ -32,7 +33,7 @@ module UniversalCrm
         functions: []
       )
       p[:labels] = params[:config][:labels].sanitize
-      p[:ticket_flags] = p[:ticket_flags].to_s.gsub('\r','').split("\n").map{|p| {label: p.split('|')[0], color: p.split('|')[1]}}
+      p[:ticket_flags] = p[:ticket_flags].to_s.gsub('\r','').split("\n").map{|pa| {label: pa.split('|')[0], color: pa.split('|')[1]}}
       p[:inbound_email_addresses] = p[:inbound_email_addresses].downcase.gsub(' ','').split(',')
       universal_crm_config.update(p)
       render json: universal_crm_config.to_json
