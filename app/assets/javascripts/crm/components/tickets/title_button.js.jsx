@@ -29,7 +29,7 @@ var TicketTitleButton = React.createClass({
       var icon;
       if (this.props.ticket.kind.toString()=='email'){
         icon = 'fa-envelope text-info';
-      }else if (this.props.ticket.kind.toString()=='normal'){
+      }else if (this.props.ticket.kind.toString()=='note'){
         icon = 'fa-sticky-note text-warning';
       } else if (this.props.ticket.kind.toString()=='task'){
         icon = 'fa-check-circle text-success';

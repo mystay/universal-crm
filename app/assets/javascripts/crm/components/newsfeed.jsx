@@ -65,7 +65,7 @@ var Newsfeed = React.createClass({
     var u = [];
     u.push(<button key='email' className={`btn btn-sm btn-${this.state.ticketKind=='email' ? 'primary' : 'default'}`} data-kind="email" onClick={this.selectTicketKind} >Emails</button>);
     u.push(<button key='task' className={`btn btn-sm btn-${this.state.ticketKind=='task' ? 'primary' : 'default'}`} data-kind="task" onClick={this.selectTicketKind} >Tasks</button>);
-    u.push(<button key='normal' className={`btn btn-sm btn-${this.state.ticketKind=='normal' ? 'primary' : 'default'}`} data-kind="normal" onClick={this.selectTicketKind} >Notes</button>);
+    u.push(<button key='note' className={`btn btn-sm btn-${this.state.ticketKind=='note' ? 'primary' : 'default'}`} data-kind="note" onClick={this.selectTicketKind} >Notes</button>);
     return(<div className="btn-group">{u}</div>);
   },
   userList: function(){

@@ -35,8 +35,8 @@ module UniversalCrm
           @tickets = @tickets.flagged_with(params[:flag])        
         elsif params[:status] == 'email'
           @tickets = @tickets.email.active
-        elsif params[:status] == 'normal'
-          @tickets = @tickets.normal.active
+        elsif params[:status] == 'note'
+          @tickets = @tickets.note.active
         elsif params[:status] == 'task'
           @tickets = @tickets.task.active
         elsif !params[:status].blank? and params[:status] != 'priority' and params[:status] != 'all' and params[:status] != 'null'
@@ -84,7 +84,7 @@ module UniversalCrm
     def create
       if !params[:subject_id].blank? and !params[:subject_type].blank?
         subject = params[:subject_type].classify.constantize.find params[:subject_id]
-        kind = (params[:kind].to_s=='note' ? 'normal' : params[:kind])
+        kind = (params[:kind].to_s=='note' ? 'note' : params[:kind])
         sent_from_crm=true
       elsif !params[:customer_name].blank? and !params[:customer_email].blank?
         #find a customer by this email

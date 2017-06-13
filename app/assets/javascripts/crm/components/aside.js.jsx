@@ -42,7 +42,7 @@ var Aside = React.createClass({
             </li>
             {this.tasksButton()}
             <li>
-              <a style={{cursor: 'pointer'}} onClick={this.loadTickets} data-kind='normal' data-status='active' data-title="Notes" data-icon="fa-sticky-note">
+              <a style={{cursor: 'pointer'}} onClick={this.loadTickets} data-kind='note' data-status='active' data-title="Notes" data-icon="fa-sticky-note">
                 <i className="fa fa-sticky-note fa-fw" />
                 Notes
               </a>

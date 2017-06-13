@@ -72,7 +72,7 @@ var Dashboard = React.createClass({
           <div className="row">
             <div className="col-sm-4 col-xs-6">{this.ticketTile('envelope', this.state.ticketCounts.inbox, 'Emails', 'primary', 'email', 'active')}</div>
             {this.tasksTile()}
-            <div className="col-sm-4 col-xs-6">{this.ticketTile('sticky-note', this.state.ticketCounts.notes, 'Notes', 'primary', 'normal', 'active')}</div>
+            <div className="col-sm-4 col-xs-6">{this.ticketTile('sticky-note', this.state.ticketCounts.notes, 'Notes', 'primary', 'note', 'active')}</div>
             <div className="col-sm-4 col-xs-6">{this.ticketTile('folder-open', this.state.ticketCounts.open, 'Open Tickets', 'success', '', 'active')}</div>
             <div className="col-sm-4 col-xs-6">{this.ticketTile('exclamation-triangle', this.state.ticketCounts.actioned, 'Follow up', 'warning', '', 'actioned')}</div>
             <div className="col-sm-4 col-xs-6">{this.ticketTile('ban', this.state.ticketCounts.closed, 'Closed Tickets', 'default', '', 'closed')}</div>
