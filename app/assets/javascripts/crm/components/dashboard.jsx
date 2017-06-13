@@ -99,7 +99,7 @@ var Dashboard = React.createClass({
   tasksTile: function(){
     if (this.props.gs && this.props.gs.config && this.props.gs.config.functions.indexOf('tasks')>-1){
       return(
-        <div className="col-sm-4 col-xs-6">{this.ticketTile('check-circle', this.state.ticketCounts.tasks, 'Tasks', 'primary', 'task', 'active')}</div>
+        <div className="col-sm-4 col-xs-6">{this.ticketTile('check-circle', this.state.ticketCounts.tasks, 'Tasks', 'primary', 'task', 'active', this.goTicketList)}</div>
       );
     }
   },
