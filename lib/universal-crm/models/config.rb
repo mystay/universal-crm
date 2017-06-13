@@ -12,7 +12,7 @@ module UniversalCrm
         store_in session: UniversalCrm::Configuration.mongoid_session_name, collection: 'crm_configs'
 
         field :tf, as: :ticket_flags, type: Array, default: [{label: 'priority', color: 'e25d5d'}, {label: 'general', color: '27b6af'}]
-        field :lb, as: :labels, type: Hash, default: {customer: [], company: [], task: [], email: [], normal: []}
+        field :lb, as: :labels, type: Hash, default: {customer: [], company: [], task: [], email: [], note: []}
         field :system_name
         field :url
         field :hp, as: :hashed_password

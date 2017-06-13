@@ -28,7 +28,7 @@ var Search = React.createClass({
                 <div className="btn-group">
                   {this.searchTypeButton('Emails', 'email')}
                   {this.searchTypeButton('Tasks', 'task')}
-                  {this.searchTypeButton('Notes', 'normal')}
+                  {this.searchTypeButton('Notes', 'note')}
                   {this.searchTypeButton('Customers', 'customer')}
                   {this.searchTypeButton('Companies', 'company')}
                 </div>
@@ -84,7 +84,7 @@ var Search = React.createClass({
         },
         success: function(data){
           _this.setState({loading: false});
-          if (data.type=='email'||data.type=='task'||data.type=='normal'){
+          if (data.type=='email'||data.type=='task'||data.type=='note'){
             _this.props._goTicketSearch(data.type, '');
           }else if (data.type=='customer'){
             _this.props._goCustomerSearch();
