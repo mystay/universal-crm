@@ -66,7 +66,24 @@ var TicketDueOn = React.createClass({
       if (new Date(this.props.ticket.due_on) < new Date()){
         labelClass = 'danger';
       }
-      return(<span className={`label label-${labelClass}`} style={{marginLeft: (this.props.margin ? '10px' : null)}}>Due: {this.state.dueOn} {this.editButton()}</span>);
+      return(
+        <span className={`label label-${labelClass}`} style={{fontWeight: 'normal', marginLeft: (this.props.margin ? '10px' : null)}}>
+          Due: {this.dueDate()} {this.editButton()}
+        </span>
+      );
+    }
+  },
+  dueDate: function(){
+    if (this.state.dueOn){
+      var d1 = formatDate(new Date(this.state.dueOn));
+      var d2 = formatDate(new Date());
+      if (d1 == d2){
+        return 'Today';
+      }else{
+        return `${this.state.dueOn}`;
+      }
+    }else{
+      return 'NA';
     }
   },
   editForm: function(){

@@ -48,18 +48,18 @@ var Aside = React.createClass({
               </a>
             </li>
             <li>
+              <a style={{cursor: 'pointer'}} onClick={this.loadTickets} data-kind='' data-status='actioned' data-title="Follow up" data-icon="fa-exclamation-triangle">
+                <i className="fa fa-exclamation-triangle fa-fw" />
+                Follow up
+              </a>
+            </li>
+            <li>
               <a style={{cursor: 'pointer'}} onClick={this.loadTickets} data-kind='' data-status='active' data-title="All Open Tickets" data-icon="fa-folder-open">
                 <i className="fa fa-folder-open fa-fw" />
                 All Open Tickets
               </a>
             </li>
             {this.searchButton()}
-            <li>
-              <a style={{cursor: 'pointer'}} onClick={this.loadTickets} data-kind='' data-status='actioned' data-title="Follow up" data-icon="fa-exclamation-triangle">
-                <i className="fa fa-exclamation-triangle fa-fw" />
-                Follow up
-              </a>
-            </li>
             <li>
               <a style={{cursor: 'pointer'}} onClick={this.loadTickets} data-kind='' data-status='closed' data-title="Closed" data-icon="fa-ban">
                 <i className="fa fa-ban fa-fw" />
