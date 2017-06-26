@@ -138,9 +138,9 @@ module UniversalCrm
               if to[0,3] == 'tk-'
                 logger.warn "Direct to ticket"
                 ticket = UniversalCrm::Ticket.find_by(token: /^#{token}$/i)
-                ticket_subject = ticket.subject
-                user = (ticket_subject.subject.class.to_s == Universal::Configuration.class_name_user.to_s ? ticket_subject.subject : nil),
                 if !ticket.nil?
+                  ticket_subject = ticket.subject
+                  user = (ticket_subject.subject.class.to_s == Universal::Configuration.class_name_user.to_s ? ticket_subject.subject : nil)
                   ticket.open!(user)
                   ticket.update(kind: :email)
                   comment = ticket.comments.create content: params['TextBody'].hideQuotedLines,
