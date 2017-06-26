@@ -151,7 +151,8 @@ module UniversalCrm
                                           author: (ticket_subject.nil? ? 'Unknown' : ticket_subject.name),
                                           incoming: true,
                                           subject_name: ticket.name,
-                                          subject_kind: ticket.kind
+                                          subject_kind: ticket.kind,
+                                          subject: ticket_subject
                   
                   logger.warn comment.errors.to_json
                 end
