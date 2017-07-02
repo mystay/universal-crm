@@ -82,9 +82,12 @@ var CRM = React.createClass({
       </section>
     );
   },
-  handlePageHistory: function(title, url){
+  handlePageHistory: function(title, url, icon){
     window.history.replaceState({"pageTitle":title},'', url);
     this.setGlobalState('pageTitle', title);
+    if (icon){
+      this.setGlobalState('pageIcon', icon);
+    }
   },
   setGlobalState: function(key, value){
     var globalState = this.state.gs;
@@ -111,7 +114,7 @@ var CRM = React.createClass({
   _goDashboard: function(){
     this.closeSupportingComponent();
     this.setGlobalState('pageTitle', 'Dashboard');
-    this.setGlobalState('pageIcon', null);
+    this.setGlobalState('pageIcon', 'fa-dashboard');
     this.handlePageHistory('Dashboard', '/crm');
     this.setState({mainComponent: <Dashboard gs={this.state.gs} sgs={this.setGlobalState} _goTicketList={this._goTicketList} _goCustomerList={this._goCustomerList} _goCompanyList={this._goCompanyList} _goTicket={this._goTicket} _goCompany={this._goCompany} _goCustomer={this._goCustomer} />});
   },
@@ -155,11 +158,15 @@ var CRM = React.createClass({
   _goCustomerList: function(searchWord, status){
     this.setGlobalState('searchWord', '');
     this.setGlobalState('customerStatus', status);
+    this.setGlobalState('pageIcon', 'fa-group');
+    this.setGlobalState('pageTitle', 'Customers');
     this.setState({mainComponent: <CustomerList _goCustomer={this._goCustomer} gs={this.state.gs} sgs={this.setGlobalState} />});
   },
   _goCompanyList: function(searchWord, status){
     this.setGlobalState('searchWord', '');
     this.setGlobalState('companyStatus', status);
+    this.setGlobalState('pageIcon', 'fa-building');
+    this.setGlobalState('pageTitle', 'Companies');
     this.setState({mainComponent: <CompanyList _goCustomer={this._goCustomer} _goCompany={this._goCompany} gs={this.state.gs} sgs={this.setGlobalState} />});
   },
   _goQuickSearch: function(searchWord, ticketStatus, ticketKind){

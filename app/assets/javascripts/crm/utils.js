@@ -31,3 +31,6 @@ function can(state, func){
 function cannot(state, func){
   return (state.user && (state.user.functions==undefined || state.user.functions.indexOf(func)==-1));
 }
+function formatDate(d){
+  return (d.getFullYear() + '-' + (d.getMonth()+1) + '-' + d.getDate());
+}

@@ -138,9 +138,9 @@ module UniversalCrm
               if to[0,3] == 'tk-'
                 logger.warn "Direct to ticket"
                 ticket = UniversalCrm::Ticket.find_by(token: /^#{token}$/i)
-                ticket_subject = ticket.subject
-                user = (ticket_subject.subject.class.to_s == Universal::Configuration.class_name_user.to_s ? ticket_subject.subject : nil),
                 if !ticket.nil?
+                  ticket_subject = ticket.subject
+                  user = (ticket_subject.subject.class.to_s == Universal::Configuration.class_name_user.to_s ? ticket_subject.subject : nil)
                   ticket.open!(user)
                   ticket.update(kind: :email)
                   comment = ticket.comments.create content: params['TextBody'].hideQuotedLines,
@@ -151,7 +151,8 @@ module UniversalCrm
                                           author: (ticket_subject.nil? ? 'Unknown' : ticket_subject.name),
                                           incoming: true,
                                           subject_name: ticket.name,
-                                          subject_kind: ticket.kind
+                                          subject_kind: ticket.kind,
+                                          subject: ticket_subject
                   
                   logger.warn comment.errors.to_json
                 end
@@ -228,7 +229,7 @@ module UniversalCrm
           render json: {
             ticket_counts: {
               inbox: ActiveSupport::NumberHelper.number_to_delimited(status_count.select{|s| s['_id']['kind']=='email' && s['_id']['status'] == 'active'}.map{|s| s['value'].to_i}.sum),
-              notes: ActiveSupport::NumberHelper.number_to_delimited(status_count.select{|s| s['_id']['kind']=='normal' && s['_id']['status'] == 'active'}.map{|s| s['value'].to_i}.sum),
+              notes: ActiveSupport::NumberHelper.number_to_delimited(status_count.select{|s| s['_id']['kind']=='note' && s['_id']['status'] == 'active'}.map{|s| s['value'].to_i}.sum),
               tasks: ActiveSupport::NumberHelper.number_to_delimited(status_count.select{|s| s['_id']['kind']=='task' && s['_id']['status'] == 'active'}.map{|s| s['value'].to_i}.sum),
               open: ActiveSupport::NumberHelper.number_to_delimited(status_count.select{|s| s['_id']['status'] == 'active'}.map{|s| s['value'].to_i}.sum),
               actioned: ActiveSupport::NumberHelper.number_to_delimited(status_count.select{|s| s['_id']['status'] == 'actioned'}.map{|s| s['value'].to_i}.sum),

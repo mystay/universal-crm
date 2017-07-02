@@ -47,8 +47,18 @@ var Newsfeed = React.createClass({
     return(
       <div className="panel">
         <div className="panel-body">
-          {this.ticketKindList()}
-          {this.userList()}
+          <div className="row">
+            <div className="col-sm-3">
+              <div className="form-group">
+                {this.ticketKindList()}
+              </div>
+            </div>
+            <div className="col-sm-3">
+              <div className="form-group">
+                {this.userList()}
+              </div>
+            </div>
+          </div>
           <hr />
           {this.resultList()}
           <Pagination
@@ -65,7 +75,7 @@ var Newsfeed = React.createClass({
     var u = [];
     u.push(<button key='email' className={`btn btn-sm btn-${this.state.ticketKind=='email' ? 'primary' : 'default'}`} data-kind="email" onClick={this.selectTicketKind} >Emails</button>);
     u.push(<button key='task' className={`btn btn-sm btn-${this.state.ticketKind=='task' ? 'primary' : 'default'}`} data-kind="task" onClick={this.selectTicketKind} >Tasks</button>);
-    u.push(<button key='normal' className={`btn btn-sm btn-${this.state.ticketKind=='normal' ? 'primary' : 'default'}`} data-kind="normal" onClick={this.selectTicketKind} >Notes</button>);
+    u.push(<button key='note' className={`btn btn-sm btn-${this.state.ticketKind=='note' ? 'primary' : 'default'}`} data-kind="note" onClick={this.selectTicketKind} >Notes</button>);
     return(<div className="btn-group">{u}</div>);
   },
   userList: function(){
@@ -73,18 +83,13 @@ var Newsfeed = React.createClass({
       var u = [];
       for (var i=0;i<this.props.gs.users.length;i++){
         var user = this.props.gs.users[i];
-        u.push(<div className="col-xs-2" key={user.id}>{this.userButton(user)}</div>);
+        u.push(<option key={user.id} value={user.id}>{user.name}</option>);
       }
-      return(<div className="row">{u}</div>);
+      return(<select className="form-control" onChange={this.selectUser}><option value=''>Select...</option>{u}</select>);
     }
   },
-  userButton: function(user){
-    return(
-      <button className={`btn btn-${this.state.userId==user.id ? 'primary' : 'default'} btn-sm btn-block`} onClick={this.selectUser} data-id={user.id} data-name={user.name}>{user.name}</button>
-    );
-  },
   selectUser: function(e){
-    var userId = $(e.target).attr('data-id');
+    var userId = $(e.target).val();
     this.loadFeed(1, userId, this.state.ticketKind);
   },
   selectTicketKind: function(e){

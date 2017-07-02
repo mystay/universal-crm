@@ -42,9 +42,15 @@ var Aside = React.createClass({
             </li>
             {this.tasksButton()}
             <li>
-              <a style={{cursor: 'pointer'}} onClick={this.loadTickets} data-kind='normal' data-status='active' data-title="Notes" data-icon="fa-sticky-note">
+              <a style={{cursor: 'pointer'}} onClick={this.loadTickets} data-kind='note' data-status='active' data-title="Notes" data-icon="fa-sticky-note">
                 <i className="fa fa-sticky-note fa-fw" />
                 Notes
+              </a>
+            </li>
+            <li>
+              <a style={{cursor: 'pointer'}} onClick={this.loadTickets} data-kind='' data-status='actioned' data-title="Follow up" data-icon="fa-exclamation-triangle">
+                <i className="fa fa-exclamation-triangle fa-fw" />
+                Follow up
               </a>
             </li>
             <li>
@@ -54,12 +60,6 @@ var Aside = React.createClass({
               </a>
             </li>
             {this.searchButton()}
-            <li>
-              <a style={{cursor: 'pointer'}} onClick={this.loadTickets} data-kind='' data-status='actioned' data-title="Follow up" data-icon="fa-exclamation-triangle">
-                <i className="fa fa-exclamation-triangle fa-fw" />
-                Follow up
-              </a>
-            </li>
             <li>
               <a style={{cursor: 'pointer'}} onClick={this.loadTickets} data-kind='' data-status='closed' data-title="Closed" data-icon="fa-ban">
                 <i className="fa fa-ban fa-fw" />

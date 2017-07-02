@@ -10,11 +10,15 @@ var TicketTitleButton = React.createClass({
   render: function(){
     if (this.props.ticket){
       return(
-        <div onClick={this.selectTicket} style={{cursor: 'pointer', fontWeight: 'bold'}}>
-          <div className='pull-right small hidden-xs'>Ticket: #{this.props.ticket.number}</div>
+        <div>
+          <div className='pull-right hidden-xs'>Ticket: #{this.props.ticket.number}</div>
           {this.statusLabel()}
           {this.ticketIcon()}
-          {this.props.ticket.title}
+          <div className="pull-right"><QuickClose ticket={this.props.ticket} /></div>
+          <span style={{cursor: 'pointer', fontWeight: 'bold'}} onClick={this.selectTicket}>
+            {this.props.ticket.title}
+          </span>
+          
           <TicketDueOn ticket={this.props.ticket} margin={false} editable={false} />
           <Flags flags={this.props.ticket.flags} gs={this.props.gs} />
           {this.tags()}
@@ -29,7 +33,7 @@ var TicketTitleButton = React.createClass({
       var icon;
       if (this.props.ticket.kind.toString()=='email'){
         icon = 'fa-envelope text-info';
-      }else if (this.props.ticket.kind.toString()=='normal'){
+      }else if (this.props.ticket.kind.toString()=='note'){
         icon = 'fa-sticky-note text-warning';
       } else if (this.props.ticket.kind.toString()=='task'){
         icon = 'fa-check-circle text-success';

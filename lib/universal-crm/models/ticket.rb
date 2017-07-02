@@ -33,7 +33,7 @@ module UniversalCrm
         field :cids, as: :child_ticket_ids, type: Array, default: []
 
         statuses %w(active actioned closed), default: :active
-        kinds %w(normal email task), :normal
+        kinds %w(note email task), :note
 
         flags %w(priority)
 
