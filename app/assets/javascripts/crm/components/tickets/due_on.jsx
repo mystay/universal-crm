@@ -8,20 +8,25 @@ var TicketDueOn = React.createClass({
     return({
       editing: false,
       dueOn: null,
-      jsLoaded: false
+      jsLoaded: false,
+      pastProps: null
     });
   },
   componentDidMount: function(){
-    this.setState({dueOn: this.props.ticket.due_on});
+    this.init();
   },
   componentDidUpdate: function(){
-    if (true){
-      var _this=this;
-      $('.datepicker').datepicker({dateFormat:'yy-mm-dd', 
-        onSelect: function(date){
-          _this.handleDueOnChange(date);
-        }});
+    if (this.state.pastProps != this.props){
+      this.init();
     }
+    var _this=this;
+    $('.datepicker').datepicker({dateFormat:'yy-mm-dd', 
+      onSelect: function(date){
+        _this.handleDueOnChange(date);
+      }});
+  },
+  init: function(){
+    this.setState({dueOn: this.props.ticket.due_on, pastProps: this.props});
   },
   render: function(){
     if (this.props.ticket && this.props.ticket.kind=='task'){
