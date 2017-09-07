@@ -14,7 +14,7 @@ var CompanyList = React.createClass({
     });
   },
   init: function(){
-    this.loadCompanies(this.props.gs.searchWord, this.props.gs.companyStatus);
+    this.loadCompanies(this.props.gs.searchWord, this.props.gs.companyStatus, this.props.gs.country, this.props.gs.addressState);
   },
   componentDidMount: function(){
     this.init();
@@ -27,16 +27,18 @@ var CompanyList = React.createClass({
   clickCompany: function(e){
     this.props._goCompany(e.target.id);
   },  
-  loadCompanies: function(searchWord, companyStatus, page){
+  loadCompanies: function(searchWord, companyStatus, country, addressState, page){
     if (!this.state.loading){
       this.setState({loading: true, pastProps: this.props, companyStatus: companyStatus});
       if (page==undefined){page=1;}
       if (searchWord==undefined){searchWord='';}
+      if (country==undefined){country='';}
+      if (addressState==undefined){addressState='';}
       if (companyStatus==undefined){companyStatus='';}
       var _this=this;
       return $.ajax({
         method: 'GET',
-        url: `/crm/companies?q=${searchWord}&page=${page}&status=${companyStatus}`,
+        url: `/crm/companies?q=${searchWord}&page=${page}&status=${companyStatus}&country=${country}&address_state=${addressState}`,
         success: function(data){
           _this.setState({
             loading: false,
