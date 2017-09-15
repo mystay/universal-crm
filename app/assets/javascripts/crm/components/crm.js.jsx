@@ -122,7 +122,7 @@ var CRM = React.createClass({
     this.setGlobalState('pageTitle', 'Search');
     this.setGlobalState('pageIcon', null);
     this.handlePageHistory('Search', '/crm');
-    this.setState({supportingComponent: <Search gs={this.state.gs} sgs={this.setGlobalState} _goTicketList={this._goTicketList} _goCustomerList={this._goCustomerList} _goCompanyList={this._goCompanyList}  _goTicketSearch={this._goTicketSearch} _goCustomerSearch={this._goCustomerSearch} _goCompanySearch={this._goCompanySearch} />});
+    this.setState({mainComponent: <Search gs={this.state.gs} sgs={this.setGlobalState} _goTicketList={this._goTicketList} _goCustomerList={this._goCustomerList} _goCompanyList={this._goCompanyList}  _goTicketSearch={this._goTicketSearch} _goCustomerSearch={this._goCustomerSearch} _goCompanySearch={this._goCompanySearch} />});
   },
   _goNewsfeed: function(){
     this.closeSupportingComponent();
