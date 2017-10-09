@@ -251,14 +251,36 @@ module UniversalCrm
         end
         
         def newsfeed
+          ## ToDo: Configure this to target tickets and comments for specific companies and employees
+          employees = []
           @comments = Universal::Comment.unscoped.order_by(created_at: :desc)
           @comments = @comments.scoped_to(universal_scope) if !universal_scope.nil?
           @comments = @comments.where(subject_type: params[:subject_type]) if !params[:subject_type].blank?
-          @comments = @comments.where(user_id: params[:user_id]) if !params[:user_id].blank?
+          if !params[:user_id].blank?
+            @comments = @comments.where(user_id: params[:user_id])
+            if !params[:company_id].blank?
+              company = UniversalCrm::Company.find(params[:company_id])
+              @comments = @comments.for_subject(company)
+              employees = company.employees.map{|e| [e.id.to_s, e.name]}   
+              if !params[:employee_id].blank?
+                @comments = @comments.for_subject(UniversalCrm::Customer.find(params[:employee_id]))
+              end
+            end
+          end
           @comments = @comments.where(subject_kind: params[:subject_kind]) if !params[:subject_kind].blank?
           @tickets = UniversalCrm::Ticket.unscoped.order_by(created_at: :desc)
           @tickets = @tickets.scoped_to(universal_scope) if !universal_scope.nil?
-          @tickets = @tickets.where(creator_id: params[:user_id]) if !params[:user_id].blank?
+          if !params[:user_id].blank?
+            @tickets = @tickets.where(creator_id: params[:user_id])
+            if !params[:company_id].blank?
+              company = UniversalCrm::Company.find(params[:company_id])
+              @tickets = @tickets.for_subject(company)
+              employees = company.employees.map{|e| [e.id.to_s, e.name]}   
+              if !params[:employee_id].blank?
+                @tickets = @tickets.for_subject(UniversalCrm::Customer.find(params[:employee_id]))
+              end
+            end
+          end
           @tickets = @tickets.where(kind: params[:subject_kind]) if !params[:subject_kind].blank?
           results = []
           per_page=20
@@ -277,7 +299,8 @@ module UniversalCrm
               current_page: params[:page].to_i,
               per_page: per_page
             },
-            results: results
+            results: results,
+            employees: employees
           }
         end
         
