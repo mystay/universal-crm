@@ -2,7 +2,8 @@ require_dependency "universal_crm/application_controller"
 
 module UniversalCrm
   class TicketsController < ApplicationController
-
+    protect_from_forgery except: :receive_slack_response
+    skip_before_filter :require_user, :enforce_manager, only: :receive_slack_response
     before_filter :remove_tickets_viewing!, only: %w(index)
     
     def index
@@ -228,6 +229,13 @@ module UniversalCrm
     def editing
       @ticket = UniversalCrm::Ticket.find(params[:id])
       @ticket.being_edited_by!(universal_user)
+      render json: {}
+    end
+    
+    def receive_slack_response
+      @ticket = UniversalCrm::Ticket.find(params[:ticket_id])
+      dev_user = Padlock::User.find_by(email: 'dev@homestaynetwork.org')
+      @ticket.save_comment!(params[:message], dev_user)
       render json: {}
     end
     

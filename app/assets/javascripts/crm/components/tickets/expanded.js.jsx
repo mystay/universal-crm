@@ -25,6 +25,7 @@ var ExpandedTicket = React.createClass({
               changeTicketStatusActive={this.props.changeTicketStatusActive}
               changeTicketStatusClosed={this.props.changeTicketStatusClosed}
               changeTicketStatusActioned={this.props.changeTicketStatusActioned}
+              sendToSlack={this.props.sendToSlack}
               ticketFlags={this.props.ticketFlags}
               replyCount={this.state.replyCount}
               />
@@ -142,6 +143,7 @@ var ExpandedTicket = React.createClass({
       }
     });
     this.setState({replyCount: replyCount});
+    this.props.addNewComment()
   },
 
 });

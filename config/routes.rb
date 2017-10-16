@@ -52,6 +52,9 @@ UniversalCrm::Engine.routes.draw do
       patch :update_status, :flag, :update_customer, :assign_user, :editing, :update_due_on
       post :create_related_task
     end
+    collection do
+      post :receive_slack_response
+    end
   end
   resources :comments
   

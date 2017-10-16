@@ -132,6 +132,10 @@ module UniversalCrm
           UniversalCrm::Ticket.in(id: self.child_ticket_ids)
         end
         
+        def comments_json
+          self.comments.map(&:to_json)
+        end
+        
         def to_json(config=nil)
           {
             id: self.id.to_s,
@@ -174,7 +178,8 @@ module UniversalCrm
             creator_name: (self.creator.nil? ? nil : self.creator.name),
             referring_url: self.referring_url,
             parent_ticket: (self.parent_ticket_id.blank? ? nil : {id: self.parent_ticket_id.to_s, name: self.parent_ticket.name}),
-            child_tickets: self.child_tickets.map{|c| {id: c.id.to_s, name: c.name}}
+            child_tickets: self.child_tickets.map{|c| {id: c.id.to_s, name: c.name}},
+            comments: comments_json
           }
         end
         

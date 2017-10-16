@@ -59,6 +59,7 @@ var TicketFunctions = React.createClass({
       b.push(<li key='assign'>{this.assignUserButton()}</li>);
       b.push(<li key='change'>{this.customerChangeButton()}</li>);
       b.push(<li key='actioned'>{this.actionedButton()}</li>);
+      b.push(<li key='slack'>{this.sendToSlackButton()}</li>);
       b.push(<li key='close'>{this.closeButton()}</li>);
     }
     return(<ul className="list-inline">{b}</ul>);
@@ -72,6 +73,9 @@ var TicketFunctions = React.createClass({
   },
   assignUserButton: function(){
     return(<AssignUserButton ticket={this.props.ticket} gs={this.props.gs} />);
+  },
+  sendToSlackButton: function(){
+    return(<SendToSlackButton ticket={this.props.ticket} gs={this.props.gs} />);
   },
   customerChangeButton: function(){
     return(<ChangeCustomerButton ticket={this.props.ticket} />);

@@ -80,6 +80,9 @@ var TicketShowContainer = React.createClass({
       })(this)
     });
   },
+  sendToSlack: function(){
+    this.changeTicketFlag('slack');
+  },
   setCustomerId: function(){
     if (this.props._goCustomer){
       this.props._goCustomer(this.state.ticket.subject_id);
@@ -122,6 +125,8 @@ var TicketShowContainer = React.createClass({
                 changeTicketStatusActive={this.changeTicketStatusActive}
                 changeTicketStatusClosed={this.changeTicketStatusClosed}
                 changeTicketStatusActioned={this.changeTicketStatusActioned}
+                addNewComment={this.addNewComment}
+                sendToSlack={this.sendToSlack}
                 countComments={this.countComments}
                 ticketFlags={this.props.gs.config.ticket_flags}
                 gs={this.props.gs}
@@ -139,6 +144,9 @@ var TicketShowContainer = React.createClass({
     if (this.state.ticket.subject_email){
       return(<small className="text-muted">({this.state.ticket.subject_email})</small>);
     }
+  },
+  addNewComment: function(){
+    this.loadTicket();
   },
   emailAddressConflict: function(){
     if (this.props.gs.config.inbound_email_addresses.indexOf(this.state.ticket.from_email)>=0){
