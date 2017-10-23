@@ -4,10 +4,21 @@
 */
 var QuickClose = React.createClass({
   getInitialState: function(){
-    return({ticket: null});
+    return({
+      ticket: null,
+      pastProps: null
+    });
   },
   componentDidMount: function(){
-    this.setState({ticket: this.props.ticket});
+    this.init();
+  },
+  componentDidUpdate: function(){
+    if (this.state.pastProps != this.props){
+      this.init();
+    }
+  },
+  init: function(){
+    this.setState({ticket: this.props.ticket, pastProps: this.props});
   },
   render: function(){
     if (this.state.ticket && this.state.ticket.kind == 'task'){
@@ -22,13 +33,13 @@ var QuickClose = React.createClass({
     if (this.state.ticket.status == 'active'){
       return(
         <span style={{marginRight: '10px', cursor: 'pointer'}}>
-          <i className="fa fa-square-o text-success" onClick={this.closeTicket} title="Complete task" /> <span className="small">Complete</span>
+          <i className="fa fa-square-o text-success" onClick={this.closeTicket} title="Complete task" /> <span className="small" onClick={this.closeTicket}>Complete</span>
         </span>
       );
     }else{
       return(
         <span style={{marginRight: '10px', cursor: 'pointer'}}>
-          <i className="fa fa-check-square text-success" onClick={this.openTicket} title="Reopen task" /> <span className="small">Complete</span>
+          <i className="fa fa-check-square text-success" onClick={this.openTicket} title="Reopen task" /> <span className="small" onClick={this.openTicket}>Complete</span>
         </span>
       );
     }

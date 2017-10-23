@@ -2,7 +2,7 @@
   global React
   global $
 */
-var Employees = React.createClass({
+window.Employees = createReactClass({
   getInitialState: function(){
     return({
       employees: [],

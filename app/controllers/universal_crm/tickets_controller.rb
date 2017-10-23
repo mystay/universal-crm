@@ -12,7 +12,7 @@ module UniversalCrm
       @tickets = @tickets.for_kind(params[:kind]) if !params[:kind].blank? and params[:kind] != 'undefined'
       if !params[:q].blank? and params[:q].to_s != 'undefined'
         conditions = []
-        params[:q].split(' ').each do |keyword|
+        params[:q].alphanumeric.split(' ').each do |keyword|
           conditions.push({'$or' => [
             {title: /#{keyword}/i},
             {number: /#{keyword}/i},

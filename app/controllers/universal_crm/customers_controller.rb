@@ -9,6 +9,9 @@ module UniversalCrm
       @customers = UniversalCrm::Customer.order_by(name: :asc)
       @customers = @customers.scoped_to(universal_scope) if !universal_scope.nil?
       @customers = @customers.where(status: params[:status]) if !params[:status].blank?
+      if !params[:company].blank?
+        @customers = @customers.where(:id.in => UniversalCrm::Company.find(params[:company]).employees.map{|e| e.id.to_s})
+      end
       if !params[:q].blank?
         @customers = @customers.full_text_search(params[:q], match: :all)
       end

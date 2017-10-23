@@ -1,9 +1,9 @@
-var TicketListItem = React.createClass({
+window.TicketListItem = createReactClass({
   getInitialState: function(){
     return ({
       status: this.props.ticket.status,
       flags: this.props.ticket.flags
-    })
+    });
   },
   render: function(){
     return (
@@ -18,7 +18,7 @@ var TicketListItem = React.createClass({
         </h4>
         {this.listItemDetails()}
       </div>
-    )
+    );
   },
   listItemDetails: function(){
     return(
@@ -30,7 +30,7 @@ var TicketListItem = React.createClass({
         {this.customerName()}
         {this.assignedTo()}
       </div>
-    )
+    );
   },
   customerName: function(){
     if (this.props._goCustomer || this.props._goCompany){
@@ -68,7 +68,7 @@ var TicketListItem = React.createClass({
   },
   ticketTitleClass: function(e){
     if (this.props.ticketId == e){
-      return 'text-success'
+      return 'text-success';
     }
   },
   assignedTo: function(){

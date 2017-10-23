@@ -1,4 +1,4 @@
-var CustomerSearch = React.createClass({
+window.CustomerSearch = createReactClass({
   getInitialState: function(){
     return({
       searchWord: null,

@@ -1,7 +1,7 @@
 /*
   global React
 */
-var TicketFunctions = React.createClass({
+window.TicketFunctions = createReactClass({
   render: function(){
     return(
       <div>

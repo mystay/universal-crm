@@ -2,7 +2,7 @@
   global React
   global ReactDOM
 */
-var QuickSearch = React.createClass({
+window.QuickSearch = createReactClass({
   getInitialState: function(){
     return({
       searchWord: null,

@@ -3,7 +3,7 @@
   global ReactDOM
   global $
 */
-var TicketTitleButton = React.createClass({
+window.TicketTitleButton = createReactClass({
   selectTicket: function(){
     this.props.selectTicketId(this.props.ticket.id);
   },
@@ -14,11 +14,10 @@ var TicketTitleButton = React.createClass({
           <div className='pull-right hidden-xs'>Ticket: #{this.props.ticket.number}</div>
           {this.statusLabel()}
           {this.ticketIcon()}
-          <div className="pull-right"><QuickClose ticket={this.props.ticket} /></div>
+          <div className="pull-right"><QuickClose ticket={this.props.ticket} gs={this.props.gs} sgs={this.props.sgs} /></div>
           <span style={{cursor: 'pointer', fontWeight: 'bold'}} onClick={this.selectTicket}>
             {this.props.ticket.title}
           </span>
-          
           <TicketDueOn ticket={this.props.ticket} margin={false} editable={false} />
           <Flags flags={this.props.ticket.flags} gs={this.props.gs} />
           {this.tags()}

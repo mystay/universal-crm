@@ -1,5 +1,4 @@
-var BrandLogo = React.createClass({
-  
+window.BrandLogo = createReactClass({
   render: function(){
     return(
       <div className="brand">

@@ -1,4 +1,4 @@
-var CompanySettings = React.createClass({
+window.CompanySettings = createReactClass({
   getInitialState: function(){
     return({
       status: null
