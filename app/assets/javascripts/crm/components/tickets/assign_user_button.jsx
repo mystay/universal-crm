@@ -1,4 +1,4 @@
-var AssignUserButton = React.createClass({
+window.AssignUserButton = createReactClass({
   getInitialState: function(){
     return({
       

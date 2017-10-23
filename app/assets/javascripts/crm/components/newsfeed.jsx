@@ -3,8 +3,7 @@
   global $
   global ReactDOM
 */
-
-var Newsfeed = React.createClass({
+window.Newsfeed = createReactClass({
   getInitialState: function(){
     return({
       results: [],

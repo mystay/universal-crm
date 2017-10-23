@@ -1,6 +1,6 @@
 /*global React*/
 /*global $*/
-var TicketList = React.createClass({
+window.TicketList = createReactClass({
   getInitialState: function(){
     return({
       subjectId: null,

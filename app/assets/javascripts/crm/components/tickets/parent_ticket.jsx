@@ -3,7 +3,7 @@
   global ReactDOM
   global $
 */
-var ParentTicket = React.createClass({
+window.ParentTicket = createReactClass({
   render: function(){
     if (this.props.ticket){
       return(

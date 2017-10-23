@@ -1,7 +1,7 @@
 /*
   global React
 */
-var ConfigLogin = React.createClass({
+window.ConfigLogin = createReactClass({
   getInitialState: function(){
     return({password: null});
   },

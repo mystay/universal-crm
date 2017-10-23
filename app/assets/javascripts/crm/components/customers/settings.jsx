@@ -1,4 +1,4 @@
-var CustomerSettings = React.createClass({
+window.CustomerSettings = createReactClass({
   getInitialState: function(){
     return({
       status: null

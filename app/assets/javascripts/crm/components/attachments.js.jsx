@@ -1,7 +1,7 @@
 /*
   global $, React
 */
-var Attachments = React.createClass({
+window.Attachments = createReactClass({
   getInitialState: function(){
     return({
       subjectId: null,

@@ -3,7 +3,7 @@
   global ReactDOM
   global $
 */
-var CustomerEdit = React.createClass({
+window.CustomerEdit = createReactClass({
   handleSubmit: function(e){
     e.preventDefault();
     $.ajax({

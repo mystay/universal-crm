@@ -2,7 +2,7 @@
   global React
   global $
 */
-var Labels = React.createClass({
+window.Labels = createReactClass({
   getInitialState: function(){
     return({
       labels: null,

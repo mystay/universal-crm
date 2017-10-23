@@ -1,4 +1,4 @@
-var ShortenUrl = React.createClass({
+window.ShortenUrl = createReactClass({
   getInitialState: function(){
     return({
       shortUrl: null,

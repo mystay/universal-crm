@@ -2,7 +2,7 @@
   global React
   global $
 */
-var Dashboard = React.createClass({
+window.Dashboard = createReactClass({
   getInitialState: function(){
     return({
       ticketCounts: null,

@@ -3,7 +3,7 @@
   global ReactDOM
   global $
 */
-var NewCompany = React.createClass({
+window.NewCompany = createReactClass({
   getInitialState: function(){
     return({
       companyId: null,

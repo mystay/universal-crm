@@ -4,7 +4,7 @@
   global ReactDOM
   global $
 */
-var Helpdesk = React.createClass({
+window.Helpdesk = createReactClass({
   getInitialState: function(){
     return({
       subjectId: null,
