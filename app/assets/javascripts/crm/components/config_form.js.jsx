@@ -2,7 +2,7 @@
   global React
   global $
 */
-var ConfigForm = React.createClass({
+window.ConfigForm = createReactClass({
   getInitialState: function(){
     return({
       inbound_domain: this.props.config.inbound_domain,

@@ -3,7 +3,7 @@
   global ReactDOM
   global $
 */
-var Aside = React.createClass({
+window.Aside = createReactClass({
   dashboard: function(){
     this.props._goDashboard();
   },

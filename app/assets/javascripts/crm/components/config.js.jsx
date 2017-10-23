@@ -3,7 +3,7 @@
   global ReactDOM
   global $
 */
-var Config = React.createClass({
+window.Config = createReactClass({
   getInitialState: function(){
     return({
       config: null,

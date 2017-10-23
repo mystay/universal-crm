@@ -1,5 +1,4 @@
-var Home = React.createClass({
-  
+window.Home = createReactClass({
   render: function(){
     return(
       <div>

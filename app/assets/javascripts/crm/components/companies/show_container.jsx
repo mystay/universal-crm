@@ -2,7 +2,7 @@
   global React
   global $
 */
-var CompanyShowContainer = React.createClass({
+window.CompanyShowContainer = createReactClass({
   getInitialState: function(){
     return {
       edit: false,

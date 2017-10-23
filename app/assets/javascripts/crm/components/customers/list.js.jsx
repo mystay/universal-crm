@@ -2,7 +2,7 @@
 global React
 global $
 */
-var CustomerList = React.createClass({
+window.CustomerList = createReactClass({
   getInitialState: function(){
     return({
       customers: null,

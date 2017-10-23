@@ -1,4 +1,4 @@
-var CustomerShowContainer = React.createClass({
+window.CustomerShowContainer = createReactClass({
   getInitialState: function(){
     return {
       edit: false,

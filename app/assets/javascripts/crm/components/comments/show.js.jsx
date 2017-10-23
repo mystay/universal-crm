@@ -1,8 +1,7 @@
 /*
   global React
 */
-var Comment = React.createClass({
-  
+window.Comment = createReactClass({
   render: function(){
     var commentClass;
     if (this.props.comment.system_generated){

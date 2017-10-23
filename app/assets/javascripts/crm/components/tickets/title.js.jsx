@@ -1,4 +1,4 @@
-var TicketTitle = React.createClass({
+window.TicketTitle = createReactClass({
   
   render: function(){
     if (this.props.ticket){

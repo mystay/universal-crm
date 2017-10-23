@@ -1,7 +1,7 @@
 /*
   global React
 */
-var TicketStatus = React.createClass({
+window.TicketStatus = createReactClass({
   getInitialState: function(){
     return({});
   },

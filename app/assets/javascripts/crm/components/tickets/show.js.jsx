@@ -2,7 +2,7 @@
   global React
   global $
 */
-var TicketShowContainer = React.createClass({
+window.TicketShowContainer = createReactClass({
   getInitialState: function(){
     return ({
       commentCount: 0,

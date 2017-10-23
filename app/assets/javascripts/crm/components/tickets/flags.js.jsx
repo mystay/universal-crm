@@ -1,5 +1,4 @@
-var Flags = React.createClass({
-  
+window.Flags = createReactClass({
   render: function(){
     var labels = [];
     for (var i=0;i<this.props.flags.length;i++){

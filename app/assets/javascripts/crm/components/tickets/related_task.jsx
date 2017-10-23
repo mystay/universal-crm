@@ -3,7 +3,7 @@
   global ReactDOM
   global $
 */
-var RelatedTask = React.createClass({
+window.RelatedTask = createReactClass({
   render: function(){
     if (this.props.gs && this.props.gs.config && this.props.gs.config.functions.indexOf('tasks')>-1 && this.props.ticket.kind=='email'){
       return(

@@ -2,7 +2,7 @@
   global React
   global $
 */
-var Comments = React.createClass({
+window.Comments = createReactClass({
   getInitialState: function(){
     return({
       subject_id: null,
