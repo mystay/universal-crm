@@ -75,7 +75,8 @@ module UniversalCrm
             closed_ticket_count: self.tickets.unscoped.closed.count,
             companies: self.companies.map{|c| c.to_json(config)},
             subject_type: self.subject_type,
-            subject_id: self.subject_id.to_s
+            subject_id: self.subject_id.to_s,
+            created_at: self.created_at
             }
         end
         

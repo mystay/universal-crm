@@ -15,7 +15,7 @@ window.CustomerList = createReactClass({
     });
   },
   init: function(){
-    this.loadCustomers(this.props.gs.searchWord, this.props.gs.customerStatus);
+    this.loadCustomers(this.props.gs.searchWord, this.props.gs.customerStatus, this.props.gs.customerCompanyID);
   },
   componentDidMount: function(){
     this.init();
@@ -30,16 +30,17 @@ window.CustomerList = createReactClass({
     this.props.sgs('customerStatus', null);
     this.props._goCustomer($(e.target).attr('data-id'));
   },  
-  loadCustomers: function(searchWord, customerStatus, page){
+  loadCustomers: function(searchWord, customerStatus, customerCompanyID, page){
     if (!this.state.loading){
       this.setState({loading: true, pastProps: this.props, searchWord: searchWord, customerStatus: customerStatus});
       if (page==undefined){page=1;}
       if (searchWord==undefined){searchWord='';}
+      if (customerCompanyID==undefined){customerCompanyID='';}
       if (customerStatus==undefined){customerStatus='';}
       var _this=this;
       return $.ajax({
         method: 'GET',
-        url: `/crm/customers?q=${searchWord}&page=${page}&status=${customerStatus}`,
+        url: `/crm/customers?q=${searchWord}&page=${page}&status=${customerStatus}&company=${customerCompanyID}`,
         success: function(data){
           _this.setState({
             loading: false,

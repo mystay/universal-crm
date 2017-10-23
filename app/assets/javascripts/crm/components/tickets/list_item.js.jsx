@@ -3,7 +3,7 @@ window.TicketListItem = createReactClass({
     return ({
       status: this.props.ticket.status,
       flags: this.props.ticket.flags
-    })
+    });
   },
   render: function(){
     return (
@@ -18,7 +18,7 @@ window.TicketListItem = createReactClass({
         </h4>
         {this.listItemDetails()}
       </div>
-    )
+    );
   },
   listItemDetails: function(){
     return(
@@ -30,7 +30,7 @@ window.TicketListItem = createReactClass({
         {this.customerName()}
         {this.assignedTo()}
       </div>
-    )
+    );
   },
   customerName: function(){
     if (this.props._goCustomer || this.props._goCompany){
@@ -68,7 +68,7 @@ window.TicketListItem = createReactClass({
   },
   ticketTitleClass: function(e){
     if (this.props.ticketId == e){
-      return 'text-success'
+      return 'text-success';
     }
   },
   assignedTo: function(){

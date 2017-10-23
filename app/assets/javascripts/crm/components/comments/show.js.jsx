@@ -8,7 +8,7 @@ window.Comment = createReactClass({
       commentClass = 'post system_generated';
     } else if (this.props.comment.incoming){
       commentClass = 'post primary';
-    }else if (this.props.comment.kind=='normal'){
+    }else if (this.props.comment.kind=='note'){
       commentClass = 'post system_generated';
     }else{
       commentClass = `post default ${this.props.comment.kind}-kind`;

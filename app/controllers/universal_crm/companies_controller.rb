@@ -16,6 +16,12 @@ module UniversalCrm
       @companies = UniversalCrm::Company.all
       @companies = @companies.scoped_to(universal_scope) if !universal_scope.nil?
       @companies = @companies.where(status: params[:status]) if !params[:status].blank?
+      if !params[:country].blank?
+        @companies = @companies.where(country_code: Universal::Country.find(params[:country]).code)
+        if !params[:address_state].blank?
+          @companies = @companies.where(address_state: params[:address_state])
+        end
+      end
       if !params[:q].blank?
         @companies = @companies.full_text_search(params[:q], match: :all)
       end

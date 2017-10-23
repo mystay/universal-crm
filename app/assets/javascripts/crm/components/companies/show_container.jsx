@@ -40,7 +40,7 @@ window.CompanyShowContainer = createReactClass({
   },
   setCompany: function(company){
     this.setState({company: company, companyId: company.id, edit: false, loading: false});
-    this.props.handlePageHistory(`${company.name}`, `/crm/company/${company.id}`);
+    this.props.handlePageHistory(`${company.name}`, `/crm/company/${company.id}`, 'fa-building');
   },
   handleEdit: function(){
     this.setState({edit: !this.state.edit});

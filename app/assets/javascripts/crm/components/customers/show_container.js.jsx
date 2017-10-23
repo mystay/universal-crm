@@ -36,7 +36,7 @@ window.CustomerShowContainer = createReactClass({
   },
   setCustomer: function(customer){
     this.setState({customer: customer, customerId: customer.id, edit: false, loading: false});
-    this.props.handlePageHistory(`${customer.name||customer.email}`, `/crm/customer/${customer.id}`);
+    this.props.handlePageHistory(`${customer.name||customer.email}`, `/crm/customer/${customer.id}`, 'fa-user');
   },
   handleEdit: function(){
     this.setState({edit: !this.state.edit})

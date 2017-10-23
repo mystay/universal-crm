@@ -48,7 +48,7 @@ window.NewComment = createReactClass({
     var _this=this;
     if (!this.state.loading){
       this.setState({loading: true});
-      var emailKind = (sendAsEmail ? 'email' : 'normal');
+      var emailKind = (sendAsEmail ? 'email' : 'note');
       $.ajax({
         method: 'POST',
         url: '/universal/comments',

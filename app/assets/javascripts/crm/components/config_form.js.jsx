@@ -100,7 +100,7 @@ window.ConfigForm = createReactClass({
           {this.labelsTextbox('company')}
           {this.labelsTextbox('email')}
           {this.labelsTextbox('task')}
-          {this.labelsTextbox('normal')}
+          {this.labelsTextbox('note')}
         </fieldset>
         <div className="form-group">
           {this.submitButton('Save Changes')}
