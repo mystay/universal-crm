@@ -27,88 +27,94 @@ var SendToSlackButton = React.createClass({
   //   });
   // },
   sendToSlack: function(){
-    // this.loadTicket(this.props.ticket.id)
-    var ticket = this.state.ticket
-    var comments = ``
-    ticket.comments.forEach(function(comment){
-      if (comment.system_generated == false) {
-        comments += `*${comment.author}*\n`
-        comments += `${comment.content}`
-        comments += `\n`
-      }
-    })
-    var transcription = `*Ticket*\n`
-    transcription += `URL: ${ticket.referring_url}\n`
-    transcription += `*${ticket.title}*\n`
-    transcription += `${ticket.content}\n`
-    transcription += `${comments}\n`
-    var ticket_info = `*Ticket Info*\n`
-    ticket_info += `Created: ${ticket.created_at}\n`
-    ticket_info += `Ticket ID: ${ticket.id}\n`
-    ticket_info += `Sender Name: ${this.props.gs.user.name}\n`
-    ticket_info += `Sender Email: ${this.props.gs.user.email}\n`
-    var attachments = [
-      {
-        "text": transcription,
-        "mrkdwn_in": ["text"],
-        "callback_id": "helpdesk-text",
-        "color": "#F03A47"
-      },
-      {
-        "text": ticket_info,
-        "mrkdwn_in": ["text"],
-        "callback_id": "helpdesk-info",
-        "color": "#065A82"
-      },
-      {
-        "text": "Would you like to convert this to an issue in JIRA?",
-        "mrkdwn_in": ["text"],
-        "fallback": "You don't have pemission to do this",
-        "callback_id": "helpdesk",
-        "attachment_type": "default",
-        "color": "#EB5E28",
-        "actions": [
-          {
-            "name": "yes",
-            "text": "Yes",
-            "type": "button",
-            "value": "yes"
-          },
-          {
-            "name": "more-info",
-            "text": "More info",
-            "type": "button",
-            "value": "more-info"
-          },
-          {
-            "name": "no",
-            "text": "No",
-            "type": "button",
-            "value": "no"
-          }
-        ]
-      }
-    ]
-    if (ticket.attachments.length > 0) {
-      ticket.attachments.forEach(function(attachment){
-        var url = `http:${attachment.url}`
-        attachments.splice(1, 0, {
-          "text": `*${attachment.filename}*`,
-          "mrkdwn_in": ["text"],
-          "image_url": url,
-          "color": "#065A82"
-        })
-      })
-    }
     $.ajax({
-      data: 'payload=' + JSON.stringify({
-        "attachments": attachments
-      }),
-      dataType: 'json',
-      processData: false,
-      type: 'POST',
-      url: 'https://hooks.slack.com/services/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'
-      // ToDo: Get URL from app config
+      method: 'GET',
+      url: `/crm/tickets/${this.props.ticket.id}.json`,
+      success: (function(data){
+        console.log(data.ticket.comments.slice(-1)[0].content )
+      }).bind(this)
     });
+    // var ticket = this.state.ticket
+    // var comments = ``
+    // ticket.comments.forEach(function(comment){
+    //   if (comment.system_generated == false) {
+    //     comments += `*${comment.author}*\n`
+    //     comments += `${comment.content}`
+    //     comments += `\n`
+    //   }
+    // })
+    // var transcription = `*Ticket*\n`
+    // transcription += `URL: ${ticket.referring_url}\n`
+    // transcription += `*${ticket.title}*\n`
+    // transcription += `${ticket.content}\n`
+    // transcription += `${comments}\n`
+    // var ticket_info = `*Ticket Info*\n`
+    // ticket_info += `Created: ${ticket.created_at}\n`
+    // ticket_info += `Ticket ID: ${ticket.id}\n`
+    // ticket_info += `Sender Name: ${this.props.gs.user.name}\n`
+    // ticket_info += `Sender Email: ${this.props.gs.user.email}\n`
+    // var attachments = [
+    //   {
+    //     "text": transcription,
+    //     "mrkdwn_in": ["text"],
+    //     "callback_id": "helpdesk-text",
+    //     "color": "#F03A47"
+    //   },
+    //   {
+    //     "text": ticket_info,
+    //     "mrkdwn_in": ["text"],
+    //     "callback_id": "helpdesk-info",
+    //     "color": "#065A82"
+    //   },
+    //   {
+    //     "text": "Would you like to convert this to an issue in JIRA?",
+    //     "mrkdwn_in": ["text"],
+    //     "fallback": "You don't have pemission to do this",
+    //     "callback_id": "helpdesk",
+    //     "attachment_type": "default",
+    //     "color": "#EB5E28",
+    //     "actions": [
+    //       {
+    //         "name": "yes",
+    //         "text": "Yes",
+    //         "type": "button",
+    //         "value": "yes"
+    //       },
+    //       {
+    //         "name": "more-info",
+    //         "text": "More info",
+    //         "type": "button",
+    //         "value": "more-info"
+    //       },
+    //       {
+    //         "name": "no",
+    //         "text": "No",
+    //         "type": "button",
+    //         "value": "no"
+    //       }
+    //     ]
+    //   }
+    // ]
+    // if (ticket.attachments.length > 0) {
+    //   ticket.attachments.forEach(function(attachment){
+    //     var url = `http:${attachment.url}`
+    //     attachments.splice(1, 0, {
+    //       "text": `*${attachment.filename}*`,
+    //       "mrkdwn_in": ["text"],
+    //       "image_url": url,
+    //       "color": "#065A82"
+    //     })
+    //   })
+    // }
+    // $.ajax({
+    //   data: 'payload=' + JSON.stringify({
+    //     "attachments": attachments
+    //   }),
+    //   dataType: 'json',
+    //   processData: false,
+    //   type: 'POST',
+    //   url: 'https://hooks.slack.com/services/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'
+    //   // ToDo: Get URL from app config
+    // });
   }
 });
