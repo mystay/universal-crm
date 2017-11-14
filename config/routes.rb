@@ -49,7 +49,7 @@ UniversalCrm::Engine.routes.draw do
   end
   resources :tickets do
     member do
-      patch :update_status, :flag, :update_customer, :assign_user, :editing, :update_due_on
+      patch :update_status, :flag, :update_customer, :assign_user, :editing, :update_due_on, :send_to_slack
       post :create_related_task
     end
     collection do

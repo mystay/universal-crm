@@ -232,8 +232,95 @@ module UniversalCrm
       render json: {}
     end
     
+    def send_to_slack
+      @ticket = UniversalCrm::Ticket.find(params[:id])
+      @sender = Padlock::User.find(params[:sender_id])
+      comments = ""
+      @ticket.comments.each do |c| 
+        if !c.system_generated?
+          comments << "*#{c.user.name}*\n"
+          comments << "#{c.content}"
+          comments << "\n"
+        end
+      end
+      transcription = "*Ticket*\n"
+      transcription += "URL: #{@ticket.referring_url}\n"
+      transcription += "*#{@ticket.title}*\n"
+      transcription += "#{@ticket.content}\n"
+      transcription += "#{comments}\n"
+      ticket_info = "*Ticket Info*\n"
+      ticket_info += "Created: #{@ticket.created_at}\n"
+      ticket_info += "Ticket ID: #{@ticket.id}\n"
+      ticket_info += "Sender Name: #{@sender.name}\n"
+      ticket_info += "Sender Email: #{@sender.email}\n"
+      attachments = [
+        {
+          "text": transcription,
+          "mrkdwn_in": ["text"],
+          "callback_id": "helpdesk-text",
+          "color": "#F03A47"
+        },
+        {
+          "text": ticket_info,
+          "mrkdwn_in": ["text"],
+          "callback_id": "helpdesk-info",
+          "color": "#065A82"
+        },
+        {
+          "text": "Would you like to convert this to an issue in JIRA?",
+          "mrkdwn_in": ["text"],
+          "fallback": "You don't have pemission to do this",
+          "callback_id": "helpdesk",
+          "attachment_type": "default",
+          "color": "#EB5E28",
+          "actions": [
+            {
+              "name": "yes",
+              "text": "Yes",
+              "type": "button",
+              "value": "yes"
+            },
+            {
+              "name": "more-info",
+              "text": "More info",
+              "type": "button",
+              "value": "more-info"
+            },
+            {
+              "name": "no",
+              "text": "No",
+              "type": "button",
+              "value": "no"
+            }
+          ]
+        }
+      ]
+      if !@ticket.attachments.blank?
+        @ticket.attachments.each do |a|
+          puts a.inspect
+          url = "http:#{a.file.url}"
+          attachments.insert(1, {
+            "text": "*#{a.file_filename}*",
+            "mrkdwn_in": ["text"],
+            "image_url": url,
+            "color": "#065A82"
+          })
+        end
+      end
+      HTTParty.post(
+        'https://hooks.slack.com/services/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',
+        body: {
+          "attachments": attachments
+        }.to_json,
+        headers: { 'Content-Type' => 'application/json' } 
+      )
+      @ticket.save_comment!("Sent to development", @sender)
+      render json: {}
+    end
+    
     def receive_slack_response
       @ticket = UniversalCrm::Ticket.find(params[:ticket_id])
+      puts "TICKET: #{@ticket}"
       dev_user = Padlock::User.find_by(email: 'dev@homestaynetwork.org')
       @ticket.save_comment!(params[:message], dev_user)
       render json: {}
