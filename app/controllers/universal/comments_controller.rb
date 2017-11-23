@@ -16,6 +16,10 @@ module Universal
       @comment.when = Time.now.utc
       @comment.user = current_user
       if @comment.save
+        attachments = Universal::Attachment.for_comment(params[:temp_comment_id])
+        if !attachments.blank?
+          @comment.attachments << attachments
+        end
         if @model.class == UniversalCrm::Ticket 
           if @comment.email?
             UniversalCrm::Mailer.ticket_reply(universal_crm_config, @model.subject, @model, @comment).deliver_now

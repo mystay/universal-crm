@@ -46,15 +46,18 @@ window.Comments = createReactClass({
   },
   renderCommentForm: function(){
     if (this.openComments()){
-      return(<NewComment 
-               updateCommentList={this.updateCommentList} 
-               subject_type={this.props.subject_type} 
-               subject_id={this.props.subject_id} 
-               newCommentPlaceholder={this.props.newCommentPlaceholder} 
-               allowEmail={this.props.allowEmail} 
-               hidePrivateComments={this.props.hidePrivateComments}
-               newCommentReceived={this.props.newCommentReceived}
-               />);
+      return(
+        <NewComment
+          updateCommentList={this.updateCommentList} 
+          subject_type={this.props.subject_type} 
+          subject_id={this.props.subject_id} 
+          newCommentPlaceholder={this.props.newCommentPlaceholder} 
+          allowEmail={this.props.allowEmail} 
+          hidePrivateComments={this.props.hidePrivateComments}
+          newCommentReceived={this.props.newCommentReceived}
+          gs={this.props.gs}
+          />
+      );
     }
   },
   renderCommentList: function(){
