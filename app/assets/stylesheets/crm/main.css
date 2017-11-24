@@ -4379,3 +4379,8 @@ div.config h4 a:hover {
 r {
   cursor: pointer;
 }
+.comment-right-ul {
+  list-style: none;
+  margin: 0px;
+  text-align: right;
+}

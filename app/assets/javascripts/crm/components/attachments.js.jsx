@@ -50,7 +50,7 @@ window.Attachments = createReactClass({
     }
   },
   url: function(){
-    return `/crm/attachments?subject_id=${this.props.subjectId}&subject_type=${this.props.subjectType}&parent_id=${this.props.parentId}&parent_type=${this.props.parentType}`;
+   return `/crm/attachments?subject_id=${this.props.subjectId}&subject_type=${this.props.subjectType}&parent_id=${this.props.parentId}&parent_type=${this.props.parentType}`
   },
   render: function(){
     return(
