@@ -71,7 +71,7 @@ window.Comment = createReactClass({
   attachments: function(){
     var attachments = []
     this.props.comment.attachments.forEach(function(attachment){
-      attachments.push(<li key={attachment.url}><i className="fa fa-paperclip" /> <a href={`http:${attachment.url.replace(/hms\/(.*)attachment/, "hms/attachment")}`} target="_blank">{attachment.filename}</a></li>);
+      attachments.push(<li key={attachment.url}><i className="fa fa-paperclip" /> <a href={`http:${attachment.url}`} target="_blank">{attachment.filename}</a></li>);
     });
     return (
       <div>
