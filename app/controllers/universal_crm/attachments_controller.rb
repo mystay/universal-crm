@@ -9,28 +9,41 @@ module UniversalCrm
       if !@subject.nil?
         render json: {attachments: @subject.attachments.map{|a| a.to_json}}
       elsif !@parent.nil?
-        #find the attachments for the children of the parent
-        att = []
         children = params[:subject_type].classify.constantize.where(subject_type: params[:parent_type], subject_id: params[:parent_id])
         puts children.length
         attachments = Universal::Attachment.in(subject_id: children.map{|c| c.id})
         render json: {attachments: attachments.map{|a| a.to_json}}
+      elsif !params[:temp_comment_id].blank? && params[:temp_comment_id] != "undefined"
+        render json: {attachments: Universal::Attachment.for_comment(params[:temp_comment_id]).map{|a| a.to_json}}
       else
         render json: {attachments: []}  
       end
-      
     end
     
     def create
       if !@subject.nil?
         attachments = []
         params[:files].each do |file|
-          attachments.push(@subject.attachments.create file: file)
+          attachment = @subject.attachments.create file: file
+          attachments.push(attachment)
         end
         render json: {attachments: @subject.attachments.map{|a| a.to_json}}
       end
     end
     
+    def create_comment_attachment
+      if !params[:temp_comment_id].blank? && params[:temp_comment_id] != "undefined"
+        attachments = []
+        params[:files].each do |file|
+          # Attachment URL is incorrect after save
+          attachment = Universal::Attachment.create file: file, temporary_comment_id: params[:temp_comment_id]
+          attachments.push(attachment)
+        end
+        render json: {attachments: attachments.map{|a| a.to_json}}
+      end
+    end
+  
+  
     def shorten_url
       @attachment = @subject.attachments.find(params[:id])
       if @attachment.shortened_url.blank?
@@ -53,6 +66,12 @@ module UniversalCrm
       else
         render json: {url: @attachment.shortened_url}
       end
+    end
+    
+    def destroy
+      attachment = Universal::Attachment.find(params[:id])
+      attachment.destroy
+      render json: {}
     end
    
     private

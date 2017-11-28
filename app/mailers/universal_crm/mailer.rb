@@ -21,6 +21,9 @@ module UniversalCrm
         @ticket = ticket
         @comment = comment
         @config = config
+        @comment.attachments.where(tci: nil).each do |a|
+          attachments[a.file_filename] = open("http:#{a.file.url}").read
+        end
         if !@customer.nil?
           mail  to: to(@customer.email, config.test_email),
                 from: "#{config.transaction_email_from} <#{config.transaction_email_address}>",
