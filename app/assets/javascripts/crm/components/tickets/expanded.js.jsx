@@ -53,6 +53,7 @@ window.ExpandedTicket = createReactClass({
             fullWidth={false}
             allowEmail={this.props.ticket.kind=='email'}
             newCommentReceived={this.newCommentReceived}
+            gs={this.props.gs}
             />
           {this.emailWarning()}
         </div>

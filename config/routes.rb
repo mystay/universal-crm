@@ -25,6 +25,9 @@ UniversalCrm::Engine.routes.draw do
     member do
       get :shorten_url
     end
+    collection do
+      post :create_comment_attachment
+    end
   end
   resources :flags do
     collection do

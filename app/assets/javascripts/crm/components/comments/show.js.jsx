@@ -35,8 +35,13 @@ window.Comment = createReactClass({
             {this.author()}
           </div>
           <div className={this.column(10)}>
-            <div className={commentClass}>
-              <div className="pull-right small">{this.props.comment.when_formatted}</div>
+            <div className={commentClass} style={{overflow: 'hidden'}}>
+              <div className="pull-right small">
+                <ul className="comment-right-ul">
+                  <li>{this.props.comment.when_formatted}</li>
+                  {this.attachments()}
+                </ul>
+              </div>
               {this.arrow()}
               <p>{nl2br(this.props.comment.content)}</p>
             </div>
@@ -62,6 +67,17 @@ window.Comment = createReactClass({
     }else{
       return(null);
     }
+  },
+  attachments: function(){
+    var attachments = []
+    this.props.comment.attachments.forEach(function(attachment){
+      attachments.push(<li key={attachment.url}><i className="fa fa-paperclip" /> <a href={`http:${attachment.url}`} target="_blank">{attachment.filename}</a></li>);
+    });
+    return (
+      <div>
+        {attachments}
+      </div>
+    )
   },
   author: function(){
     var timeago;

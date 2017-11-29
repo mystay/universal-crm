@@ -9,14 +9,28 @@ window.NewComment = createReactClass({
       loading: false,
       content: '',
       allowEmail: false,
-      editing: false
+      editing: false,
+      uniqueId: null,
+      tempCommentId: ''
     });
   },
+  init: function(){
+    var uniqueId = `comment_${this.props.subject_id}`;
+    this.setState({uniqueId: uniqueId});
+  },
   componentDidMount: function(){
+    this.init();
     this.setState({allowEmail: this.props.allowEmail});
+    this.setTempId();
   },
   valid: function(){
     return (this.state.content != '');
+  },
+  setTempId: function(){
+    if (this.state.tempCommentId == ''){
+      var tempCommentId = `${ new Date().getTime() }_${this.props.subject_id}`;
+      this.setState({tempCommentId: tempCommentId});
+    }
   },
   handleChange: function(e){
     if (!this.state.editing && this.props.subject_type == 'UniversalCrm::Ticket'){
@@ -58,11 +72,13 @@ window.NewComment = createReactClass({
           subject_id: this.props.subject_id,
           content: this.state.content,
           kind: emailKind,
-          hide_private_comments: this.props.hidePrivateComments
+          hide_private_comments: this.props.hidePrivateComments,
+          temp_comment_id: this.state.tempCommentId
         },
         success: function(data){
-          _this.setState({content: '', focused: false, loading: false});
+          _this.setState({content: '', focused: false, loading: false, tempCommentId: ''});
           _this.props.updateCommentList(data);
+          _this.setTempId();
           ReactDOM.findDOMNode(_this.refs.content).value='';
           showSuccess("Comments saved");
           if (_this.props.newCommentReceived){
@@ -84,9 +100,15 @@ window.NewComment = createReactClass({
             style={this.textareaStyle()} />
         </div>
         <div className="form-group">
+          {this.progressBar()}
           <ul className="list-inline">
             {this.sendAsEmailButton()}
             {this.saveAsNoteButton()}
+            <CommentAttachments 
+              valid={this.valid()}
+              uniqueId={this.state.uniqueId} 
+              subject_id={this.props.subject_id} 
+              temp_comment_id={this.state.tempCommentId} />
           </ul>
         </div>
       </div>
@@ -104,6 +126,13 @@ window.NewComment = createReactClass({
     }else{
       return(null)
     }    
+  },
+  progressBar: function(){
+    return (
+      <div id={`progress_${this.state.uniqueId}`} className="progress" style={{display: 'none'}}>
+        <div className="progress-bar progress-bar-primary"></div>
+      </div>
+    )
   },
   saveAsNoteButton: function(){
     if (this.valid()){
