@@ -114,7 +114,7 @@ window.CRM = createReactClass({
   _goDashboard: function(){
     this.closeSupportingComponent();
     this.setGlobalState('pageTitle', 'Dashboard');
-    this.setGlobalState('pageIcon', 'fa-dashboard');
+    this.setGlobalState('pageIcon', 'fa-tachometer-alt');
     this.handlePageHistory('Dashboard', '/crm');
     this.setState({mainComponent: <Dashboard gs={this.state.gs} sgs={this.setGlobalState} _goTicketList={this._goTicketList} _goCustomerList={this._goCustomerList} _goCompanyList={this._goCompanyList} _goTicket={this._goTicket} _goCompany={this._goCompany} _goCustomer={this._goCustomer} />});
   },

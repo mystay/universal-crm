@@ -865,8 +865,6 @@ canvas {
 .pageheader .breadcrumb > li + li:before {
   padding: 0 5px;
   color: #515050;
-  font-family: FontAwesome;
-  content: "\f105";
 }
 @media (max-width: 767px) {
   .main-content-wrapper {

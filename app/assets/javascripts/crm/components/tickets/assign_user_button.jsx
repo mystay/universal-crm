@@ -1,7 +1,7 @@
 window.AssignUserButton = createReactClass({
   getInitialState: function(){
     return({
-      
+
     });
   },
   render: function(){
@@ -9,7 +9,7 @@ window.AssignUserButton = createReactClass({
       return(
         <div>
           <button className="btn btn-info btn-xs" onClick={this.displayAssignUser}>
-            <i className="fa fa-send" /> {this.buttonText()}
+            <i className="fa fa-paper-plane" /> {this.buttonText()}
           </button>
           <Modal ref='assign_user_modal' modalTitle="Assign to:" modalContent={<AssignUser ticket={this.props.ticket} gs={this.props.gs}/>} />
         </div>
@@ -23,7 +23,7 @@ window.AssignUserButton = createReactClass({
     if (modal){
       $(modal).modal('show', {backdrop: 'none'});
     }
-  }, 
+  },
   buttonText: function(){
     if (this.props.ticket.responsible_name){
       return(`${this.props.ticket.responsible_name}`);
