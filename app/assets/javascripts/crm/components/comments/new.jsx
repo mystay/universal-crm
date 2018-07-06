@@ -45,7 +45,7 @@ window.NewComment = createReactClass({
   submitEmail: function(e){
     e.preventDefault();
     if (confirm('Are you sure you want to EMAIL this reply to the customer?')){
-      this.handleSubmit(true); 
+      this.handleSubmit(true);
     }
   },
   submitNote: function(e){
@@ -56,7 +56,7 @@ window.NewComment = createReactClass({
       }
     }else{
       this.handleSubmit(false);
-    }  
+    }
   },
   handleSubmit: function(sendAsEmail){
     var _this=this;
@@ -92,11 +92,11 @@ window.NewComment = createReactClass({
     return(
       <div>
         <div className="form-group">
-          <textarea 
-            className="form-control" 
-            ref='content' 
-            placeholder={this.props.newCommentPlaceholder} 
-            onChange={this.handleChange} 
+          <textarea
+            className="form-control"
+            ref='content'
+            placeholder={this.props.newCommentPlaceholder}
+            onChange={this.handleChange}
             style={this.textareaStyle()} />
         </div>
         <div className="form-group">
@@ -104,10 +104,10 @@ window.NewComment = createReactClass({
           <ul className="list-inline">
             {this.sendAsEmailButton()}
             {this.saveAsNoteButton()}
-            <CommentAttachments 
+            <CommentAttachments
               valid={this.valid()}
-              uniqueId={this.state.uniqueId} 
-              subject_id={this.props.subject_id} 
+              uniqueId={this.state.uniqueId}
+              subject_id={this.props.subject_id}
               temp_comment_id={this.state.tempCommentId} />
           </ul>
         </div>
@@ -119,13 +119,13 @@ window.NewComment = createReactClass({
       return(
         <li>
           <button className={this.buttonClass('email')} onClick={this.submitEmail}>
-            <i className={this.loadingIcon('send')} /> Send email
+            <i className={this.loadingIcon('paper-plane')} /> Send email
           </button>
         </li>
       )
     }else{
       return(null)
-    }    
+    }
   },
   progressBar: function(){
     return (
@@ -159,7 +159,7 @@ window.NewComment = createReactClass({
       return("btn btn-primary")
     }else if (type=='note'){
       return("btn btn-default btn-sm")
-    }      
+    }
   },
   textareaStyle: function(){
     if (this.state.content){

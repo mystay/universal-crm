@@ -29,7 +29,7 @@ window.Aside = createReactClass({
           <ul className="nav nav-pills nav-stacked">
             <li>
               <a style={{cursor: 'pointer'}} onClick={this.dashboard}>
-                <i className="fa fa-dashboard fa-fw" />
+                <i className="fa fa-tachometer-alt fa-fw" />
                 Dashboard
               </a>
             </li>
@@ -151,7 +151,7 @@ window.Aside = createReactClass({
       return(
         <li>
           <a style={{cursor: 'pointer'}} onClick={this.props._goNewsfeed} data-title="newsfeed" data-icon="fa-check-circle">
-            <i className="fa fa-newspaper-o fa-fw" />
+            <i className="fa fa-newspaper fa-fw" />
             Newsfeed
           </a>
         </li>

@@ -2,7 +2,7 @@
   global React
   global $
 */
-var QuickClose = React.createClass({
+window.QuickClose = createReactClass({
   getInitialState: function(){
     return({
       ticket: null,
