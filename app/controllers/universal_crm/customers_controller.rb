@@ -3,7 +3,7 @@ require_dependency "universal_crm/application_controller"
 module UniversalCrm
   class CustomersController < ApplicationController
     before_filter :find_customer, only: %w(show update update_status)
-    
+
     def index
       params[:page] = 1 if params[:page].blank?
       @customers = UniversalCrm::Customer.order_by(name: :asc)
@@ -18,7 +18,7 @@ module UniversalCrm
       @customers = @customers.page(params[:page])
       render json: {
         pagination: {
-          total_count: @customers.total_count,
+          total_count: defined?(WillPaginate) ? @customers.total_entries : @customers.total_count,
           page_count: @customers.total_pages,
           current_page: params[:page].to_i,
           per_page: 20
@@ -34,7 +34,7 @@ module UniversalCrm
           }}
         }
     end
-    
+
     def autocomplete
       @customers = UniversalCrm::Customer.all
       if !params[:term].blank?
@@ -43,7 +43,7 @@ module UniversalCrm
       json = @customers.map{|c| {label: "#{c.name} - #{c.email}", value: c.id.to_s}}
       render json: json.to_json
     end
-    
+
     def show
       if @customer.nil?
         render json: {customer: nil}
@@ -56,23 +56,23 @@ module UniversalCrm
         end
       end
     end
-    
+
     def create
       #make sure we don't have an existing customer
       @customer = UniversalCrm::Customer.find_or_create_by(scope: universal_scope, email: params[:email].strip.downcase)
       if !@customer.nil?
-        @customer.update(name: params[:name].strip, status: universal_crm_config.default_customer_status)    
+        @customer.update(name: params[:name].strip, status: universal_crm_config.default_customer_status)
         render json: {id: @customer.id.to_s, name: @customer.name, email: @customer.email, existing: @customer.created_at<1.minute.ago}
       else
         render json: {}
       end
     end
-    
+
     def update
       @customer.update(params.require(:customer).permit(:name, :position, :email, :phone_home, :phone_work, :phone_mobile))
       render json: {customer: @customer.to_json(universal_crm_config)}
     end
-    
+
     def update_status
       if params[:status] == 'blocked'
         @customer.block!(universal_user)
@@ -81,7 +81,7 @@ module UniversalCrm
       end
       render json: {customer: @customer.to_json(universal_crm_config)}
     end
-    
+
     private
     def find_customer
       @customer = UniversalCrm::Customer.find(params[:id])
