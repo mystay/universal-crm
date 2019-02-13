@@ -2,15 +2,15 @@ require_dependency "universal_crm/application_controller"
 
 module UniversalCrm
   class CompaniesController < ApplicationController
-    
+
     before_filter :find_company, only: %w(show update update_status add_employee)
-    
+
     def recent
       @companies = UniversalCrm::Company.order_by(created_at: :desc).limit(8)
       @companies = @companies.scoped_to(universal_scope) if !universal_scope.nil?
       render json: {companies: @companies.map{|c| c.to_json(universal_crm_config)}}
     end
-    
+
     def index
       params[:page] = 1 if params[:page].blank?
       @companies = UniversalCrm::Company.all
@@ -29,15 +29,15 @@ module UniversalCrm
       @companies = @companies.page(params[:page])
       render json: {
         pagination: {
-          total_count: @companies.total_count,
+          total_count: defined?(WillPaginate) ? @companies.total_entries : @companies.total_count,
           page_count: @companies.total_pages,
           current_page: params[:page].to_i,
           per_page: 20
         },
         companies: @companies.map{|c| {id: c.id.to_s,
-          number: c.number.to_s, 
-          name: c.name, 
-          email: c.email, 
+          number: c.number.to_s,
+          name: c.name,
+          email: c.email,
           token: c.token,
           status: c.status,
           tags: c.tags,
@@ -48,7 +48,7 @@ module UniversalCrm
           }}
         }
     end
-    
+
     def autocomplete
       @companies = UniversalCrm::Company.all
       @companies = @companies.scoped_to(universal_scope) if !universal_scope.nil?
@@ -58,7 +58,7 @@ module UniversalCrm
       json = @companies.map{|c| {label: [c.name, c.email].join(' - '), value: c.id.to_s}}
       render json: json.to_json
     end
-    
+
     def show
       if @company.nil?
         render json: {company: nil}
@@ -71,7 +71,7 @@ module UniversalCrm
         end
       end
     end
-    
+
     def create
       #make sure we don't have an existing customer
       @company = UniversalCrm::Company.find_by(scope: universal_scope, email: params[:email].strip.downcase)
@@ -83,12 +83,12 @@ module UniversalCrm
         render json: {id: @company.id.to_s, name: @company.name, email: @company.email, existing: @company.created_at<1.minute.ago}
       end
     end
-    
+
     def update
       @company.update(params.require(:company).permit(:name, :email, :address_line_1, :address_line_2, :address_city, :address_state, :address_post_code, :country_id))
       render json: {company: @company.to_json(universal_crm_config)}
     end
-    
+
     def update_status
       if params[:status] == 'blocked'
         @company.block!(universal_user)
@@ -97,7 +97,7 @@ module UniversalCrm
       end
       render json: {customer: @customer.to_json(universal_crm_config)}
     end
-    
+
     def add_employee
       employee = UniversalCrm::Customer.find(params[:customer_id])
       @company.add_employee!(employee)
@@ -105,11 +105,11 @@ module UniversalCrm
       employee.active! if employee.draft?
       render json: {employees: @company.employees_json}
     end
-    
+
     private
     def find_company
       @company = UniversalCrm::Company.find(params[:id])
     end
-    
+
   end
 end

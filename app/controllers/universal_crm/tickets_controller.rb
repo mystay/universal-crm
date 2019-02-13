@@ -4,7 +4,7 @@ module UniversalCrm
   class TicketsController < ApplicationController
 
     before_filter :remove_tickets_viewing!, only: %w(index)
-    
+
     def index
       params[:page] = 1 if params[:page].blank?
       @tickets = UniversalCrm::Ticket.all
@@ -32,7 +32,7 @@ module UniversalCrm
           end
           @tickets = @tickets.where('$or' => conditions)
         elsif !params[:flag].blank? and params[:flag]!='null' and params[:flag]!='undefined'
-          @tickets = @tickets.flagged_with(params[:flag])        
+          @tickets = @tickets.flagged_with(params[:flag])
         elsif params[:status] == 'email'
           @tickets = @tickets.email.active
         elsif params[:status] == 'note'
@@ -44,7 +44,7 @@ module UniversalCrm
         elsif params[:status] == 'priority'
           @tickets = @tickets.active.priority
         elsif params[:status] != 'all'
-          @tickets = @tickets.active  
+          @tickets = @tickets.active
         end
         if params[:kind] == 'email'
           @tickets = @tickets.email
@@ -53,7 +53,7 @@ module UniversalCrm
       @tickets = @tickets.page(params[:page])
       render json: {
         pagination: {
-          total_count: @tickets.total_count,
+          total_count: defined?(WillPaginate) ? @tickets.total_entries : @tickets.total_count,
           page_count: @tickets.total_pages,
           current_page: params[:page].to_i,
           per_page: 20
@@ -61,11 +61,11 @@ module UniversalCrm
         tickets: @tickets.map{|t| t.to_json}
         }
     end
-    
+
     def new
-      
+
     end
-    
+
     def show
       @ticket = UniversalCrm::Ticket.find(params[:id])
       if @ticket.nil?
@@ -80,7 +80,7 @@ module UniversalCrm
         end
       end
     end
-    
+
     def create
       if !params[:subject_id].blank? and !params[:subject_type].blank?
         subject = params[:subject_type].classify.constantize.find params[:subject_id]
@@ -109,11 +109,11 @@ module UniversalCrm
                                         responsible_id: params[:responsible_id],
                                         subject: subject,
                                         parent_ticket_id: params[:parent_ticket_id]
-                                        
+
         if !document.nil? and !UniversalCrm::Configuration.secondary_scope_class.blank?
           ticket.secondary_scope = document.crm_secondary_scope
         end
-                     
+
         if ticket.save
           if !params[:flag].blank?
             params[:flag].strip.gsub(' ','').split(',').each do |flag|
@@ -136,7 +136,7 @@ module UniversalCrm
         render json: {}
       end
     end
-    
+
     def update_status
       @ticket = UniversalCrm::Ticket.find(params[:id])
       if params[:status]=='closed'
@@ -155,7 +155,7 @@ module UniversalCrm
         }
       end
     end
-    
+
     def update_due_on
       @ticket = UniversalCrm::Ticket.find(params[:id])
       if @ticket
@@ -166,7 +166,7 @@ module UniversalCrm
         render json: {}
       end
     end
-    
+
     def flag
       @ticket = UniversalCrm::Ticket.find(params[:id])
       if params[:add] == 'true'
@@ -178,7 +178,7 @@ module UniversalCrm
       end
       render json: {ticket: @ticket.to_json}
     end
-    
+
     def update_customer
       @ticket = UniversalCrm::Ticket.find(params[:id])
       old_customer_name = @ticket.subject.name
@@ -187,7 +187,7 @@ module UniversalCrm
       @ticket.save_comment!("Customer changed from: '#{old_customer_name}'", current_user, universal_scope)
       render json: {ticket: @ticket.to_json}
     end
-    
+
     def assign_user
       @user = Universal::Configuration.class_name_user.classify.constantize.find(params[:user_id])
       if !@user.nil?
@@ -200,9 +200,9 @@ module UniversalCrm
         end
       end
       render json: {user: {name: @user.name, email: @user.email}}
-        
+
     end
-    
+
     def create_related_task
       @ticket = UniversalCrm::Ticket.find(params[:id])
       if !@ticket.nil?
@@ -224,12 +224,12 @@ module UniversalCrm
         render json: {}
       end
     end
-    
+
     def editing
       @ticket = UniversalCrm::Ticket.find(params[:id])
       @ticket.being_edited_by!(universal_user)
       render json: {}
     end
-    
+
   end
 end

@@ -9,7 +9,7 @@ module Universal
       comments = load_comments
       render json: comments.map{|c| c.to_json}
     end
-    
+
     def create
       @model = find_model
       @comment = @model.comments.new content: params[:content], kind: params[:kind], scope: universal_scope, subject_name: @model.name, subject_kind: @model.kind
@@ -20,7 +20,7 @@ module Universal
         if !attachments.blank?
           @comment.attachments << attachments
         end
-        if @model.class == UniversalCrm::Ticket 
+        if @model.class == UniversalCrm::Ticket
           if @comment.email?
             UniversalCrm::Mailer.ticket_reply(universal_crm_config, @model.subject, @model, @comment).deliver_now
           end
@@ -43,7 +43,7 @@ module Universal
       @comments = @comments.page(params[:page])
       render json: {
         pagination: {
-          total_count: @comments.total_count,
+          total_count: defined?(WillPaginate) ? @comments.total_entries : @comments.total_count,
           page_count: @comments.total_pages,
           current_page: params[:page].to_i,
           per_page: 20
@@ -59,14 +59,14 @@ module Universal
       end
       return nil
     end
-    
+
     def load_comments
       comments = @model.comments
       if params[:hide_private_comments].to_s == 'true'
-        comments = comments.not_system_generated.email 
+        comments = comments.not_system_generated.email
       end
       return comments
     end
-    
+
   end
 end
