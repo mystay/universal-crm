@@ -1,0 +1,31 @@
+- panel_id = String.random(12)
+.panel{class: "panel-#{attrs[:class].blank? ? 'default' : attrs[:class]}", id: attrs[:id].blank? ? "panel_#{panel_id}" : attrs[:id]}
+  - if !attrs[:title].blank? or !attrs[:search_url].blank? or !attrs[:new_url].blank?
+    .panel-heading
+      - if attrs[:close]
+        .pull-right
+          = link_to "#{icon('times fa-2x')} Close".html_safe, "javascript:$('##{attrs[:id].blank? ? "panel_#{panel_id}" : attrs[:id]}').hide();void(0);"
+      - if !attrs[:search_url].blank? or !attrs[:new_url].blank?
+        .pull-right.col-xs-9.col-sm-6.text-right{style: 'margin-top:-9px;'}
+          - if !attrs[:new_url].blank?
+            .pull-right{style: 'margin-left:5px;'}= link_to "#{icon('plus')} New".html_safe, attrs[:new_url], class: 'btn btn-primary', remote: attrs[:remote]
+          - if !attrs[:search_url].blank?
+            - if attrs[:remote]
+              .input-group
+                = text_field_tag :q, '', placeholder: 'Search', class: 'form-control', onchange: "ajaxSearch('#{attrs[:search_url]}', this.value, '#{panel_id}');"
+                %span.input-group-addon= icon('search')
+            - else
+              = form_tag attrs[:search_url], method: :get, class: 'form-inline' do
+                .form-group= text_field_tag :q, params[:q], placeholder: 'Keyword...', class: 'form-control'
+                = submit('Search', 'search')
+
+      %h3.panel-title
+        = icon(attrs[:icon]) if !attrs[:icon].blank?
+        - if (attrs[:collapsed] || attrs[:collapsable]) and !attrs[:title].blank?
+          = link_to attrs[:title].html_safe, "#pb#{panel_id}", data: {toggle: 'collapse'}
+        - else
+          = (attrs[:title].blank? ? '&nbsp;' : attrs[:title]).html_safe
+  - body_class = "panel-collapse in" if attrs[:collapsable]
+  - body_class = "panel-collapse collapse" if attrs[:collapsed]
+  .panel-body{id: "pb#{panel_id}", style: attrs[:body_style], class: body_class}
+    = yield

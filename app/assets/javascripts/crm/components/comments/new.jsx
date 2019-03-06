@@ -65,7 +65,7 @@ window.NewComment = createReactClass({
       var emailKind = (sendAsEmail ? 'email' : 'note');
       $.ajax({
         method: 'POST',
-        url: '/universal/comments',
+        url: 'comments',
         dataType: 'JSON',
         data:{
           subject_type: this.props.subject_type,

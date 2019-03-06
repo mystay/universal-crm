@@ -48,11 +48,11 @@ window.Comments = createReactClass({
     if (this.openComments()){
       return(
         <NewComment
-          updateCommentList={this.updateCommentList} 
-          subject_type={this.props.subject_type} 
-          subject_id={this.props.subject_id} 
-          newCommentPlaceholder={this.props.newCommentPlaceholder} 
-          allowEmail={this.props.allowEmail} 
+          updateCommentList={this.updateCommentList}
+          subject_type={this.props.subject_type}
+          subject_id={this.props.subject_id}
+          newCommentPlaceholder={this.props.newCommentPlaceholder}
+          allowEmail={this.props.allowEmail}
           hidePrivateComments={this.props.hidePrivateComments}
           newCommentReceived={this.props.newCommentReceived}
           gs={this.props.gs}
@@ -80,7 +80,7 @@ window.Comments = createReactClass({
       this.setState({loading: true, pastProps: this.props});
       $.ajax({
         method: 'GET',
-        url: `/universal/comments`,
+        url: `comments`,
         dataType: 'JSON',
         data:{
           subject_type: this.props.subject_type,

@@ -12,8 +12,8 @@ window.CompanyEdit = createReactClass({
   componentDidMount: function(){
     var _this=this;
     $.ajax({
-      url: "/universal/countries.json", 
-      type: 'GET', 
+      url: "countries.json", 
+      type: 'GET',
       success: function(d){
         _this.setState({countries: d.countries});
       }

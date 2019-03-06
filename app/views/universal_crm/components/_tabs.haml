@@ -1,0 +1,59 @@
+- attrs[:tabs] = attrs[:tabs].map{|t| t.class==Array ? t : t.to_s}
+.tab-wrapper.tab-primary{class: attrs[:class]}
+  %ul.nav.nav-tabs
+    - attrs[:tabs].compact.each_with_index do |tab, i|
+      - if tab.class == Array
+        - tab_path = (tab[0].include?('/') ? "#{tab[0].sub('/','/tab_')}" : "tab_#{tab[0]}").to_s
+        - tab_title = tab[1]
+      - else
+        - tab_path = (tab.include?('/') ? "#{tab.sub('/','/tab_')}" : "tab_#{tab}").to_s
+        - tab_title = (tab.include?('/') ? tab.reverse[0,tab.reverse.index('/')].reverse : tab).to_s
+      %li{class: ((i==0) ? 'active' : 0)}
+        = link_to tab_title.titleize, "#tab_pane_#{tab_title}",
+          data: {toggle: 'tab', href: tab_title, 'block-reload': attrs[:block_reload].present? ? attrs[:block_reload].include?(tab) : nil},
+          id: "tab_anchor_#{tab_title}"
+  .tab-content
+    - attrs[:tabs].compact.each_with_index do |tab, i|
+      - tab_path = (tab.include?('/') ? "#{tab.sub('/','/tab_')}" : "tab_#{tab}").to_s
+      - tab_title = (tab.include?('/') ? tab.reverse[0,tab.reverse.index('/')].reverse : tab).to_s
+      .tab-pane{id: "tab_pane_#{tab_title}", class: ((i==0) ? 'active' : nil), style: (attrs[:class] == 'tab-left' ? "min-height:#{50*attrs[:tabs].length}px;" : nil)}
+        = render tab_path if attrs[:ajax].blank? or (attrs[:ajax] and i==0)
+- if attrs[:ajax]
+  - content_for :javascript do
+    :javascript
+      $( document ).ready(function(){
+        $('.nav-tabs a[data-href][data-toggle="tab"]').on('show.bs.tab', function(e) {
+          var $this = $(this);
+          var blockReload = $this.attr('data-block-reload')=='true'
+          if (!blockReload){
+            var firstSlash = $this.attr('data-href').indexOf('/');
+            if (firstSlash !== 0){
+              var url = window.location.href;
+              var querystring = window.location.search;
+              url = url.replace(querystring,'');
+              var anchorPos = url.indexOf('#');
+              if (anchorPos>-1){
+                url = url.substring(0,anchorPos);
+              }
+              url = url + '/' + $this.attr('data-href');
+              if (querystring!=''){
+                url = url + querystring;
+              }
+            }else{
+              var url = $this.attr('data-href');
+            }
+            $($this.attr('href')).html("<h4 class=\"text-center text-muted\"><i class=\"fa fa-spinner fa-spin fa-lg\" style=\"margin-right:10px;\"/> Loading, please be patient...</h4>");
+            $($this.attr('href')).load(url, function(data){
+              $this.data('loaded', 1);
+            });
+          }
+        });
+      })
+      $(function(){
+        var anchor_value;
+        var stripped_url = document.location.toString().split("#");
+        if (stripped_url.length > 1){
+          anchor_value = stripped_url[1];
+          $('.nav-tabs a[data-href="'+anchor_value+'"]').tab('show');
+        }
+      })
