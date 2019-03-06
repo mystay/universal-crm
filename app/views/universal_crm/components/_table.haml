@@ -1,0 +1,17 @@
+- body_id = String.random(6)
+%table.table.table-striped{class: "#{!attrs[:sortable_url].blank? ? ' table-sortable' : ''}#{!attrs[:class].blank? ? " #{attrs[:class]}" : ''}", id: attrs[:id]}
+  - if !attrs[:header].blank?
+    %thead
+      %tr
+        - attrs[:header].compact.each do |header|
+          %th{class: attrs[:class].to_s.include?('table-bordered') ? 'text-center' : nil}= header.to_s.include?('<') ? header : header.to_s.titleize
+
+  %tbody{id: body_id}
+    = yield
+
+- if !attrs[:sortable_url].blank?
+  - if request.xhr?
+    = render 'components/sortable_js', sortable_url: attrs[:sortable_url], table_body_id: body_id
+  - else
+    - content_for :javascript do
+      = render 'components/sortable_js', sortable_url: attrs[:sortable_url], table_body_id: body_id

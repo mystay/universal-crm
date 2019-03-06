@@ -19,7 +19,7 @@ window.Tags = createReactClass({
     if (this.props.tags != this.state.propTags){ //we have sent new props
       this.setState({tags: this.props.tags, propTags: this.props.tags});
     }
-  }, 
+  },
   handleToggle: function(e){
     e.preventDefault();
     this.setState({edit: !this.state.edit});
@@ -32,7 +32,7 @@ window.Tags = createReactClass({
     this.setState({edit: false});
     $.ajax({
       method: 'POST',
-      url: `/universal/tags?model_class=${this.props.subjectType}&model_id=${this.props.subjectId}`,
+      url: `tags?model_class=${this.props.subjectType}&model_id=${this.props.subjectId}`,
       dataType: 'JSON',
       data: {tags: this.state.editedTags.join(',')},
       success: (function(_this){
@@ -81,7 +81,7 @@ window.Tags = createReactClass({
         </div>
       </div>
     )
-  },        
+  },
   render: function(){
     if (this.state.edit){
       return(this.editForm());

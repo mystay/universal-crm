@@ -189,7 +189,7 @@ module UniversalCrm
     end
 
     def assign_user
-      @user = Universal::Configuration.class_name_user.classify.constantize.find(params[:user_id])
+      @user = Padlock::User.find(params[:user_id])
       if !@user.nil?
         @ticket = UniversalCrm::Ticket.find(params[:id])
         @ticket.update(responsible: @user)

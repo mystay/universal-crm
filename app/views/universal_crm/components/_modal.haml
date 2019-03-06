@@ -1,0 +1,8 @@
+.modal.fade{id: attrs[:id]}
+  .modal-dialog
+    .modal-content
+      .modal-header
+        = button_tag "&times;".html_safe, class: 'close', data: {:dismiss => 'modal'}
+        %h4.modal-title= attrs[:title]
+      .modal-body
+        = yield

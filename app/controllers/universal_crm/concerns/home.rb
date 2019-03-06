@@ -2,23 +2,23 @@ module UniversalCrm
   module Concerns
     module Home
       extend ActiveSupport::Concern
-      
+
       included do
         protect_from_forgery except: %w(inbound)
-        
+
         def index
-          #list all tickets  
+          #list all tickets
         end
-        
-        def init          
-          users = Universal::Configuration.class_name_user.classify.constantize.where('_ugf.crm.0' => {'$exists' => true})
-          users = users.where(Universal::Configuration.user_scope_field => universal_scope.id) if !universal_scope.nil? and !Universal::Configuration.user_scope_field.blank?
-          users = users.sort_by{|a| a.name}.map{|u| {name: u.name, 
-              email: u.email, 
-              first_name: u.name.split(' ')[0].titleize, 
-              id: u.id.to_s, 
+
+        def init
+          users = Padlock::User.where('_ugf.crm.0' => {'$exists' => true})
+          users = users.where(territory_id: universal_scope.id) if !universal_scope.nil?
+          users = users.sort_by{|a| a.name}.map{|u| {name: u.name,
+              email: u.email,
+              first_name: u.name.split(' ')[0].titleize,
+              id: u.id.to_s,
               functions: (u.universal_user_group_functions.blank? ? [] : u.universal_user_group_functions['crm'])}}
-          
+
           json = {config: universal_crm_config.to_json, user_count: users.length, users: users}
 
           if universal_user
@@ -51,7 +51,7 @@ module UniversalCrm
             from = params['From'].downcase
             from_name = params['FromName']
             ticket=nil
-            
+
             #check if the BCC is for our inbound addresses:
             if !bcc.blank?
               #check if it was forwarded to the bcc address:
@@ -61,7 +61,7 @@ module UniversalCrm
                 ticket_subject = UniversalCrm::Customer.find_by(scope: config.scope, email: /^#{from}$/i)
                 ticket_subject ||= UniversalCrm::Company.find_by(scope: config.scope, email: /^#{from}$/i) #check if there's a company now
                 ticket_subject ||= UniversalCrm::Customer.create(scope: config.scope, email: (from), name: from_name, status: config.default_customer_status)
-                creator = Universal::Configuration.class_name_user.classify.constantize.find_by(email: /^#{from}$/i)
+                creator = Padlock::User.find_by(email: /^#{from}$/i)
                 if !ticket_subject.nil? and !ticket_subject.blocked?
                   ticket_subject.update(name: to_name) if ticket_subject.name.blank?
                   ticket = ticket_subject.tickets.create  kind: :email,
@@ -78,7 +78,7 @@ module UniversalCrm
                 ticket_subject = UniversalCrm::Customer.find_by(scope: config.scope, email: /^#{to}$/i)
                 ticket_subject ||= UniversalCrm::Company.find_by(scope: config.scope, email: /^#{to}$/i) #check if there's a company now
                 ticket_subject ||= UniversalCrm::Customer.create(scope: config.scope, email: (to), name: to_name, status: config.default_customer_status)
-                creator = Universal::Configuration.class_name_user.classify.constantize.find_by(email: /^#{from}$/i)
+                creator = Padlock::User.find_by(email: /^#{from}$/i)
                 if !ticket_subject.nil? and !ticket_subject.blocked?
                   ticket_subject.update(name: to_name) if ticket_subject.name.blank?
                   ticket = ticket_subject.tickets.create  kind: :email,
@@ -93,7 +93,7 @@ module UniversalCrm
               end
             elsif !to.blank? and config = UniversalCrm::Config.find_by(inbound_email_addresses: to) #SENT Directly to the CRM
               if !config.nil?
-                creator = Universal::Configuration.class_name_user.classify.constantize.find_by(email: /^#{from}$/i)
+                creator = Padlock::User.find_by(email: /^#{from}$/i)
                 #find who it was originally from:
                 forwarded_from = nil
                 #Need to establish if this was a forwarded message, and find who it was originally from
@@ -140,7 +140,7 @@ module UniversalCrm
                 ticket = UniversalCrm::Ticket.find_by(token: /^#{token}$/i)
                 if !ticket.nil?
                   ticket_subject = ticket.subject
-                  user = (ticket_subject.subject.class.to_s == Universal::Configuration.class_name_user.to_s ? ticket_subject.subject : nil)
+                  user = (ticket_subject.subject.class.to_s == 'Padlock::User' ? ticket_subject.subject : nil)
                   ticket.open!(user)
                   ticket.update(kind: :email)
                   comment = ticket.comments.create content: params['TextBody'].hideQuotedLines,
@@ -153,7 +153,7 @@ module UniversalCrm
                                           subject_name: ticket.name,
                                           subject_kind: ticket.kind,
                                           subject: ticket_subject
-                  
+
                   logger.warn comment.errors.to_json
                 end
               end
@@ -177,19 +177,19 @@ module UniversalCrm
                 rescue => error
                   puts "Attachment error: #{error.to_s}"
                 end
-              end              
+              end
             end
             render json: {}
           else
             render json: {status: 200, message: "From/To not sent"}
           end
         end
-        
+
         def unload
           remove_tickets_viewing!
           render json: {}
         end
-        
+
         def dashboard
           @tickets = UniversalCrm::Ticket.unscoped
           @tickets = @tickets.scoped_to(universal_scope) if !universal_scope.nil?
@@ -224,7 +224,7 @@ module UniversalCrm
           flag_count = @tickets.map_reduce(map_flags, reduce).out(inline: true)
           flags = {}
           flag_count.sort_by{|a| -a['value'].to_i}.each do |c|
-            flags.merge!(c['_id'] => ActiveSupport::NumberHelper.number_to_delimited(c['value'].to_i))  
+            flags.merge!(c['_id'] => ActiveSupport::NumberHelper.number_to_delimited(c['value'].to_i))
           end
           render json: {
             ticket_counts: {
@@ -245,15 +245,15 @@ module UniversalCrm
             }
           }
         end
-        
+
         def search
           render json: {type: params[:search_type], results: []}
         end
-        
+
         def newsfeed
           ## ToDo: Configure this to target tickets and comments for specific companies and employees
           employees = []
-          @comments = Universal::Comment.unscoped.order_by(created_at: :desc)
+          @comments = UniversalCrm::Comment.unscoped.order_by(created_at: :desc)
           @comments = @comments.scoped_to(universal_scope) if !universal_scope.nil?
           @comments = @comments.where(subject_type: params[:subject_type]) if !params[:subject_type].blank?
           if !params[:user_id].blank?
@@ -261,7 +261,7 @@ module UniversalCrm
             if !params[:company_id].blank?
               company = UniversalCrm::Company.find(params[:company_id])
               @comments = @comments.for_subject(company)
-              employees = company.employees.map{|e| [e.id.to_s, e.name]}   
+              employees = company.employees.map{|e| [e.id.to_s, e.name]}
               if !params[:employee_id].blank?
                 @comments = @comments.for_subject(UniversalCrm::Customer.find(params[:employee_id]))
               end
@@ -275,7 +275,7 @@ module UniversalCrm
             if !params[:company_id].blank?
               company = UniversalCrm::Company.find(params[:company_id])
               @tickets = @tickets.for_subject(company)
-              employees = company.employees.map{|e| [e.id.to_s, e.name]}   
+              employees = company.employees.map{|e| [e.id.to_s, e.name]}
               if !params[:employee_id].blank?
                 @tickets = @tickets.for_subject(UniversalCrm::Customer.find(params[:employee_id]))
               end
@@ -303,7 +303,7 @@ module UniversalCrm
             employees: employees
           }
         end
-        
+
       end
     end
   end

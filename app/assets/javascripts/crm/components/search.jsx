@@ -19,8 +19,8 @@ window.Search = createReactClass({
   componentDidMount: function(){
     var _this=this;
     $.ajax({
-      url: "/universal/countries.json", 
-      type: 'GET', 
+      url: 'countries.json', 
+      type: 'GET',
       success: function(d){
         _this.setState({countries: d.countries});
       }
@@ -104,7 +104,7 @@ window.Search = createReactClass({
         u.push(<option key={country.id} value={country.id}>{country.name}</option>);
       }
       return(
-        <div className="form-group">  
+        <div className="form-group">
           <select className="form-control" onChange={this.handleCountry}><option value=''>Country (Optional)</option>{u}</select>
         </div>
       )
